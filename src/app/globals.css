@@ -1,26 +1,326 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   METIS TECH STUDIO — DARK DESIGN SYSTEM
+   Black + blue. Brand anchors kept: Venice #16587B · Rock #84B3CE ·
+   Sky #C8D9E6 · Merino #F5EEDD. Extended down into near-black navy surfaces
+   and up into an electric beam blue + aurora cyan for signal.
+   ========================================================================== */
+
+@theme {
+  /* --- Venice ramp: the primary. Brand colours at 200 / 300 / 700 --- */
+  --color-venice-50:  #f2f9fc;
+  --color-venice-100: #e1eff6;
+  --color-venice-200: #c8d9e6; /* BRAND — Sky Blue. Body copy on dark */
+  --color-venice-300: #84b3ce; /* BRAND — Rock Blue. Muted copy */
+  --color-venice-400: #4b96bf;
+  --color-venice-500: #2f87b3;
+  --color-venice-600: #1f6e97;
+  --color-venice-700: #16587b; /* BRAND — Venice Blue */
+  --color-venice-800: #10445f;
+  --color-venice-900: #0b3145;
+  --color-venice-950: #08202e;
+
+  /* --- Ink: the page itself. Near-black, carrying the brand's blue cast --- */
+  --color-ink-700:  #16283a;
+  --color-ink-800:  #0f1e2c;
+  --color-ink-900:  #0a1420;
+  --color-ink-950:  #060c16;
+  --color-ink-1000: #03070e; /* page base */
+
+  /* --- Sand: warm accent. Merino at 100. Used for primary CTAs only --- */
+  --color-sand-50:  #fdfaf3;
+  --color-sand-100: #f5eedd; /* BRAND — Merino */
+  --color-sand-200: #ebe1cb;
+  --color-sand-300: #d9cbaf;
+
+  /* --- Aurora: cyan signal — data, edges, live state --- */
+  --color-aurora-300: #8fe6f8;
+  --color-aurora-400: #5ad8f2;
+  --color-aurora-500: #28c7e8;
+  --color-aurora-600: #12a5c6;
+
+  /* --- Brand gradient, sampled from LOGO.jpg. The mark runs blue → violet,
+         so the site's accents echo it. --- */
+  --color-brand-blue: #1a82fb;
+  --color-brand-violet: #ac31f3;
+
+  /* --- Beam: electric blue. Light shafts and glows only, never text --- */
+  --color-beam-400: #5d8bff;
+  --color-beam-500: #2f6bff;
+  --color-beam-600: #1a4fd8;
+  --color-beam-700: #143aa3;
+
+  /* --- Ember: sparing warm accent — numerals, seam markers. ≤5% --- */
+  --color-ember-400: #f2ab5c;
+  --color-ember-500: #e88f35;
+  --color-ember-600: #c9721f;
+
+  /* --- Typography --- */
+  --font-editorial: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", monospace;
+
+  /* --- Motion --- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-shimmer: shimmer 3.5s ease-in-out infinite;
+  --animate-beam: beam 14s ease-in-out infinite;
+  --animate-curtain: curtain 9s ease-in-out infinite;
+}
+
+/* Referenced by name from <Marquee>, which sets its own duration per row. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+/* Creeps toward the end without ever arriving — the route change finishes it. */
+@keyframes nav-progress {
+  0%   { transform: scaleX(0); }
+  40%  { transform: scaleX(0.55); }
+  75%  { transform: scaleX(0.82); }
+  100% { transform: scaleX(0.94); }
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+/* the diagonal light shaft breathes rather than sweeps — less distracting */
+@keyframes beam {
+  0%, 100% { opacity: 0.55; transform: translate3d(0, 0, 0) rotate(var(--beam-angle, -34deg)) scaleY(1); }
+  50%      { opacity: 0.85; transform: translate3d(2%, -1%, 0) rotate(var(--beam-angle, -34deg)) scaleY(1.06); }
+}
+@keyframes curtain {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.6; }
+}
+
+/* ============================================================================
+   BASE — dark is the only mode
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --hair: color-mix(in oklab, #ffffff 11%, transparent);
+  --hair-strong: color-mix(in oklab, #ffffff 20%, transparent);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+* { border-color: var(--hair); }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink-1000);
+  color: var(--color-venice-200);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-aurora-500);
+  color: var(--color-ink-1000);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-aurora-500);
+  outline-offset: 3px;
+}
+
+/* ============================================================================
+   TYPE SCALE — standard sizes, set large enough to read comfortably
+   ========================================================================== */
+
+@utility t-display {
+  font-family: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.75rem, 7.2vw, 5.25rem);   /* 44 → 84px */
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+}
+@utility t-h2 {
+  font-family: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 4.6vw, 3.25rem);      /* 32 → 52px */
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+}
+@utility t-h3 {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 1.9vw, 1.5rem);    /* 20 → 24px */
+  line-height: 1.25;
+  letter-spacing: -0.014em;
+}
+@utility t-editorial {
+  font-family: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-weight: 400;
+}
+@utility t-lead {
+  font-size: clamp(1.125rem, 1.5vw, 1.3125rem); /* 18 → 21px */
+  line-height: 1.5;
+  letter-spacing: -0.011em;
+}
+@utility t-body {
+  font-size: 1.0625rem;                         /* 17px */
+  line-height: 1.62;
+}
+@utility t-small {
+  font-size: 0.9375rem;                         /* 15px */
+  line-height: 1.55;
+}
+@utility t-label {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;                         /* 11px */
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ============================================================================
+   ATMOSPHERE — the two effects borrowed from the reference sites
+   ========================================================================== */
+
+/* prepairo.ai: a hard-edged diagonal shaft of light across the hero */
+@utility light-beam {
+  position: absolute;
+  pointer-events: none;
+  /* Every stop here replaces blur radius. A dense ramp reads as soft light but
+     composites for free, where `filter: blur()` on an element this size cost
+     ~20fps of scroll performance. */
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--color-beam-600) 4%, transparent) 8%,
+    color-mix(in oklab, var(--color-beam-600) 11%, transparent) 16%,
+    color-mix(in oklab, var(--color-beam-600) 20%, transparent) 25%,
+    color-mix(in oklab, var(--color-beam-500) 30%, transparent) 34%,
+    color-mix(in oklab, var(--color-beam-400) 38%, transparent) 43%,
+    color-mix(in oklab, var(--color-aurora-400) 34%, transparent) 52%,
+    color-mix(in oklab, var(--color-beam-400) 30%, transparent) 60%,
+    color-mix(in oklab, var(--color-brand-violet) 24%, transparent) 70%,
+    color-mix(in oklab, var(--color-brand-violet) 14%, transparent) 80%,
+    color-mix(in oklab, var(--color-brand-violet) 5%, transparent) 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  will-change: opacity;
+  animation: var(--animate-beam);
+}
+
+/* deccan: faint vertical light curtains, like a rippling backdrop */
+@utility light-curtain {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 62px,
+    color-mix(in oklab, var(--color-venice-400) 9%, transparent) 62px 63px,
+    transparent 63px 126px,
+    color-mix(in oklab, var(--color-aurora-500) 5%, transparent) 126px 127px
+  );
+  animation: var(--animate-curtain);
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, #ffffff 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, #ffffff 5%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+@utility mask-radial-fade {
+  mask-image: radial-gradient(ellipse 78% 62% at 50% 45%, #000 28%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 78% 62% at 50% 45%, #000 28%, transparent 78%);
+}
+
+@utility mask-fade-b {
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Brand-gradient ring, revealed on hover. The mask keeps only the 1px border. */
+@utility btn-ring {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(100deg, var(--color-brand-blue), var(--color-brand-violet));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* A diagonal highlight that sweeps across on hover. */
+@utility btn-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in oklab, var(--color-brand-blue) 22%, transparent) 45%,
+    color-mix(in oklab, var(--color-brand-violet) 22%, transparent) 55%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  background-position: 120% 0;
+  opacity: 0;
+  transition: background-position 0.7s var(--ease-out-expo), opacity 0.25s ease;
+}
+
+/* The logo's own gradient — for rules, underlines and accent marks */
+@utility bg-gradient-brand {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-brand-blue) 0%,
+    var(--color-brand-violet) 100%
+  );
+}
+
+/* The signature gradient sweep for a headline's accent phrase */
+@utility text-gradient-aurora {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-venice-200) 0%,
+    var(--color-aurora-400) 34%,
+    var(--color-beam-400) 56%,
+    var(--color-venice-300) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-shimmer);
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

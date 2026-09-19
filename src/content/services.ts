@@ -1,0 +1,912 @@
+/* ============================================================================
+   SERVICE PAGES — generated from 01-ai-and-ml.md … 04-data-and-cloud.md.
+   22 services across 4 practices. Copy is verbatim from those documents.
+
+   Regenerate rather than hand-editing: the source of truth is the markdown.
+   ========================================================================== */
+
+export type ServiceSection =
+  | { kind: "prose"; heading: string; paragraphs: string[] }
+  | { kind: "list"; heading: string; intro: string | null; items: { term: string; body: string }[] };
+
+export type Service = {
+  slug: string;
+  name: string;
+  category: string;
+  categorySlug: string;
+  titleTag: string;
+  metaDescription: string;
+  h1: string;
+  subhead: string;
+  heroCta: string;
+  sections: ServiceSection[];
+  faq: { q: string; a: string }[];
+  closingCta: string;
+  related: string[];
+};
+
+export const allServices: Service[] = [
+  {
+    slug: "generative-ai",
+    name: "Generative AI",
+    category: "AI & ML",
+    categorySlug: "ai-ml",
+    titleTag: "Generative AI Development Services | Metis Tech Studio",
+    metaDescription: "We build generative AI features that survive real users — evaluated, guarded, and wired into your product. Fixed-scope pilots available.",
+    h1: "Generative AI",
+    subhead: "Most generative AI projects die somewhere between the demo and the deadline. We build the version that survives the gap.",
+    heroCta: "Scope a pilot",
+    sections: [
+      { kind: "prose", heading: "The demo problem", paragraphs: [
+        "Generative AI demos beautifully. That's the trap.",
+        "A model that produces one impressive answer in a meeting will produce a hundred answers a day in production, and roughly three of them will be confidently, fluently wrong. In a demo that's a curiosity. In a customer-facing product it's a refund, a complaint, or a regulator.",
+        "The engineering that separates those two states — evaluation sets, guardrails, fallbacks, retrieval grounding, human review on the paths that matter — is invisible in a demo and is most of the actual work.",
+        "That's the work we do.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Content and drafting features", body: "Generation embedded inside your product, tuned to your voice, your format, and your constraints. Email drafts, report summaries, product descriptions, first-pass documentation." },
+        { term: "Structured extraction and transformation", body: "Turning unstructured input into clean, validated data your systems can act on. The output is JSON your database accepts, not prose someone has to re-read." },
+        { term: "Internal copilots", body: "Assistants that know your product, your policies, and your history, sitting inside the tools your team already uses." },
+        { term: "Multimodal features", body: "Systems that read images, documents, and audio alongside text, where the input isn't tidy." },
+      ] },
+      { kind: "list", heading: "How we build it", intro: null, items: [
+        { term: "We define \"good\" before we start", body: "Every project begins with an evaluation set drawn from your real data — the actual inputs, including the awkward ones. We report measured accuracy against it, and we show you the failures, not just the average." },
+        { term: "We ground the model in your material", body: "Retrieval over your own documents, with citations back to source. A model answering from your policy library is a different risk profile from a model answering from memory." },
+        { term: "We design for the wrong answer", body: "Every generative system fails sometimes. The design question is what happens next, and the answer is never \"it fails silently.\" Confidence thresholds, escalation paths, and human review where the stakes justify it." },
+        { term: "Your data stays yours", body: "Enterprise API tiers with retention disabled, or open-weight models hosted in your own infrastructure where compliance requires it. We're specific about where data goes and what's kept." },
+      ] },
+      { kind: "prose", heading: "A sensible way to start", paragraphs: [
+        "One feature. Fixed scope, fixed fee, `[X weeks]`, with a measured accuracy number at the end. If the numbers work, we scale it. If they don't, you've learned that for the price of a pilot instead of the price of a programme.",
+      ] },
+    ],
+    faq: [
+      { q: "Which model will you use?", a: "Whichever fits. Commercial models from OpenAI, Anthropic, or Google, or open-weight models you host yourself. That decision follows from your privacy, cost, and latency requirements — not from what we prefer." },
+      { q: "Will our data train someone else's model?", a: "Not without your explicit agreement. We use API tiers with data retention off, and we can deploy entirely inside your infrastructure." },
+      { q: "How do we know it's accurate enough?", a: "You'll see a number, measured against your own data, before launch. And you'll see the specific cases where it fails, because that's usually the more useful half." },
+    ],
+    closingCta: "Talk about your use case",
+    related: ["AI agents", "Knowledge search (RAG)", "Document processing"],
+  },
+  {
+    slug: "ai-agents",
+    name: "AI Agents",
+    category: "AI & ML",
+    categorySlug: "ai-ml",
+    titleTag: "AI Agent Development Services | Metis Tech Studio",
+    metaDescription: "AI agents that take real actions in your systems — with guardrails, approval steps, and a full audit trail. Built by engineers, not prompt templates.",
+    h1: "AI agents",
+    subhead: "A chatbot answers a question. An agent does something about it. That difference is the entire engineering problem.",
+    heroCta: "Talk to an engineer",
+    sections: [
+      { kind: "prose", heading: "When an assistant becomes an agent", paragraphs: [
+        "The moment a system stops describing an action and starts taking one, everything changes.",
+        "A wrong answer is embarrassing. A wrong action updates a record, sends an email, issues a refund, or books something. Wrong actions have consequences that outlive the conversation, and they're harder to notice because nobody reads a log until something breaks.",
+        "So an agent isn't a chatbot with more permissions. It's a system that needs the things any automated actor needs: scoped access, validation before execution, approval gates on anything expensive or irreversible, and a record of what it did and why.",
+        "We build agents the way you'd build any process with authority. Carefully.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Operations agents", body: "Triage incoming requests, route them, update records, and prepare the work so a person only handles the part that needs judgment." },
+        { term: "Research and reporting agents", body: "Gather from multiple sources, cross-reference, and produce a structured output on a schedule. The kind of task that eats a Monday morning every week." },
+        { term: "Support agents", body: "Resolve the repetitive share of ticket volume end to end, with clean escalation the moment confidence drops." },
+        { term: "Internal tool agents", body: "Sitting inside Slack, Teams, or your own product, with access to exactly the systems they need and nothing more." },
+      ] },
+      { kind: "list", heading: "The guardrails, specifically", intro: "Because \"with guardrails\" is a phrase everyone uses and few define:", items: [
+        { term: "Scoped permissions", body: "The agent gets its own credentials with the narrowest access that lets it work. It cannot reach systems outside its brief, because it was never given the keys." },
+        { term: "Approval gates on consequence", body: "You decide the threshold. Below it the agent acts; above it a human confirms. Refunds over an amount, emails to external addresses, anything that deletes." },
+        { term: "Validation before execution", body: "Actions are checked against schema and business rules before they run, not after." },
+        { term: "A full audit trail", body: "Every action, the reasoning behind it, and the inputs it saw. When something goes wrong you can reconstruct exactly what happened." },
+        { term: "A stop button", body: "Someone can halt it. This sounds obvious and is frequently missing." },
+      ] },
+    ],
+    faq: [
+      { q: "Isn't this just automation with extra steps?", a: "For a fixed process, ordinary automation is cheaper and more reliable, and we'll tell you to use it. Agents earn their cost when the task needs judgment — variable inputs, exceptions, decisions that don't reduce to rules." },
+      { q: "What if it does something wrong?", a: "It will, occasionally. That's why approval gates, scoped permissions, and audit trails exist. We design assuming failure rather than hoping against it." },
+      { q: "How much of our stack does it need access to?", a: "As little as possible. We start from the minimum permissions the task requires and expand only where necessary." },
+    ],
+    closingCta: "Scope an agent",
+    related: ["Workflow automation", "Generative AI", "Chatbots & assistants"],
+  },
+  {
+    slug: "machine-learning",
+    name: "Machine Learning Models",
+    category: "AI & ML",
+    categorySlug: "ai-ml",
+    titleTag: "Custom Machine Learning Development | Metis Tech Studio",
+    metaDescription: "Custom ML models trained on your data and deployed into your product — with the monitoring and retraining to keep them useful in year two.",
+    h1: "Machine learning models",
+    subhead: "A model that scores 94% in a notebook and a model that earns its keep are different achievements. The distance between them is where this work lives.",
+    heroCta: "Talk about your data",
+    sections: [
+      { kind: "prose", heading: "The gap nobody budgets for", paragraphs: [
+        "Training a model is the part that's well documented, well tooled, and genuinely quite fast.",
+        "Then it has to run somewhere. It needs data arriving in the same shape it was trained on. It needs to respond fast enough for whatever calls it. It needs someone to notice when the world shifts and its accuracy quietly decays. It needs to be retrainable by someone who isn't the person who built it.",
+        "That gap — deployment, pipelines, monitoring, retraining — is routinely underestimated and is where most ML projects stall. We treat it as the main body of the work, because it is.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Classification", body: "Routing, categorisation, risk scoring, quality flags. Anything where the question is \"which bucket does this belong in.\"" },
+        { term: "Regression and forecasting", body: "Demand, pricing, capacity, lifetime value. Numbers you'll make decisions against." },
+        { term: "Ranking and matching", body: "Search relevance, candidate matching, prioritisation." },
+        { term: "Anomaly detection", body: "Fraud, faults, and outliers, in domains where the interesting events are rare by definition." },
+      ] },
+      { kind: "list", heading: "How we approach it", intro: null, items: [
+        { term: "We start with a baseline that isn't machine learning", body: "A simple rule, a lookup, an average. If that solves 80% of the problem, we'll tell you — and sometimes that's the whole project. The baseline also tells us whether the model is genuinely adding value or just adding complexity." },
+        { term: "We measure against the decision, not the metric", body: "Accuracy is a proxy. What matters is whether the prediction changes what someone does, and whether that change is worth more than the errors cost. We'll build the evaluation around your actual decision, including asymmetric costs — a missed fraud case and a false alarm are rarely worth the same." },
+        { term: "We show you the failures", body: "Every model gets a failure analysis: where it breaks, on what kind of input, and how bad the consequences are. An average accuracy figure conceals exactly the information you need." },
+        { term: "We build the pipeline alongside the model", body: "Training and inference share code paths, so the model sees production data in the same shape it saw training data. This single discipline prevents a large share of deployment failures." },
+      ] },
+      { kind: "prose", heading: "What you get", paragraphs: [
+        "Trained model with documented performance · Evaluation report including failure analysis · Deployment pipeline · Monitoring and alerting · Documented retraining process · Handover session",
+      ] },
+    ],
+    faq: [
+      { q: "How much data do we need?", a: "It depends on the problem far more than on a rule of thumb. Some classification tasks work on a few hundred labelled examples; some forecasting needs years of history. We'll assess your data in the first week and give you an honest read before you commit." },
+      { q: "Can you improve a model we already have?", a: "Yes. Model audits and targeted improvement work on existing systems is a common way clients start with us." },
+    ],
+    closingCta: "Book a data assessment",
+    related: ["Predictive analytics", "MLOps & monitoring", "Data engineering"],
+  },
+  {
+    slug: "computer-vision",
+    name: "Computer Vision",
+    category: "AI & ML",
+    categorySlug: "ai-ml",
+    titleTag: "Computer Vision Development Services | Metis Tech Studio",
+    metaDescription: "Image classification, object detection, and visual inspection built for real conditions — bad light, odd angles, and the cases the demo never covered.",
+    h1: "Computer vision",
+    subhead: "The model works on the sample images. The question is whether it works in the car park, at six in the evening, in the rain.",
+    heroCta: "Discuss your use case",
+    sections: [
+      { kind: "prose", heading: "Conditions are the whole problem", paragraphs: [
+        "Vision models fail in ways that are almost never about the model.",
+        "They fail because the camera moved. Because the lighting changed with the season. Because someone put a sticker on the thing being photographed. Because the training data was collected on one device and production runs on another, three years older, with a dirtier lens.",
+        "Getting a vision model to work on curated data is a solved problem you can do in a weekend. Getting it to work reliably on whatever your environment actually produces is the engagement.",
+        "We spend most of our time on the second thing.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Visual inspection", body: "Defect detection, quality grading, and compliance checks on production lines or in the field." },
+        { term: "Object detection and counting", body: "Locating and tallying things in images or video, where \"things\" is domain-specific and generic models won't cut it." },
+        { term: "Document and form understanding", body: "Layout-aware extraction from scans, photos, and PDFs. Where the information is as much in the position as the text." },
+        { term: "Classification and sorting", body: "Categorising images at volume, against categories that matter to your business rather than to ImageNet." },
+      ] },
+      { kind: "list", heading: "How we approach it", intro: null, items: [
+        { term: "We audit the capture conditions before the data", body: "What camera, what angle, what lighting, what varies. Half the accuracy problems in vision projects are fixable with a better mounting bracket, and that's a conversation worth having before you pay for a model." },
+        { term: "We build the hard test set first", body: "Not the clean images — the blurry ones, the odd angles, the edge cases someone will encounter in week two. If it works on those, the average takes care of itself." },
+        { term: "We're realistic about labelling", body: "Vision projects need labelled data and labelling costs real time. We'll tell you how much you need, help design the labelling process, and look for ways to reduce the requirement — synthetic data, augmentation, transfer learning — before we ask you to fund a labelling exercise." },
+        { term: "We plan for the deployment target", body: "A model that needs a GPU is a different proposal from one that runs on a phone or an edge device. That constraint shapes the architecture, so we settle it at the start." },
+      ] },
+    ],
+    faq: [
+      { q: "Can it run on-device?", a: "Often, yes, with the right architecture. It's a constraint we design around from the beginning rather than discovering at the end." },
+      { q: "How accurate can it be?", a: "Depends entirely on your images and your task. We'll build a prototype against your real data early precisely so you get a real number instead of a promise." },
+    ],
+    closingCta: "Send us sample images",
+    related: ["Machine learning models", "Document processing", "Data engineering"],
+  },
+  {
+    slug: "natural-language-processing",
+    name: "Natural Language Processing",
+    category: "AI & ML",
+    categorySlug: "ai-ml",
+    titleTag: "NLP Development Services | Metis Tech Studio",
+    metaDescription: "Text classification, extraction, and search built for real language — misspellings, jargon, and the way your customers actually write.",
+    h1: "Natural language processing",
+    subhead: "Your customers don't write like your training data. They abbreviate, misspell, switch languages mid-sentence, and describe your product using words you've never used for it.",
+    heroCta: "Talk about your text",
+    sections: [
+      { kind: "prose", heading: "Language is the messiest data you own", paragraphs: [
+        "Every organisation is sitting on text. Support tickets, reviews, emails, call transcripts, case notes, contracts. It's usually the richest source of information in the business and the least used, because it doesn't fit in a column.",
+        "The difficulty isn't reading it. Modern models read text extremely well. The difficulty is that language carries meaning through context, tone, negation, and domain convention — and the phrase that means \"urgent\" in your industry might be entirely unremarkable in another.",
+        "Useful NLP is domain work as much as model work. We spend the early weeks learning how your people actually write.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Classification and routing", body: "Sorting incoming text by topic, urgency, sentiment, or intent, so it reaches the right place without a person reading it first." },
+        { term: "Information extraction", body: "Pulling structured fields out of unstructured text: dates, amounts, parties, obligations, symptoms, specifications." },
+        { term: "Summarisation", body: "Condensing long documents, threads, or transcripts into something a person will actually read, with the important details preserved rather than averaged away." },
+        { term: "Semantic search", body: "Search that finds documents by meaning rather than keyword match, so \"can't log in\" surfaces the article titled \"authentication troubleshooting.\"" },
+        { term: "Analysis at volume", body: "Themes and trends across thousands of reviews, tickets, or survey responses. The questions you can't answer by reading a sample." },
+      ] },
+      { kind: "list", heading: "How we approach it", intro: null, items: [
+        { term: "We read your data first, properly", body: "Before any modelling, we go through a sample by hand with someone from your team. This is where we learn your abbreviations, your recurring edge cases, and the three ways your customers describe the same complaint." },
+        { term: "We define the labels with you", body: "Most NLP failure traces back to categories that seemed obvious in a meeting and turned out to be ambiguous in practice. If two of your own people label the same ticket differently, no model will do better. We settle that first." },
+        { term: "We check for bias in the sample", body: "Text data reflects who was writing and who was being written about. Where that skews results in ways that matter, we identify it rather than shipping it." },
+        { term: "We measure per-class, not overall", body: "A model that's 95% accurate overall can be useless on the rare category you built it for. We report performance for each class, especially the small ones." },
+      ] },
+    ],
+    faq: [
+      { q: "Does this work in languages other than English?", a: "Yes, though quality varies by language and by how much of your data is in each. We'll be specific about what's achievable for your particular mix." },
+      { q: "How is this different from just using ChatGPT?", a: "For one-off analysis, it isn't, and you should use the tool. This is for tasks running at volume, on a schedule, inside your systems, where you need consistency and a measurable accuracy figure." },
+    ],
+    closingCta: "Book an assessment",
+    related: ["Knowledge search (RAG)", "Document processing", "Generative AI"],
+  },
+  {
+    slug: "ai-strategy-consulting",
+    name: "AI Strategy & Consulting",
+    category: "AI & ML",
+    categorySlug: "ai-ml",
+    titleTag: "AI Strategy & Readiness Consulting | Metis Tech Studio",
+    metaDescription: "A costed, prioritised AI roadmap based on your data and your workflows — with an honest assessment of what not to build. Fixed fee, yours to keep.",
+    h1: "AI strategy & consulting",
+    subhead: "This page is for people who have to justify the spend before they can approve it.",
+    heroCta: "Book a strategy sprint",
+    sections: [
+      { kind: "prose", heading: "Deciding is the hard part", paragraphs: [
+        "You've been told AI will transform your operations. You've also watched a competitor spend a year and a budget on a pilot that quietly disappeared. Both stories are true, and neither tells you what to do on Monday.",
+        "What's usually missing isn't ambition. It's a specific, honest answer to three questions: which of our processes would actually benefit, is our data in a state to support it, and what would it cost to find out.",
+        "That's what this engagement produces. A document you can take to a board, with numbers you can defend and a recommendation that sometimes says no.",
+      ] },
+      { kind: "list", heading: "What we deliver", intro: null, items: [
+        { term: "Opportunity assessment", body: "We work through your processes with the people who run them and identify where AI creates real leverage. Ranked by value and by feasibility, which are different axes and frequently point in different directions." },
+        { term: "Data readiness audit", body: "An honest look at what you have, what state it's in, and what it would take to get it usable. This is where most optimistic roadmaps quietly fall apart, so we do it early and in writing." },
+        { term: "Build, buy, or wait", body: "For each opportunity: is there a product that already does this, is it worth building, or is the sensible move to leave it eighteen months? We have no incentive to say \"build\" — this engagement is priced the same either way." },
+        { term: "Costed roadmap", body: "Sequenced, with effort estimates and the dependencies between items made explicit. Including which one to start with and why." },
+        { term: "Risk and governance notes", body: "Where your obligations sit, what needs human oversight, and what would need to be true before a system touches customers or regulated decisions." },
+      ] },
+      { kind: "prose", heading: "What makes this different from a consultancy deck", paragraphs: [
+        "We build these systems. Every estimate in the roadmap is one we'd be willing to quote against, because we'd be the ones delivering it.",
+        "That cuts both ways, and you should know it: we have an obvious interest in recommending work we could do. Our answer is that the deliverable is yours unconditionally — take it to another firm, take it in-house, or shelve it. We've been paid either way, and a roadmap that overstates the case is worth nothing to our reputation.",
+      ] },
+      { kind: "prose", heading: "The engagement", paragraphs: [
+        "`[1–2 weeks]`. Fixed fee. Workshops with your team, a review of your data and systems, and a written deliverable at the end that belongs to you.",
+      ] },
+    ],
+    faq: [
+      { q: "Do we have to build with you afterwards?", a: "No. The deliverable is yours to use however you like, including with someone else." },
+      { q: "What if the answer is that we shouldn't do AI?", a: "Then that's what the document says, and it's arguably the most valuable outcome available. Knowing not to spend six figures is worth more than the fee." },
+      { q: "Who needs to be involved from our side?", a: "The people who actually run the processes, and someone who can speak to the data. Usually four to six hours of their time across the engagement." },
+    ],
+    closingCta: "Book a strategy sprint",
+    related: ["Generative AI", "AI agents", "Data engineering"],
+  },
+  {
+    slug: "web-app-development",
+    name: "Web App Development",
+    category: "Software Development",
+    categorySlug: "software",
+    titleTag: "Custom Web Application Development | Metis Tech Studio",
+    metaDescription: "SaaS platforms, portals, and internal tools built to stay fast and maintainable. Fixed-price scopes, full IP transfer, your repository from day one.",
+    h1: "Web app development",
+    subhead: "Every web app is fast on day one. We build the kind that's still fast on day nine hundred.",
+    heroCta: "Discuss your project",
+    sections: [
+      { kind: "prose", heading: "Software gets slower the way people gain weight", paragraphs: [
+        "Nobody decides to build a slow, tangled application. It happens a kilogram at a time.",
+        "A query that was fine with a thousand rows. A component that was simpler to copy than to refactor. A dependency added under deadline that nobody has updated since. Individually, all reasonable. Collectively, the reason a two-day feature takes three weeks by year two, and the reason your developers start using the word \"rewrite.\"",
+        "The decisions that prevent this are made early, cost almost nothing at the time, and are invisible in a demo. That's why they get skipped, and it's most of what you're paying an experienced team for.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "SaaS platforms", body: "Multi-tenant products with the unglamorous foundations designed in from the start: roles, permissions, billing, audit logging, admin tooling." },
+        { term: "Customer portals", body: "Secure self-service where your customers manage accounts, documents, orders, and support without emailing anyone." },
+        { term: "Internal tools and dashboards", body: "The operational software your business actually runs on. Usually the highest-return thing a company can build and the last thing it gets funded." },
+        { term: "E-commerce", body: "Custom and headless storefronts integrated with your inventory, payments, and fulfilment." },
+        { term: "Marketing sites", body: "Fast, accessible, well-structured, and editable by your marketing team without a developer." },
+      ] },
+      { kind: "list", heading: "What we do differently", intro: null, items: [
+        { term: "Performance has a budget, like anything else", body: "We set a target for load and interaction time at the start and hold to it. Slow software gets abandoned regardless of what it can do." },
+        { term: "Accessibility is the baseline, not a line item", body: "WCAG 2.2 AA from the beginning. It's better for every user, it's substantially cheaper than retrofitting, and in most markets it's the law." },
+        { term: "Security is designed in", body: "Authentication, authorisation, input validation, dependency scanning, encryption at rest and in transit. Built during, not bolted on after a penetration test found something." },
+        { term: "The code is written to be read", body: "Typed, tested, documented. The measure of success is that the next developer to open the repository doesn't need to call us." },
+      ] },
+      { kind: "prose", heading: "What you get", paragraphs: [
+        "Production application · Full source code and IP · Technical documentation · Deployment pipeline · Handover session and training · `[30/60/90]` days post-launch support",
+      ] },
+    ],
+    faq: [
+      { q: "Which framework?", a: "Usually React with Next.js. We'll recommend based on your team's existing skills and your hiring plans, not on what's currently fashionable." },
+      { q: "Can you take over an existing codebase?", a: "Yes, starting with a paid audit — a fixed-fee week where we assess the code and give you an honest read on whether to continue, refactor, or rebuild. Sometimes the answer is uncomfortable and we say it anyway." },
+      { q: "Can you work with our designers?", a: "Happily. We build from Figma regularly, and we'll flag anything expensive to implement before it becomes a problem rather than after." },
+    ],
+    closingCta: "Book a call",
+    related: ["Custom software", "SaaS product development", "UI/UX design"],
+  },
+  {
+    slug: "mobile-app-development",
+    name: "Mobile App Development",
+    category: "Software Development",
+    categorySlug: "software",
+    titleTag: "iOS & Android App Development | Metis Tech Studio",
+    metaDescription: "Native and cross-platform apps built for real conditions — bad signal, old devices, and users who delete anything that annoys them.",
+    h1: "Mobile app development",
+    subhead: "Most apps lose the majority of their users within a week of install. Almost none of that is about features.",
+    heroCta: "Discuss your app",
+    sections: [
+      { kind: "prose", heading: "The phone is a hostile environment", paragraphs: [
+        "Your web app runs on a laptop, on wifi, with a user who is sitting down and paying attention.",
+        "Your mobile app runs on a four-year-old device with 6% battery, on a train, through a tunnel, held in one hand, while its owner is also doing something else. It's competing for space with eighty other apps and the delete button is two taps away.",
+        "Building for that means caring about things that don't appear in a feature list: how it behaves when the connection drops mid-action, how long the first launch takes, whether it drains battery, whether it works with one thumb. Those decisions determine retention far more than the roadmap does.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Consumer apps", body: "Products that live on a home screen and have to keep earning that place." },
+        { term: "Field and enterprise apps", body: "Tools for people working away from a desk: inspections, deliveries, service calls, stock counts, site reports." },
+        { term: "Companion apps", body: "Mobile front ends for platforms you already run." },
+        { term: "Offline-first apps", body: "Software that keeps working in a basement, a warehouse, or a regional dead zone, and syncs cleanly without losing or duplicating anything when it reconnects." },
+      ] },
+      { kind: "list", heading: "Native or cross-platform: the honest version", intro: "We'll make a recommendation after discovery, and we'll frame it in terms of your budget and roadmap rather than in terms of frameworks. If cross-platform serves you, we'll say so — it's the cheaper project and we'd still rather you had the right one.", items: [
+        { term: "Cross-platform (React Native, Flutter)", body: "suits most apps. One codebase, both platforms, meaningfully lower build and maintenance cost, and performance that's indistinguishable to users for the large majority of products." },
+        { term: "Native (Swift, Kotlin)", body: "is worth the extra cost when you're leaning hard on the device: heavy camera or AR work, sustained background processing, complex Bluetooth, or platform features you need on release day rather than when a bridge library catches up." },
+      ] },
+      { kind: "prose", heading: "The two-thirds rule", paragraphs: [
+        "Shipping the app is roughly two-thirds of the work. We also handle the rest:",
+        "App Store and Play Store submission · Store listing copy and screenshots · Review rejections and resubmission · Push notifications · Crash reporting and analytics · OS version upgrades · Phased rollouts and release management",
+      ] },
+    ],
+    faq: [
+      { q: "How long does an app take?", a: "A focused first version typically takes `[10–16 weeks]` from kickoff to store approval. Hardware integration or heavy backend work extends that, and we'll say so during discovery rather than during month three." },
+      { q: "Do you handle App Store approval?", a: "Yes, including the rejections. We've read the guidelines so you don't have to." },
+      { q: "Can you take over an app someone else built?", a: "Usually. We'd start with an audit and give you an honest assessment of whether continuing is cheaper than rebuilding." },
+    ],
+    closingCta: "Book a call",
+    related: ["Web app development", "UI/UX design", "API development & integration"],
+  },
+  {
+    slug: "custom-software",
+    name: "Custom Software",
+    category: "Software Development",
+    categorySlug: "software",
+    titleTag: "Custom Software Development Services | Metis Tech Studio",
+    metaDescription: "Software built around how your business actually works — for the processes no off-the-shelf product fits. Fixed scope, full ownership.",
+    h1: "Custom software",
+    subhead: "You know the spreadsheet. The one that runs something important, that only two people understand, that everyone is slightly afraid of.",
+    heroCta: "Tell us about the spreadsheet",
+    sections: [
+      { kind: "prose", heading: "Every business has one", paragraphs: [
+        "Sometimes it's a spreadsheet. Sometimes it's a shared inbox, a whiteboard, an Access database from 2011, or a process that lives entirely in one person's head and goes on holiday with them.",
+        "It exists because your business does something specific that no product on the market fits. So somebody built a workaround, and the workaround became load-bearing.",
+        "Custom software is worth building when the workaround has become expensive — in hours, in errors, in the risk of it depending on one person. Not before. If a product on the market does 90% of it, buy the product; we'll tell you that for free.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Operations platforms", body: "Systems for the workflow your business runs on, matched to how you actually work rather than how a vendor assumed you would." },
+        { term: "Replacements for legacy systems", body: "Migrating off software that's unsupported, unaffordable, or unmaintainable, without losing the fifteen years of institutional logic buried in it." },
+        { term: "Integration layers", body: "Middleware that makes your existing systems behave like one, when replacing them isn't realistic." },
+        { term: "Compliance and reporting tools", body: "Where the requirement is specific to your sector and generic tools force you to work around them." },
+      ] },
+      { kind: "list", heading: "How we scope it", intro: null, items: [
+        { term: "We watch the work being done", body: "Not a requirements workshop with managers — sitting with the people who use the current process, watching what they actually do, including the workarounds they've stopped mentioning because they've become normal." },
+        { term: "We look for the process problem first", body: "Sometimes a workflow is broken and software would automate the brokenness at speed. When we find that, we say so before quoting a build." },
+        { term: "We scope the smallest useful version", body: "Custom software fails most often through ambition. The first release should replace one painful thing well, be in real use within months, and grow from there against real feedback." },
+        { term: "We plan for the person who inherits it", body: "Documentation, tests, and readable code, because custom software you can't maintain is a liability with a launch party." },
+      ] },
+    ],
+    faq: [
+      { q: "Isn't custom software more expensive?", a: "Higher upfront, frequently lower over five years — no per-seat licences, no paying for modules you don't use, no annual price rises. But it's genuinely not always the right answer, and we'll tell you when buying wins." },
+      { q: "What if our requirements change?", a: "They will. That's why we build in increments and why the scope has a change process rather than pretending it won't move." },
+      { q: "What happens if we stop working with you?", a: "You keep everything: code, infrastructure, documentation. It's in your repository from the first commit specifically so this isn't a difficult conversation." },
+    ],
+    closingCta: "Book a call",
+    related: ["Web app development", "Workflow automation", "API development & integration"],
+  },
+  {
+    slug: "saas-product-development",
+    name: "SaaS Product Development",
+    category: "Software Development",
+    categorySlug: "software",
+    titleTag: "SaaS Product Development Services | Metis Tech Studio",
+    metaDescription: "Multi-tenancy, billing, permissions, and onboarding — the unglamorous foundations that decide whether a SaaS product can scale. Built properly from v1.",
+    h1: "SaaS product development",
+    subhead: "The feature you're excited about is the easy part. It's tenancy, billing, and permissions that decide whether this becomes a business.",
+    heroCta: "Discuss your product",
+    sections: [
+      { kind: "prose", heading: "The boring parts are the product", paragraphs: [
+        "Founders describe their SaaS in terms of the thing it does. Reasonably — that's the idea, that's what customers will pay for.",
+        "But the code that makes it a *product* rather than a tool is mostly elsewhere. Separating one customer's data from another's, permanently and provably. Subscriptions, trials, upgrades, failed payments, refunds, tax. Roles and permissions that survive a customer asking for one that doesn't exist yet. Onboarding that gets someone to value before they lose interest. Usage limits, admin tooling, audit logs.",
+        "These are the parts that are brutally expensive to retrofit and comparatively cheap to design in. Multi-tenancy in particular: adding it to a single-tenant product later is often a rewrite.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "MVPs that can grow", body: "A first version small enough to launch quickly but structured so version two isn't a rebuild. Those two goals conflict constantly, and managing that tension is the skill." },
+        { term: "Full platforms", body: "Complete products with billing, admin, analytics, and the operational tooling you'll need once you have real customers and real support tickets." },
+        { term: "Existing product rescue", body: "Products that shipped and hit a wall: performance, tenancy, or a codebase nobody can safely change." },
+      ] },
+      { kind: "list", heading: "What we build in from the start", intro: null, items: [
+        { term: "Multi-tenancy with real isolation", body: "Decided at architecture, not bolted on. This is the single most expensive thing to get wrong." },
+        { term: "Billing that handles the awkward cases", body: "Upgrades mid-cycle, proration, failed payments, dunning, cancellation, tax. All of it will happen in your first hundred customers." },
+        { term: "Roles and permissions designed to extend", body: "Because your first enterprise prospect will ask for a permission model you didn't anticipate, and the answer needs to be days rather than months." },
+        { term: "Admin tooling from day one", body: "You will need to impersonate a user, refund a charge, and check what happened. Building this early costs a week; building it during an incident costs a customer." },
+        { term: "Analytics that answer product questions", body: "Activation, retention, and feature usage instrumented at launch, because the data you didn't collect in month one is gone." },
+      ] },
+    ],
+    faq: [
+      { q: "How fast can we launch?", a: "A genuinely focused MVP typically ships in `[10–14 weeks]`. Most of the scoping conversation is about cutting, and it's the most valuable part of discovery." },
+      { q: "Should we build for scale now?", a: "Mostly no. We build so that scaling is possible without a rewrite, but we don't build for a million users you don't have. The exception is tenancy and data model, where the cost of changing later is disproportionate." },
+      { q: "Can you help after launch?", a: "Yes — a monthly retainer covering support, maintenance, and the next phase of features." },
+    ],
+    closingCta: "Book a call",
+    related: ["Web app development", "Cloud & DevOps", "UI/UX design"],
+  },
+  {
+    slug: "api-development-integration",
+    name: "API Development & Integration",
+    category: "Software Development",
+    categorySlug: "software",
+    titleTag: "API Development & System Integration | Metis Tech Studio",
+    metaDescription: "REST and GraphQL APIs, third-party integrations, and middleware that makes separate systems behave like one. Built to survive the other system's bad day.",
+    h1: "API development & integration",
+    subhead: "Integration is where estimates go to die. Usually because the estimate assumed the other system behaves.",
+    heroCta: "Talk about your systems",
+    sections: [
+      { kind: "prose", heading: "The other system will let you down", paragraphs: [
+        "Integration work looks simple from the outside. Two systems, some data, move it across.",
+        "Then reality: the API is rate limited at a number nobody documented. It returns 200 with an error in the body. The sandbox behaves differently from production. A field marked required is sometimes null. It goes down for four hours on a Tuesday and comes back with duplicates.",
+        "None of this is unusual. It's the normal condition of integration work, and the difference between a project that lands and one that overruns is whether it was designed for this from the start or discovered halfway through.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Public and partner APIs", body: "REST or GraphQL, versioned, documented, rate limited, and authenticated properly. Designed for the developers who'll consume them rather than for whoever's building them." },
+        { term: "Third-party integrations", body: "Payment providers, CRMs, accounting, logistics, identity, industry platforms. Including the ones with documentation that hasn't been updated since 2019." },
+        { term: "Middleware and sync layers", body: "Keeping data consistent across systems that disagree about what a customer is, without either becoming the bottleneck." },
+        { term: "Webhooks and event pipelines", body: "Real-time flows between systems, with the delivery guarantees and replay capability that make them trustworthy." },
+      ] },
+      { kind: "list", heading: "Designed for failure, deliberately", intro: null, items: [
+        { term: "Retries with backoff, and idempotency", body: "Requests get retried. Without idempotency keys, retries create duplicate orders, duplicate charges, duplicate everything. This is the most common integration bug we're called in to fix." },
+        { term: "Queues between systems", body: "So the other service being down means delay rather than data loss." },
+        { term: "Reconciliation, not just sync", body: "A scheduled check that both sides agree, because eventually they won't, and finding out from a customer is the expensive way." },
+        { term: "Observability on every integration", body: "Logging, alerting, and a dashboard showing what's flowing and what's stuck. Silent failure is the worst failure mode and it's the default one." },
+        { term: "Contract tests", body: "So you find out the third party changed their response shape from a test, not from your support inbox." },
+      ] },
+    ],
+    faq: [
+      { q: "REST or GraphQL?", a: "REST for most cases — simpler, better tooled, easier for consumers. GraphQL when clients genuinely need flexible queries across related data. Not a matter of taste; a matter of what your consumers do." },
+      { q: "Can you integrate with a system that has no API?", a: "Often, via database access, file exchange, or as a last resort automated interaction with the interface. It's more fragile and we'll be direct about the maintenance implications before you commit." },
+      { q: "What about maintenance?", a: "Third-party APIs change and break. A support retainer covering integration maintenance is usually the sensible arrangement." },
+    ],
+    closingCta: "Book a call",
+    related: ["Custom software", "Workflow automation", "Cloud & DevOps"],
+  },
+  {
+    slug: "ui-ux-design",
+    name: "UI/UX Design",
+    category: "Software Development",
+    categorySlug: "software",
+    titleTag: "UI/UX Design Services | Metis Tech Studio",
+    metaDescription: "Interface design that survives implementation — because designers and engineers are the same two people. Research, prototypes, and design systems.",
+    h1: "UI/UX design",
+    subhead: "Most design doesn't fail in the design. It fails in the handover, where the beautiful file meets the loading state nobody drew.",
+    heroCta: "Talk about your product",
+    sections: [
+      { kind: "prose", heading: "The gap between the file and the thing", paragraphs: [
+        "A design file shows an interface at rest, full of realistic data, with everything working.",
+        "The built product spends a great deal of its life in states nobody drew. Empty, because the user is new. Loading. Broken, because the request failed. Overflowing, because a real customer's company name is sixty characters. Half-filled, with three validation errors.",
+        "When designers and engineers are different companies, those states get invented during the build — quickly, inconsistently, by someone under deadline. It's the most common reason a shipped product looks worse than the pitch.",
+        "We design and build with the same two people, so the states get designed because we're the ones who'll have to implement them.",
+      ] },
+      { kind: "list", heading: "What we do", intro: null, items: [
+        { term: "User research", body: "Talking to the people who'll use it. Even six conversations reliably changes what you build, and it's cheaper than finding out post-launch." },
+        { term: "Information architecture", body: "What goes where, what's called what, and what a user has to hold in their head. Usually the highest-leverage part of the work and the least visible." },
+        { term: "Wireframes and prototypes", body: "Clickable early, so decisions get made against something people can use rather than something they have to imagine." },
+        { term: "Interface design", body: "The visual layer, including the unglamorous states: empty, loading, error, overflow, permission-denied." },
+        { term: "Design systems", body: "Components, tokens, and rules so the product stays coherent as it grows and as other people add to it." },
+        { term: "Accessibility review", body: "Contrast, keyboard navigation, screen reader behaviour, and focus order. Designed in, where it's cheap." },
+      ] },
+      { kind: "list", heading: "How we work", intro: null, items: [
+        { term: "We design in the browser early", body: "Static mockups conceal every problem that involves motion, real data, or a small screen. We get to something interactive quickly." },
+        { term: "We use your real content", body: "Lorem ipsum makes every layout look fine. Your actual product names, your actual error messages, and your longest customer name reveal what's actually going to break." },
+        { term: "We design the whole state machine", body: "Every screen has more than one state. We enumerate them rather than leaving the difficult ones to be improvised at build time." },
+        { term: "We say when it's expensive", body: "A design decision that adds three weeks of engineering should be a conscious trade, made with the cost visible. Being both the designer and the engineer means that conversation happens before the file is signed off." },
+      ] },
+    ],
+    faq: [
+      { q: "Can you do design without the build?", a: "Yes. You'll get a full design system and a specification thorough enough for another team to implement, including the states that usually go missing." },
+      { q: "How long does design take?", a: "Usually `[3–5 weeks]` for a focused product, running partly in parallel with early engineering rather than as a gate before it." },
+    ],
+    closingCta: "Book a call",
+    related: ["Web app development", "Mobile app development", "SaaS product development"],
+  },
+  {
+    slug: "chatbots-assistants",
+    name: "Chatbots & Assistants",
+    category: "Intelligent Systems",
+    categorySlug: "intelligent-systems",
+    titleTag: "Chatbot & AI Assistant Development | Metis Tech Studio",
+    metaDescription: "Assistants that resolve real questions and escalate cleanly when they can't. Built on your content, measured on resolution rather than deflection.",
+    h1: "Chatbots & assistants",
+    subhead: "Your customers have met a chatbot before. Statistically, it wasted their time. You're not starting from neutral — you're starting from a grudge.",
+    heroCta: "Talk about your use case",
+    sections: [
+      { kind: "prose", heading: "Working against a reputation", paragraphs: [
+        "For a decade, \"chat with us\" meant a decision tree that couldn't understand a sentence and existed to make you give up before reaching a person. People learned. Now the first thing many users type is a request for a human.",
+        "That's the bar. Not \"can it hold a conversation\" — models cleared that some time ago — but \"will this specific user, who has been burned before, get a real answer faster than they would have any other way.\"",
+        "Which changes what you optimise for. Deflection rate — the share of people who don't reach a human — is the metric that produced the bad chatbots, because you can maximise it by being hard to escape. We measure resolution and satisfaction instead.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Customer support assistants", body: "Grounded in your help centre, policies, and product documentation, answering with citations and handing over cleanly when confidence drops." },
+        { term: "Internal helpdesk assistants", body: "For HR, IT, and operations questions. Often a better first project than customer-facing: real value, forgiving audience, no reputational exposure while you learn." },
+        { term: "Sales and onboarding assistants", body: "Qualifying, answering product questions, and guiding people through setup." },
+        { term: "In-product assistants", body: "Sitting inside your software, aware of what the user is looking at and what they're entitled to do." },
+      ] },
+      { kind: "list", heading: "The rules we build to", intro: null, items: [
+        { term: "Escalation is one message away, always", body: "Never buried, never gated behind three refusals. Counterintuitively this improves satisfaction *and* resolution, because users who trust they can escape are willing to try the bot first." },
+        { term: "It says when it doesn't know", body: "A grounded assistant that admits uncertainty and hands over is worth more than a confident one that invents a returns policy." },
+        { term: "It answers from your content", body: "Retrieval over your real material, with links to source. Not the model's general impression of how businesses like yours usually work." },
+        { term: "Context comes with the handover", body: "When it escalates, the human gets the full conversation and what was already tried. Making a customer repeat themselves is the specific failure that makes people hate chatbots." },
+        { term: "We measure what matters", body: "Resolution rate, satisfaction after the conversation, and escalation quality. Not deflection." },
+      ] },
+    ],
+    faq: [
+      { q: "Will it make things up?", a: "Grounding and citations make it substantially less likely, and confidence thresholds catch much of the rest. It's not zero, which is why escalation paths and human review on sensitive topics exist." },
+      { q: "Can it do things, or only answer?", a: "Both — but the moment it takes actions it's an agent, with a different set of guardrails. See our AI agents page." },
+      { q: "What if our documentation is poor?", a: "Then the assistant will be poor, and honestly the documentation gap is worth fixing first. We'll tell you if that's what we find rather than building on top of it." },
+    ],
+    closingCta: "Book a call",
+    related: ["AI agents", "Knowledge search (RAG)", "Workflow automation"],
+  },
+  {
+    slug: "document-processing",
+    name: "Document Processing",
+    category: "Intelligent Systems",
+    categorySlug: "intelligent-systems",
+    titleTag: "AI Document Processing & Data Extraction | Metis Tech Studio",
+    metaDescription: "Automated extraction from invoices, contracts, forms, and reports. Usually the fastest measurable ROI available. Fixed-scope pilots from a few weeks.",
+    h1: "Document processing",
+    subhead: "Somewhere in your business, a person is reading a PDF and typing what it says into a form. Possibly right now.",
+    heroCta: "Send us sample documents",
+    sections: [
+      { kind: "prose", heading: "The most boring high-value problem you have", paragraphs: [
+        "It's rarely one person's whole job, which is why it stays invisible. It's forty minutes here, a Thursday afternoon there, spread across a team, absorbed into everyone's week.",
+        "Add it up and it's frequently the largest recoverable block of time in an organisation. It's also the most measurable AI project available: you know how many documents, you know how long each takes, and you can compare before and after without a debate about attribution.",
+        "That combination — clear baseline, clear result, contained scope — makes it the project we most often recommend to a team doing this for the first time.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Invoice and receipt processing", body: "Line items, totals, tax, supplier matching, and validation against purchase orders." },
+        { term: "Contract analysis", body: "Key terms, dates, obligations, renewal windows, and non-standard clauses flagged for review." },
+        { term: "Forms and applications", body: "Structured data out of submitted forms, however they arrived: typed, scanned, or photographed at an angle in poor light." },
+        { term: "Reports and statements", body: "Extracting figures from documents that arrive as PDFs and need to become rows." },
+        { term: "Classification and routing", body: "Sorting mixed inbound documents by type and sending each to the right process." },
+      ] },
+      { kind: "list", heading: "How we build it", intro: null, items: [
+        { term: "We start with your worst documents", body: "Not the clean template — the scanned copy of a fax, the phone photo, the one with handwriting in the margin. If the system handles those, the good ones are trivial. Building against clean samples first is how these projects end up at 70% accuracy in production." },
+        { term: "Confidence scores on every field", body: "The system knows which extractions it's sure about. High confidence flows straight through; low confidence goes to a person. You set the threshold, and you can move it as trust builds." },
+        { term: "Validation against what you already know", body: "Extracted values checked against your existing records — does this supplier exist, does the total match the line items, is this date plausible. Catches errors before they reach your systems." },
+        { term: "A review interface for the exceptions", body: "Fast to work through, showing the document and the extraction side by side. The goal isn't zero human involvement; it's turning forty minutes of typing into thirty seconds of confirming." },
+        { term: "Corrections improve the system", body: "Every human fix is signal. We build the loop so accuracy climbs rather than plateaus." },
+      ] },
+      { kind: "prose", heading: "Measuring it", paragraphs: [
+        "We'll establish the baseline before building: documents per month, minutes each, error rate now. Then the same numbers after. It's rare to get a comparison this clean, so we make the most of it.",
+      ] },
+    ],
+    faq: [
+      { q: "Handwriting?", a: "Sometimes, depending on quality. Send us samples and we'll tell you honestly rather than optimistically." },
+      { q: "How accurate?", a: "Depends on your documents. We'll build a prototype against your real ones early so you get a measured number before committing to a full build." },
+    ],
+    closingCta: "Send sample documents",
+    related: ["Workflow automation", "Computer vision", "Natural language processing"],
+  },
+  {
+    slug: "workflow-automation",
+    name: "Workflow Automation",
+    category: "Intelligent Systems",
+    categorySlug: "intelligent-systems",
+    titleTag: "AI Workflow Automation Services | Metis Tech Studio",
+    metaDescription: "Automating the handoffs between your systems — the copy-paste work that lives between tools nobody owns. Connected to what you already use.",
+    h1: "Workflow automation",
+    subhead: "Your systems are fine. It's the space between them where the week disappears.",
+    heroCta: "Map your workflow",
+    sections: [
+      { kind: "prose", heading: "Nobody owns the gaps", paragraphs: [
+        "Your CRM works. Your accounting software works. Your project tool works.",
+        "And between them sits a person exporting a report, reformatting it, checking it against a second system, and pasting it into a third. Then chasing an approval by email. Then updating the first system to say it's done.",
+        "No individual tool is failing. The work exists precisely because the tools don't know about each other, and it never appears in anyone's job description or budget, because it isn't anyone's system. It's just Thursday.",
+        "Automating the gaps is usually cheaper than replacing anything and delivers faster than a platform migration.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Cross-system sync", body: "Keeping records consistent across the tools that each hold part of the truth, without a person as the integration layer." },
+        { term: "Approval and routing flows", body: "Requests that find the right approver, chase them, escalate on silence, and record the decision." },
+        { term: "Scheduled operations", body: "Reports, reconciliations, exports, and checks that run on time without anyone remembering." },
+        { term: "Intelligent triage", body: "Inbound requests read, categorised, prioritised, and routed. Including the ones that arrive as unstructured email." },
+        { term: "Exception handling", body: "The awkward cases pulled out for human attention with context attached, instead of quietly failing." },
+      ] },
+      { kind: "prose", heading: "Where the AI actually goes", paragraphs: [
+        "Most of a workflow doesn't need AI, and putting it everywhere is how these projects become slow and expensive.",
+        "Rules handle the deterministic parts — faster, cheaper, and fully predictable. AI goes specifically where the work needs judgment: reading unstructured input, categorising something ambiguous, deciding what an email is actually asking for.",
+        "We use the cheapest mechanism that reliably works at each step. That's not a compromise; it's what makes the whole thing maintainable.",
+      ] },
+      { kind: "list", heading: "How we approach it", intro: null, items: [
+        { term: "We watch the workflow first", body: "Sitting with the people doing it, following one real case end to end. Documented processes and actual processes differ, and the difference is where the automation opportunities are." },
+        { term: "We look for the process problem", body: "Occasionally a workflow exists because of an old constraint that no longer applies, and the right answer is to delete it rather than automate it. We'll say so." },
+        { term: "We automate the boring 80% first", body: "The common path, quickly, in production. Edge cases go to humans initially and get automated later if the volume justifies it. Trying to handle everything before launching is how these projects don't launch." },
+        { term: "We build in monitoring", body: "You'll know what ran, what didn't, and what's stuck. Silent automation failure is worse than no automation, because you stop checking." },
+      ] },
+    ],
+    faq: [
+      { q: "We already use Zapier or Make. Is this different?", a: "Those are excellent for simple triggers and we'll happily tell you to keep using them. Custom work earns its cost when logic gets complex, volume gets high, or the workflow needs judgment those tools can't express." },
+      { q: "What happens when a system we connect to changes?", a: "It will. Contract tests catch it fast, and a support retainer covers keeping integrations current." },
+      { q: "How do we know what's worth automating?", a: "Volume multiplied by time multiplied by error cost. We'll do that arithmetic with you during discovery and rank the candidates, including the ones not worth doing." },
+    ],
+    closingCta: "Book a call",
+    related: ["AI agents", "Document processing", "API development & integration"],
+  },
+  {
+    slug: "knowledge-search-rag",
+    name: "Knowledge Search (RAG)",
+    category: "Intelligent Systems",
+    categorySlug: "intelligent-systems",
+    titleTag: "RAG & Enterprise Knowledge Search | Metis Tech Studio",
+    metaDescription: "Search that answers questions from your own documents, with citations back to source. Permission-aware, grounded, and measured on real queries.",
+    h1: "Knowledge search",
+    subhead: "Your organisation already knows the answer. It's in a PDF, in a folder, that someone left in 2022.",
+    heroCta: "Talk about your content",
+    sections: [
+      { kind: "prose", heading: "Institutional knowledge with no index", paragraphs: [
+        "Every organisation accumulates knowledge faster than it can organise it. Policies, procedures, past projects, technical documentation, meeting notes, the email thread where a decision was actually made.",
+        "The information exists. It's just unfindable, because keyword search requires knowing the words the author used, and your new starter doesn't. So they ask a colleague, who interrupts their work to answer, or they guess.",
+        "Retrieval-augmented generation — RAG — closes that gap: search by meaning, answer in plain language, cite the source so the reader can verify.",
+        "The technique is well understood. The engagement is in the details, which is where these projects succeed or fail.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Internal knowledge assistants", body: "Question answering across your documentation, policies, and past work, respecting who's allowed to see what." },
+        { term: "Customer-facing documentation search", body: "Support and product content that answers rather than returning a list of ten links." },
+        { term: "Research and analysis tools", body: "Search across large document collections for teams whose work is reading: legal, compliance, technical, academic." },
+        { term: "Contextual in-product help", body: "Answers surfaced inside your software, aware of what the user is doing." },
+      ] },
+      { kind: "list", heading: "Where these projects actually fail", intro: null, items: [
+        { term: "Chunking", body: "How documents get split determines what can be found. Split badly and the answer is spread across two fragments that never surface together. This is unglamorous and it's the single largest driver of quality." },
+        { term: "Permissions", body: "If retrieval ignores access control, your knowledge assistant will cheerfully summarise the salary review a user isn't entitled to read. Permission-aware retrieval has to be designed in from the start, not filtered afterwards." },
+        { term: "Stale content", body: "Confidently citing a superseded policy is worse than no answer. Documents need freshness handling and a path for retiring old material." },
+        { term: "No evaluation", body: "Most RAG projects launch without a test set, so nobody can say whether a change made it better. We build a question set from real queries — with correct answers agreed by your team — and measure against it every time we change anything." },
+        { term: "Conflicting sources", body: "Two documents disagree, because organisations are like that. The system should surface the conflict rather than silently pick one." },
+      ] },
+    ],
+    faq: [
+      { q: "What content can it search?", a: "Documents, wikis, ticket histories, code, transcripts, databases — most things, with connectors to the systems they live in." },
+      { q: "Will it leak information across permission boundaries?", a: "Not if retrieval is permission-aware from the start, which is how we build it. It's the first thing we design and the first thing we test." },
+      { q: "How do we keep it current?", a: "Automated ingestion on a schedule, with freshness signals and a retirement process for superseded documents." },
+    ],
+    closingCta: "Book a call",
+    related: ["Chatbots & assistants", "Natural language processing", "Document processing"],
+  },
+  {
+    slug: "recommendation-systems",
+    name: "Recommendation Systems",
+    category: "Intelligent Systems",
+    categorySlug: "intelligent-systems",
+    titleTag: "Recommendation Engine Development | Metis Tech Studio",
+    metaDescription: "Personalisation that improves what users find — built and A/B tested against your metrics, with cold start and diversity handled properly.",
+    h1: "Recommendation systems",
+    subhead: "Showing everyone the same thing is a decision. It's just one you made by not making it.",
+    heroCta: "Talk about your catalogue",
+    sections: [
+      { kind: "prose", heading: "The cost of the default", paragraphs: [
+        "If your product has more items than a person will look through — products, articles, courses, listings, tracks — then most of your catalogue is invisible to most of your users.",
+        "They see the homepage, the first page of results, whatever's featured. Everything else exists but is functionally absent, which means inventory you paid for, content you commissioned, and listings someone is paying you to display all sit unseen.",
+        "Recommendation is how you close the gap between what you have and what each person sees.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Product recommendations", body: "Related items, complements, and personalised merchandising for e-commerce." },
+        { term: "Content recommendation", body: "Next article, next video, next course. Keeping people engaged past the thing they arrived for." },
+        { term: "Search ranking", body: "Personalising result order, which is often higher value than a recommendation carousel and considerably less visible." },
+        { term: "Matching systems", body: "Two-sided marketplaces: candidates to roles, providers to customers, supply to demand." },
+        { term: "Email and notification targeting", body: "Deciding what to send whom, and critically when not to send at all." },
+      ] },
+      { kind: "list", heading: "The problems that define the work", intro: null, items: [
+        { term: "Cold start", body: "New users have no history, and new items have no interactions. Both need a sensible answer from day one — content-based similarity, popularity fallbacks, quick preference capture — or your newest inventory never surfaces." },
+        { term: "The feedback loop", body: "A recommender trained on its own recommendations narrows relentlessly. It shows popular items, which become more popular, which get shown more. Left alone it converges on a small slice of your catalogue and calls it success. Exploration has to be designed in deliberately." },
+        { term: "Diversity and filter bubbles", body: "The most accurate recommendation is often the most boring one. Five variations of the thing they just bought is technically well predicted and commercially useless." },
+        { term: "Business rules alongside the model", body: "Margin, stock, contractual placement, seasonal priorities. The model produces relevance; your business decides what to do with it. Both matter and they have to be composable." },
+      ] },
+      { kind: "prose", heading: "How we measure it", paragraphs: [
+        "Offline metrics tell you a model learned something. They don't tell you it makes money.",
+        "So we build for A/B testing from the start, against the metric you actually care about — revenue per session, retention, engaged time, application completion. If the new system doesn't beat the current one on that number, it doesn't ship, regardless of how good its offline scores are.",
+      ] },
+    ],
+    faq: [
+      { q: "How much interaction data do we need?", a: "Less than people assume to start. Content-based approaches work from item attributes alone and improve as behavioural data accumulates. We'll design for whichever stage you're at." },
+      { q: "Will it work with our existing platform?", a: "Generally yes, via API. We'll assess your platform's extension points during discovery." },
+      { q: "Can we control what it recommends?", a: "Yes. Business rules, boosts, exclusions, and manual overrides sit alongside the model. You keep the final say." },
+    ],
+    closingCta: "Book a call",
+    related: ["Machine learning models", "Data engineering", "Predictive analytics"],
+  },
+  {
+    slug: "data-engineering",
+    name: "Data Engineering",
+    category: "Data & Cloud",
+    categorySlug: "data-cloud",
+    titleTag: "Data Engineering & Pipeline Development | Metis Tech Studio",
+    metaDescription: "Reliable pipelines, warehouses, and transformations — the foundation every analytics and AI project quietly depends on. Built to be trusted.",
+    h1: "Data engineering",
+    subhead: "Nobody has ever asked us for data engineering. They ask for the dashboard, the model, or the AI feature — and then we find out why it isn't working.",
+    heroCta: "Talk about your data",
+    sections: [
+      { kind: "prose", heading: "The invisible dependency", paragraphs: [
+        "Data engineering has a marketing problem. It produces nothing anyone can look at.",
+        "But every analytics project, every model, and every AI feature rests on data arriving somewhere, on time, in a known shape, with someone able to say what it means. When that foundation is missing, the visible project fails and gets blamed — the dashboard nobody trusts, the model that mysteriously degraded, the AI pilot that couldn't get access to the right records.",
+        "We frequently start engagements here even when the client came for something else. Not because it's what we prefer to sell, but because the thing they asked for won't work otherwise, and it's better to say that in week one.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Ingestion pipelines", body: "Getting data reliably out of source systems: databases, APIs, files, events, third-party platforms." },
+        { term: "Transformation layers", body: "Cleaning, joining, and reshaping raw data into tables people can actually query, with the logic version-controlled and tested rather than living in someone's notebook." },
+        { term: "Warehouses and data models", body: "Structured storage designed around the questions your business asks, not around how the source systems happened to store things." },
+        { term: "Streaming pipelines", body: "For data that has to be current rather than daily." },
+        { term: "Data quality monitoring", body: "Automated checks that catch problems before someone spots them in a report." },
+      ] },
+      { kind: "list", heading: "What makes a pipeline trustworthy", intro: null, items: [
+        { term: "It fails loudly", body: "Silent failure is the defining sin of data engineering. A pipeline that quietly stops is worse than one that crashes, because people keep using yesterday's numbers without knowing." },
+        { term: "It's idempotent", body: "Re-running it produces the same result. Without this, recovering from a failure means untangling duplicates by hand at exactly the moment you can least afford to." },
+        { term: "It's tested", body: "Schema checks, null checks, range checks, row count expectations. Bad data caught at the boundary instead of discovered in a board pack." },
+        { term: "It's documented", body: "What each field means, where it came from, and when it last updated. The most expensive question in any data team is \"which of these three revenue columns is the real one?\"" },
+        { term: "It's observable", body: "Freshness, volume, and success visible on a dashboard, so trust is verifiable rather than assumed." },
+      ] },
+    ],
+    faq: [
+      { q: "Do we need a warehouse?", a: "Not necessarily. Plenty of organisations are well served by simpler arrangements, and we'll say so rather than selling you infrastructure you'll pay for monthly and use quarterly." },
+      { q: "Can you work with our existing setup?", a: "Yes. Most of this work is improving and extending what's there rather than replacing it." },
+    ],
+    closingCta: "Book a data assessment",
+    related: ["Data science & analytics", "MLOps & monitoring", "Machine learning models"],
+  },
+  {
+    slug: "data-science-analytics",
+    name: "Data Science & Analytics",
+    category: "Data & Cloud",
+    categorySlug: "data-cloud",
+    titleTag: "Data Science & Analytics Services | Metis Tech Studio",
+    metaDescription: "Analysis that answers specific questions and changes specific decisions. Not another dashboard nobody opens.",
+    h1: "Data science & analytics",
+    subhead: "You almost certainly don't need another dashboard. You need an answer to a question, and then possibly to stop looking.",
+    heroCta: "Bring us a question",
+    sections: [
+      { kind: "prose", heading: "Dashboards are where questions go to be forgotten", paragraphs: [
+        "The pattern is familiar. Someone asks a question. Rather than answering it, a dashboard gets built so anyone can answer it whenever they like.",
+        "The dashboard is used enthusiastically for two weeks. Then it's used for one number. Then the underlying data changes and nobody updates it. Two years later it's still on the intranet, quietly wrong, and someone has built a spreadsheet next to it.",
+        "The original question never got a clear answer, and the organisation now maintains a permanent artefact instead.",
+        "Sometimes a dashboard is genuinely right — a number a team steers by daily. Often the honest deliverable is a piece of analysis, an answer, and a recommendation, after which the work is done.",
+      ] },
+      { kind: "list", heading: "What we do", intro: null, items: [
+        { term: "Focused analysis", body: "A specific question, investigated properly, answered in writing with the reasoning and the caveats visible. Churn drivers, pricing effects, cohort behaviour, funnel drop-off, segment profitability." },
+        { term: "Experiment design and analysis", body: "A/B tests set up so the result will actually be interpretable, and analysed so you don't ship a change on noise." },
+        { term: "Metric definition", body: "Agreeing what your core numbers mean and how they're calculated, before three teams report three different figures to the same meeting." },
+        { term: "Dashboards, where they're warranted", body: "Built for a specific decision, a specific audience, and a specific cadence. With a note about when it should be retired." },
+        { term: "Data exploration", body: "Working out what's in your data and what it could support, when you're not yet sure what to ask." },
+      ] },
+      { kind: "list", heading: "How we approach it", intro: null, items: [
+        { term: "We start with the decision", body: "What will you do differently depending on the answer? If nothing, the analysis is interesting rather than useful, and we'd rather find that out before you pay for it." },
+        { term: "We show the working", body: "Assumptions, method, and limitations stated plainly. Analysis you can't interrogate is analysis you shouldn't act on." },
+        { term: "We report uncertainty honestly", body: "A number without a confidence interval invites more precision than it deserves. If the data can't answer the question at the resolution you need, that's the finding, and it's a real one." },
+        { term: "We look for the confound", body: "The obvious relationship in the data is frequently explained by something else. Checking that is most of the difference between analysis and coincidence." },
+      ] },
+    ],
+    faq: [
+      { q: "How is this different from hiring an analyst?", a: "For sustained work, an analyst is better and we'll say so. This suits specific investigations, one-off questions, or building the foundations before you make that hire." },
+      { q: "Can you work with our BI tools?", a: "Yes — Power BI, Looker, Tableau, Metabase, or whatever you have." },
+    ],
+    closingCta: "Book a call",
+    related: ["Data engineering", "Predictive analytics", "Machine learning models"],
+  },
+  {
+    slug: "predictive-analytics",
+    name: "Predictive Analytics",
+    category: "Data & Cloud",
+    categorySlug: "data-cloud",
+    titleTag: "Predictive Analytics Services | Metis Tech Studio",
+    metaDescription: "Forecasts built around a decision and wired into a workflow — churn, demand, risk, and maintenance predictions people actually act on.",
+    h1: "Predictive analytics",
+    subhead: "A forecast nobody acts on is a hobby. The prediction is the easy half; the hard half is what happens next.",
+    heroCta: "Talk about a decision",
+    sections: [
+      { kind: "prose", heading: "Predictions need a destination", paragraphs: [
+        "Plenty of organisations have built a churn model. Rather fewer have changed anything as a result.",
+        "The model gets built, validated, and presented. It's accurate. Everyone agrees it's impressive. And then the list of at-risk customers arrives in a spreadsheet each Monday, and it isn't anyone's job to do anything with it, and the intervention was never designed, and within a quarter nobody opens the file.",
+        "So we scope backwards from the action. Who sees this prediction? In what system? What are they expected to do? What's the intervention, and is it worth more than it costs? If those questions don't have answers, the model won't change anything regardless of how accurate it is.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Churn and retention", body: "Who's likely to leave, with enough notice and enough explanation to do something about it." },
+        { term: "Demand forecasting", body: "Volume by product, location, and period, feeding purchasing, staffing, and stock decisions." },
+        { term: "Predictive maintenance", body: "Equipment failure anticipated from sensor and service data, before it becomes an outage." },
+        { term: "Risk and credit scoring", body: "Probability of default, fraud, or claim, with the explainability that regulated decisions require." },
+        { term: "Lifetime value and propensity", body: "Who's worth acquiring, who's likely to convert, and where marketing spend earns its return." },
+      ] },
+      { kind: "list", heading: "Getting it used", intro: null, items: [
+        { term: "We design the intervention alongside the model", body: "A churn prediction is worth precisely as much as the retention action attached to it. That gets scoped in the same engagement." },
+        { term: "We deliver into the workflow, not into a report", body: "The prediction appears in the CRM, the ordering system, or the maintenance schedule — wherever the person who acts on it already works. A prediction requiring someone to open a separate tool will be used for a fortnight." },
+        { term: "We make it explainable", body: "\"This customer is 78% likely to churn\" prompts the question \"why,\" and if you can't answer it, nobody trusts the number or knows what to do. Every prediction comes with its main contributing factors." },
+        { term: "We tune the threshold to the economics", body: "The cost of a missed churn and the cost of a wasted retention offer are rarely equal. We set the operating point against your actual numbers, not against a default." },
+        { term: "We validate the way time works", body: "Backtesting on historical periods, never on data the model couldn't have had at prediction time. This mistake makes models look excellent in development and useless in production, and it's remarkably common." },
+      ] },
+    ],
+    faq: [
+      { q: "How far ahead can it predict?", a: "Depends on the signal in your data. We'll establish the realistic horizon early — a shorter accurate forecast beats a longer one you can't rely on." },
+      { q: "How accurate?", a: "We'll give you a measured figure against a held-out period from your own history. Anyone quoting a percentage before seeing your data is guessing." },
+      { q: "What if it's wrong?", a: "It will be sometimes. Every forecast has an error rate, and the useful question is whether acting on it beats the current process. We'll quantify that." },
+    ],
+    closingCta: "Book a call",
+    related: ["Machine learning models", "Data science & analytics", "MLOps & monitoring"],
+  },
+  {
+    slug: "mlops-monitoring",
+    name: "MLOps & Model Monitoring",
+    category: "Data & Cloud",
+    categorySlug: "data-cloud",
+    titleTag: "MLOps & Model Monitoring Services | Metis Tech Studio",
+    metaDescription: "Deployment pipelines, drift detection, and retraining — the infrastructure that keeps a model useful after the launch meeting.",
+    h1: "MLOps & model monitoring",
+    subhead: "Your model was accurate last year. Nobody has checked since, and it hasn't told you.",
+    heroCta: "Book a model audit",
+    sections: [
+      { kind: "prose", heading: "Models decay quietly", paragraphs: [
+        "Software breaks loudly. An error appears, something stops, someone notices within the hour.",
+        "Models don't. A model that's degraded from 91% to 68% returns predictions with exactly the same confidence and formatting as it always did. Nothing errors. Nothing alerts. It just becomes gradually wrong, and the business keeps acting on it, and the discovery comes months later through a symptom nobody initially connects to the model.",
+        "The causes are ordinary. Customer behaviour shifts. A supplier changes a data format. An upstream team renames a field. Your product changes and the population no longer resembles the training set. None of these are failures — they're just time passing.",
+        "This is the discipline that catches it.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Deployment pipelines", body: "Getting a model from training to serving repeatably, with versioning, staged rollout, and a rollback that works under pressure." },
+        { term: "Monitoring and alerting", body: "Tracking prediction distributions, input drift, latency, and accuracy where ground truth becomes available. Alerts to people who can act." },
+        { term: "Drift detection", body: "Automated comparison of live inputs against training distribution, flagging shifts before accuracy visibly suffers." },
+        { term: "Retraining pipelines", body: "Scheduled or triggered retraining, with validation gates so a worse model can't quietly replace a better one." },
+        { term: "Model registry and lineage", body: "Which version is live, what data trained it, who approved it, and what changed. Essential in regulated settings and useful everywhere." },
+        { term: "Shadow and canary deployment", body: "Running a new model alongside the current one on real traffic before it takes over." },
+      ] },
+      { kind: "prose", heading: "Where ground truth is delayed", paragraphs: [
+        "The awkward case: you often can't measure accuracy immediately. A churn prediction takes months to be proven right, and by then you've made decisions based on it.",
+        "So monitoring watches proxies — input drift, prediction distribution shifts, changes in downstream outcomes — and treats them as early warnings. You find out something has changed before you find out it was wrong.",
+      ] },
+      { kind: "prose", heading: "Model audits", paragraphs: [
+        "If you have models in production and nobody can say how they're performing, that's the place to start. A fixed-fee audit covering current accuracy, drift, data dependencies, and operational risk, with a prioritised list of what to fix.",
+      ] },
+    ],
+    faq: [
+      { q: "We only have one model. Is this overkill?", a: "Probably yes for a full platform, but the basics — versioning, monitoring, a documented retraining path — are proportionate at any scale. We'll scope to your situation rather than selling you infrastructure for a team you don't have." },
+      { q: "Which tools?", a: "Whatever fits your stack and your team's ability to run it. Managed cloud services, open-source tooling, or something simple and custom. Complexity you can't maintain is worse than none." },
+      { q: "Can you audit models we didn't build?", a: "Yes, and it's a common first engagement." },
+    ],
+    closingCta: "Book a model audit",
+    related: ["Machine learning models", "Cloud & DevOps", "Data engineering"],
+  },
+  {
+    slug: "cloud-devops",
+    name: "Cloud & DevOps",
+    category: "Data & Cloud",
+    categorySlug: "data-cloud",
+    titleTag: "Cloud Infrastructure & DevOps Services | Metis Tech Studio",
+    metaDescription: "Infrastructure as code, CI/CD, monitoring, and cost optimisation — set up so deployments are boring and Fridays are safe.",
+    h1: "Cloud & DevOps",
+    subhead: "Deployment should be the least interesting thing that happens all week.",
+    heroCta: "Talk about your infrastructure",
+    sections: [
+      { kind: "prose", heading: "The Friday test", paragraphs: [
+        "Ask a team whether they'd deploy on a Friday afternoon. The answer tells you nearly everything about their infrastructure.",
+        "\"Yes, why not\" means releases are small, automated, tested, observable, and reversible in minutes. \"Absolutely not\" means each deployment is a manual event with unclear consequences and no fast way back — so releases get batched, batches get larger, larger releases are riskier, and everyone becomes more cautious. The fear is rational and it compounds.",
+        "Good infrastructure is measured by how little anyone thinks about it.",
+      ] },
+      { kind: "list", heading: "What we build", intro: null, items: [
+        { term: "Infrastructure as code", body: "Your environment defined in version control, reproducible and reviewable. No configuration existing only in a console and one person's memory." },
+        { term: "CI/CD pipelines", body: "Automated build, test, and deploy. Every change tested the same way, every deployment made the same way." },
+        { term: "Container orchestration", body: "Docker and Kubernetes where the complexity is genuinely warranted. Frequently it isn't, and we'll say so — Kubernetes for a three-service application is a hobby you'll be paying for." },
+        { term: "Monitoring and observability", body: "Logs, metrics, traces, and alerts that tell you what's wrong rather than only that something is." },
+        { term: "Cost optimisation", body: "Cloud bills grow through accumulated defaults. Auditing and right-sizing usually pays for itself." },
+        { term: "Security hardening", body: "Network policy, secrets management, least-privilege access, and automated dependency scanning." },
+      ] },
+      { kind: "list", heading: "What we optimise for", intro: null, items: [
+        { term: "Fast rollback", body: "Faster to reverse than to diagnose. Roll back first, investigate afterwards, with the pressure off." },
+        { term: "Small, frequent releases", body: "Ten small deployments carry less risk than one large one, because when something breaks the cause is obvious." },
+        { term: "Environments that match", body: "Staging that genuinely resembles production. Most deployment surprises are environment differences nobody documented." },
+        { term: "Alerts a human should see", body: "An alert that fires daily and gets ignored is worse than no alert, because it trains people to ignore the channel. We tune for signal." },
+        { term: "Cost visibility", body: "Knowing what each part costs, before the finance conversation rather than during it." },
+      ] },
+      { kind: "prose", heading: "Right-sizing the complexity", paragraphs: [
+        "A serious risk in this work is building infrastructure appropriate for a company far larger than yours. Kubernetes, service meshes, and multi-region failover are the right answer sometimes, and an expensive ongoing burden the rest of the time.",
+        "We size infrastructure for the team that has to run it after we've gone. If that's two people, it needs to be something two people can operate on a bad day.",
+      ] },
+    ],
+    faq: [
+      { q: "Which cloud?", a: "AWS, Google Cloud, or Azure — usually whichever you're already on, since migration is rarely worth it on its own. If you're choosing fresh, we'll recommend based on your stack and your team's experience." },
+      { q: "Can you help us reduce our bill?", a: "Often significantly. An audit typically finds unused resources, oversized instances, and storage nobody has looked at since it was created." },
+      { q: "Do you offer ongoing management?", a: "Yes, via a support retainer covering monitoring, patching, and incident response." },
+    ],
+    closingCta: "Book an infrastructure review",
+    related: ["Web app development", "MLOps & monitoring", "SaaS product development"],
+  },
+];
+
+export const serviceBySlug = (slug: string) =>
+  allServices.find((s) => s.slug === slug);
+
+/** Practice groupings, derived so nav slugs can never drift from the pages. */
+export const practiceGroups = [
+  { slug: "ai-ml", heading: "AI & ML", question: "Can a machine do this?" },
+  { slug: "software", heading: "Software Development", question: "Can you build the thing itself?" },
+  { slug: "intelligent-systems", heading: "Intelligent Systems", question: "Can this happen without a person?" },
+  { slug: "data-cloud", heading: "Data & Cloud", question: "Will it still work in two years?" },
+].map((g) => ({
+  ...g,
+  items: allServices
+    .filter((s) => s.categorySlug === g.slug)
+    .map((s) => ({ label: s.name, href: `/services/${s.slug}` })),
+}));
