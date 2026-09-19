@@ -16,8 +16,7 @@
    ========================================================================== */
 
 export const placeholders = {
-  /** TODO: real inbox */
-  email: "hello@metistechstudio.com",
+  email: "team@metistechstudio.com",
   /** TODO: real number, or leave null to hide the row entirely */
   phone: null as string | null,
   /** TODO: e.g. "Ahmedabad, India" — leave null to hide */
@@ -45,7 +44,7 @@ export const site = {
   name: "Metis Tech Studio",
   shortName: "Metis",
   tagline: "Practical intelligence, engineered.",
-  url: "https://metistechstudio.com", // TODO: real domain
+  url: "https://metistechstudio.com",
   title: "Metis Tech Studio — Web, App & AI Development",
   description:
     "Product engineering studio building web platforms, mobile apps, and AI systems. Founder-built, fixed scope, code you own. Book a free consultation.",

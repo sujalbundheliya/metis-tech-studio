@@ -97,7 +97,7 @@ Everything unverified sits in the `placeholders` object at the top of
 `src/content/site.ts`. The UI **omits** anything still `null` rather than printing
 a fake value — nothing on the site is invented.
 
-- [ ] `email` — currently `hello@metistechstudio.com`
+- [ ] `email` — currently `team@metistechstudio.com`
 - [ ] `phone`, `location`, `regions` — `null`; footer rows and FAQ adapt
 - [ ] `founderA`, `founderB` — `null`; the team FAQ reads "The two founders"
 - [ ] `pricing.*` — `null`; the cost FAQ falls back to an honest no-numbers answer
