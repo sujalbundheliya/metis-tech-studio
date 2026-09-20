@@ -33,7 +33,7 @@ export function Problem() {
         className="absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,var(--color-venice-800),transparent_72%)] opacity-55"
       />
 
-      <div className="relative mx-auto max-w-[1400px] px-6 py-24 sm:px-10 lg:px-14 lg:py-32">
+      <div className="relative mx-auto max-w-[1400px] px-gutter py-16 sm:px-10 sm:py-24 lg:px-14 lg:py-32">
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-3">
             <div className="h-px w-full bg-white/22" />

@@ -29,7 +29,7 @@ export default function ContactPage() {
       <main id="main">
         <section className="relative border-b border-white/10">
           <Atmosphere bloom="top-left" intensity="soft" />
-          <div className="relative mx-auto max-w-[1400px] px-6 pt-20 pb-14 sm:px-10 lg:px-14 lg:pt-28">
+          <div className="relative mx-auto max-w-[1400px] px-gutter pt-12 pb-10 sm:px-10 sm:pt-20 sm:pb-14 lg:px-14 lg:pt-28">
             <Label>Contact</Label>
             <h1 className="t-display mt-7 max-w-4xl text-balance text-white">
               Tell us what you&apos;re{" "}
@@ -46,12 +46,12 @@ export default function ContactPage() {
         <section className="border-b border-white/10">
           <div className="mx-auto grid max-w-[1400px] lg:grid-cols-12">
             {/* form */}
-            <div className="px-6 py-14 sm:px-10 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:py-16">
+            <div className="px-gutter py-10 sm:px-10 sm:py-14 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:py-16">
               <ContactForm />
             </div>
 
             {/* rail */}
-            <aside className="border-t border-white/10 px-6 py-12 sm:px-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-16">
+            <aside className="border-t border-white/10 px-gutter py-10 sm:px-10 sm:py-12 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-16">
               <div className="lg:sticky lg:top-24">
                 <Label className="text-venice-300/60">What happens next</Label>
                 <ol className="mt-6">
@@ -76,7 +76,7 @@ export default function ContactPage() {
                     <li>
                       <a
                         href={`mailto:${placeholders.email}`}
-                        className="text-[16px] text-venice-200/80 transition-colors hover:text-aurora-400"
+                        className="inline-flex min-h-11 items-center text-[16px] text-venice-200/80 transition-colors hover:text-aurora-400 can-hover:min-h-0"
                       >
                         {placeholders.email}
                       </a>
@@ -85,7 +85,7 @@ export default function ContactPage() {
                       <li>
                         <a
                           href={`tel:${placeholders.phone.replace(/\s/g, "")}`}
-                          className="text-[16px] text-venice-200/80 transition-colors hover:text-aurora-400"
+                          className="inline-flex min-h-11 items-center text-[16px] text-venice-200/80 transition-colors hover:text-aurora-400 can-hover:min-h-0"
                         >
                           {placeholders.phone}
                         </a>

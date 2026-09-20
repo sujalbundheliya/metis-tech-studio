@@ -90,10 +90,26 @@
   0%, 100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }
 }
-/* the diagonal light shaft breathes rather than sweeps — less distracting */
+/* The diagonal light shaft breathes rather than sweeps — less distracting.
+   Strength is a variable rather than a literal because these keyframes animate
+   `opacity`, and an animated property beats any declared value: an
+   `opacity-45` utility on a running .light-beam is silently discarded. That is
+   why `intensity="soft"` never actually dimmed the shaft on interior pages,
+   and why the portrait beam needs a knob rather than a utility class.
+
+   Two factors, not one: `--beam-soft` is the component's own intensity prop and
+   arrives as an inline style, while `--beam-viewport` is set by the media query
+   below. They multiply because an inline style outranks any stylesheet rule —
+   a single variable would let the component silently win at every width. */
 @keyframes beam {
-  0%, 100% { opacity: 0.55; transform: translate3d(0, 0, 0) rotate(var(--beam-angle, -34deg)) scaleY(1); }
-  50%      { opacity: 0.85; transform: translate3d(2%, -1%, 0) rotate(var(--beam-angle, -34deg)) scaleY(1.06); }
+  0%, 100% {
+    opacity: calc(0.55 * var(--beam-soft, 1) * var(--beam-viewport, 1));
+    transform: translate3d(0, 0, 0) rotate(var(--beam-angle, -34deg)) scaleY(1);
+  }
+  50% {
+    opacity: calc(0.85 * var(--beam-soft, 1) * var(--beam-viewport, 1));
+    transform: translate3d(2%, -1%, 0) rotate(var(--beam-angle, -34deg)) scaleY(1.06);
+  }
 }
 @keyframes curtain {
   0%, 100% { opacity: 0.35; }
@@ -324,3 +340,139 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================================
+   MOBILE FOUNDATIONS
+
+   The site was composed at desktop width first, which left three whole classes
+   of phone behaviour unhandled: the viewport unit lies while the URL bar
+   animates, hover affordances never fire on touch, and iOS reserves physical
+   screen space this layout knew nothing about. Everything below exists to make
+   the phone a first-class target rather than a narrow desktop.
+   ========================================================================== */
+
+:root {
+  /* The sticky header's height, in one place — the mobile sheet, the scroll
+     offsets for in-page anchors and the bottom action bar all measure from it,
+     and they were previously three separate hard-coded 56px/64px guesses. */
+  --header-h: 3.5rem;
+
+  /* Resolve to 0px on every browser that has no notch, so these can be added
+     unconditionally without a fallback branch at each call site. */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+}
+
+html {
+  /* In-page anchors (#services, #process, the legal page's §-list) otherwise
+     scroll their target underneath the sticky header. */
+  scroll-padding-top: calc(var(--header-h) + 0.5rem);
+}
+
+body {
+  /* iOS paints a grey flash over any tapped link by default, which on a
+     near-black surface reads as a rendering fault rather than feedback. The
+     site provides its own :active states instead. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Safe areas -----------------------------------------------------------
+   Phones with a notch or a home indicator reserve physical screen space. Any
+   element pinned to an edge has to pad past it or it sits under the hardware. */
+
+@utility pt-safe { padding-top: var(--safe-t); }
+@utility pb-safe { padding-bottom: var(--safe-b); }
+@utility px-safe {
+  padding-left: max(var(--safe-l), 0px);
+  padding-right: max(var(--safe-r), 0px);
+}
+/* Gutter that grows to clear a landscape notch but never shrinks below the
+   design's own 1.5rem side margin. */
+@utility px-gutter {
+  padding-left: max(1.5rem, var(--safe-l));
+  padding-right: max(1.5rem, var(--safe-r));
+}
+
+/* --- Touch targets --------------------------------------------------------
+   The WCAG 2.2 target-size floor is 24px and the platform guidance from both
+   Apple and Google is 44px. Inline text links in a list were landing at 20px,
+   which is a coin-flip tap. `tap-target` sets the floor without changing the
+   type size, by growing the row rather than the text. */
+
+@utility tap-target {
+  min-height: 2.75rem; /* 44px */
+  display: flex;
+  align-items: center;
+}
+/* For targets that must stay inline (breadcrumbs, footer meta) — expands the
+   hit area past the visible text without disturbing the layout around it. */
+@utility tap-inline {
+  position: relative;
+}
+.tap-inline::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  min-height: 2.75rem;
+  transform: translateY(-50%);
+}
+
+/* --- Hover is not a thing on a phone --------------------------------------
+   Every `hover:` affordance on this site is also its only affordance: the crop
+   marks, the chip borders, the growing underlines and the card rules are all
+   invisible until hovered. On touch they simply never appear — and worse,
+   mobile browsers emulate a sticky hover on tap, so one card stays lit after
+   you have navigated away. `can-hover` gates decoration that only makes sense
+   with a pointer; `touch-visible` is its counterpart, showing on touch what a
+   pointer device reveals on hover. */
+
+@media (hover: none) {
+  .touch-visible { opacity: 1 !important; }
+}
+
+/* --- Atmosphere at phone width --------------------------------------------
+   The blueprint grid is sized for a 1400px canvas. At 390px a 72px cell puts
+   five lines across the screen and reads as a texture rather than structure. */
+
+@media (max-width: 640px) {
+  .grid-lines { background-size: 48px 48px; }
+
+  /* The curtain repeats every 126px. At 390px that is three full cycles across
+     the screen, which reads as wallpaper stripes rather than as depth behind
+     the content. Stretching the cycle puts one soft band on screen instead. */
+  .light-curtain {
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0 116px,
+      color-mix(in oklab, var(--color-venice-400) 7%, transparent) 116px 117px,
+      transparent 117px 234px,
+      color-mix(in oklab, var(--color-aurora-500) 4%, transparent) 234px 235px
+    );
+  }
+}
+
+/* --- Motion ----------------------------------------------------------------
+   Scroll-linked reveals fire per element. On a phone, where the same content
+   is a single column, that becomes a long queue of things fading in one after
+   another on the way down. Shortening the distance keeps the rhythm without
+   turning the scroll into a slideshow. */
+
+@media (max-width: 640px) {
+  .reveal-tight { --reveal-y: 12px; }
+}
+
+/* The portrait beam is 150% of the viewport wide so its twelve stops have room
+   to spread. That much coverage at full strength would light the entire hero
+   rather than rake across it, so strength comes down to match the new width. */
+@media (max-width: 640px) {
+  .light-beam { --beam-viewport: 0.5; }
+}
+
+/* `can-hover:` — the counterpart to Tailwind's own `hover:`.
+   `hover:` styles a state a phone can never enter; this variant styles the
+   *resting* value that should only apply where that state is reachable. Used
+   in pairs: the touch-friendly value is the base, and `can-hover:` restores
+   the quieter pointer-device value on top of it. */
+@custom-variant can-hover (@media (hover: hover) and (pointer: fine));

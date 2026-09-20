@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { LogoLockup } from "@/components/ui/logo";
 import { Label } from "@/components/ui/kit";
+import { FooterNav } from "@/components/footer-nav";
 import { footer, placeholders, site } from "@/content/site";
 import { cn } from "@/lib/utils";
 
@@ -59,7 +60,7 @@ export function SiteFooter() {
       </div>
 
       <div className="mx-auto grid max-w-[1400px] lg:grid-cols-12">
-        <div className="px-6 py-12 sm:px-10 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14">
+        <div className="px-gutter py-10 sm:px-10 sm:py-12 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14">
           <LogoLockup width={190} />
           <p className="t-small mt-5 max-w-xs text-venice-200/62">
             {site.name} — {site.tagline.toLowerCase()}
@@ -75,7 +76,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
-                    "grid h-10 w-10 place-items-center border border-white/12 text-venice-200/65 transition-colors hover:border-aurora-500/50 hover:text-aurora-400",
+                    "grid h-11 w-11 place-items-center border border-white/12 text-venice-200/65 transition-colors hover:border-aurora-500/50 hover:text-aurora-400 sm:h-10 sm:w-10",
                     i > 0 && "border-l-0",
                   )}
                 >
@@ -89,29 +90,9 @@ export function SiteFooter() {
         </div>
 
         <div className="grid border-t border-white/10 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-4 lg:border-t-0">
-          {footer.columns.map((column, i) => (
-            <div
-              key={column.heading}
-              className={`px-6 py-10 sm:px-8 ${i > 0 ? "border-t border-white/10 sm:border-t-0" : ""} ${
-                i % 2 === 1 ? "sm:border-l sm:border-white/10" : ""
-              } ${i >= 2 ? "sm:border-t" : ""} lg:border-t-0 lg:border-l lg:border-white/10`}
-            >
-              <Label dark>{column.heading}</Label>
-              <ul className="mt-5 space-y-2.5">
-                {column.links.map((link) => (
-                  <li key={link.href + link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-[15px] text-venice-200/62 transition-colors hover:text-sand-50"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-          <div className="border-t border-white/10 px-6 py-10 sm:border-l sm:px-8 lg:border-t-0">
+          <FooterNav columns={footer.columns} />
+
+          <div className="border-t border-white/10 px-gutter py-8 sm:border-l sm:px-8 sm:py-10 lg:border-t-0">
             <Label dark>Get in touch</Label>
             <ul className="mt-5 space-y-2.5">
               {contact.map(({ icon: Icon, value, href }) => (
@@ -119,13 +100,13 @@ export function SiteFooter() {
                   {href ? (
                     <a
                       href={href}
-                      className="inline-flex items-center gap-2 text-[15px] text-venice-200/62 transition-colors hover:text-sand-50"
+                      className="tap-target gap-2 text-[15px] text-venice-200/62 transition-colors hover:text-sand-50 active:text-sand-50 can-hover:min-h-0 can-hover:inline-flex"
                     >
                       <Icon className="h-3.5 w-3.5 shrink-0 opacity-60" strokeWidth={1.7} />
                       {value}
                     </a>
                   ) : (
-                    <span className="inline-flex items-center gap-2 text-[15px] text-venice-200/62">
+                    <span className="tap-target gap-2 text-[15px] text-venice-200/62 can-hover:min-h-0 can-hover:inline-flex">
                       <Icon className="h-3.5 w-3.5 shrink-0 opacity-60" strokeWidth={1.7} />
                       {value}
                     </span>
@@ -138,15 +119,21 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-3 px-6 py-6 sm:flex-row sm:px-10 lg:px-14">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-1 px-gutter py-4 pb-safe sm:flex-row sm:gap-3 sm:py-6 sm:px-10 lg:px-14">
           <p className="font-mono text-[12px] text-venice-300/45">
             © {year} {site.name}
           </p>
-          <div className="flex items-center gap-7">
-            <Link href="/privacy" className="text-[13px] text-venice-200/55 transition-colors hover:text-sand-50">
+          <div className="flex items-center gap-6 sm:gap-7">
+            <Link
+              href="/privacy"
+              className="tap-target text-[13px] text-venice-200/55 transition-colors hover:text-sand-50 can-hover:min-h-0"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-[13px] text-venice-200/55 transition-colors hover:text-sand-50">
+            <Link
+              href="/terms"
+              className="tap-target text-[13px] text-venice-200/55 transition-colors hover:text-sand-50 can-hover:min-h-0"
+            >
               Terms of Service
             </Link>
           </div>

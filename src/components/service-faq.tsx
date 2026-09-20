@@ -12,7 +12,7 @@ export function ServiceFaq({ items }: { items: { q: string; a: string }[] }) {
   return (
     <section className="border-b border-white/10">
       <div className="mx-auto grid max-w-[1400px] lg:grid-cols-12">
-        <div className="px-6 pt-16 pb-8 sm:px-10 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:py-20">
+        <div className="px-gutter pt-12 pb-6 sm:px-10 sm:pt-16 sm:pb-8 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:py-20">
           <div className="lg:sticky lg:top-24">
             <div className="h-px w-full bg-white/20" />
             <Label className="mt-4 block">Questions</Label>
@@ -31,7 +31,7 @@ export function ServiceFaq({ items }: { items: { q: string; a: string }[] }) {
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
                     aria-controls={`svc-faq-${i}`}
-                    className="group flex w-full items-start justify-between gap-8 px-6 py-6 text-left transition-colors duration-200 hover:bg-white/[0.04] sm:px-10 lg:px-14"
+                    className="group flex w-full items-start justify-between gap-5 px-gutter py-6 text-left transition-colors duration-200 hover:bg-white/[0.04] active:bg-white/[0.055] sm:gap-8 sm:px-10 lg:px-14"
                   >
                     <span
                       className={cn(
@@ -66,7 +66,7 @@ export function ServiceFaq({ items }: { items: { q: string; a: string }[] }) {
                       }}
                       className="overflow-hidden"
                     >
-                      <p className="t-body max-w-2xl px-6 pb-7 text-venice-200/70 sm:px-10 lg:px-14">
+                      <p className="t-body max-w-2xl px-gutter pb-7 text-venice-200/70 sm:px-10 lg:px-14">
                         {item.a}
                       </p>
                     </m.div>

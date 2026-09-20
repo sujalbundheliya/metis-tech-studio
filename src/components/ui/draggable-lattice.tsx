@@ -19,7 +19,12 @@ type Pulse = { from: number; to: number; t: number; speed: number; warm: boolean
 
 const SPRING = 0.055;   // pull back toward home
 const DAMPING = 0.9;    // velocity decay
+/* Default grab radius, in CSS pixels. A cursor hotspot is a point; a fingertip
+   contact patch is closer to 40px across, so `nearest()` widens this on coarse
+   pointers — at 26px a tap had to land within a node's own dot to catch it,
+   which on a phone read as the lattice simply not responding. */
 const GRAB_RADIUS = 26;
+const GRAB_RADIUS_TOUCH = 46;
 const PUSH_RADIUS = 130;
 
 /**
@@ -40,6 +45,8 @@ export function DraggableLattice({ className }: { className?: string }) {
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const coarse = window.matchMedia("(hover: none)").matches;
+    const grabRadius = coarse ? GRAB_RADIUS_TOUCH : GRAB_RADIUS;
 
     let w = 0, h = 0, raf = 0, time = 0, linkDist = 150;
     let nodes: Node[] = [];
@@ -95,7 +102,7 @@ export function DraggableLattice({ className }: { className?: string }) {
     };
 
     const nearest = (x: number, y: number) => {
-      let idx = -1, best = GRAB_RADIUS;
+      let idx = -1, best = grabRadius;
       for (let i = 0; i < nodes.length; i++) {
         const d = Math.hypot(nodes[i].x - x, nodes[i].y - y);
         if (d < best) { best = d; idx = i; }
@@ -266,7 +273,7 @@ export function DraggableLattice({ className }: { className?: string }) {
       pointer.px = pointer.x; pointer.py = pointer.y;
       pointer.x = x; pointer.y = y;
       pointer.active = true;
-      if (dragIndex === -1) {
+      if (dragIndex === -1 && !coarse) {
         hoverIndex = nearest(x, y);
         canvas.style.cursor = hoverIndex === -1 ? "default" : "grab";
       }

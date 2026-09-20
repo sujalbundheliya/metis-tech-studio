@@ -13,7 +13,7 @@ export function Faq() {
   return (
     <section id="faq" className="border-b border-white/10 bg-ink-950">
       <div className="mx-auto grid max-w-[1400px] lg:grid-cols-12">
-        <div className="px-6 pt-24 pb-10 sm:px-10 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:pt-32 lg:pb-32">
+        <div className="px-gutter pt-16 pb-8 sm:px-10 sm:pt-24 sm:pb-10 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:pt-32 lg:pb-32">
           <div className="lg:sticky lg:top-28">
             <div className="h-px w-full bg-venice-950/20" />
             <Label className="mt-4 block">{faq.eyebrow}</Label>
@@ -35,7 +35,7 @@ export function Faq() {
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
                     aria-controls={`v1-faq-${i}`}
-                    className="group flex w-full items-start justify-between gap-8 px-6 py-7 text-left transition-colors duration-200 hover:bg-white/[0.035] sm:px-10 lg:px-14"
+                    className="group flex w-full items-start justify-between gap-5 px-gutter py-6 text-left transition-colors duration-200 hover:bg-white/[0.035] active:bg-white/[0.05] sm:gap-8 sm:py-7 sm:px-10 lg:px-14"
                   >
                     <span
                       className={cn(
@@ -70,7 +70,7 @@ export function Faq() {
                       }}
                       className="overflow-hidden"
                     >
-                      <p className="t-body max-w-2xl px-6 pb-8 text-venice-200/68 sm:px-10 lg:px-14">
+                      <p className="t-body max-w-2xl px-gutter pb-8 text-venice-200/68 sm:px-10 lg:px-14">
                         {item.a}
                       </p>
                     </m.div>

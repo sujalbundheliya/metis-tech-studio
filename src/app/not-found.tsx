@@ -12,7 +12,7 @@ export default function NotFound() {
       <main id="main">
         <section className="relative border-b border-white/10">
           <Atmosphere bloom="top-center" />
-          <div className="relative mx-auto max-w-[1400px] px-6 pt-24 pb-20 sm:px-10 lg:px-14 lg:pt-32 lg:pb-28">
+          <div className="relative mx-auto max-w-[1400px] px-gutter pt-16 pb-14 sm:px-10 sm:pt-24 sm:pb-20 lg:px-14 lg:pt-32 lg:pb-28">
             <Label className="text-ember-400">Error 404</Label>
             <h1 className="t-display mt-7 max-w-3xl text-balance text-white">
               That page{" "}
@@ -30,7 +30,7 @@ export default function NotFound() {
         </section>
 
         <section className="border-b border-white/10">
-          <div className="mx-auto max-w-[1400px] px-6 pt-12 pb-4 sm:px-10 lg:px-14">
+          <div className="mx-auto max-w-[1400px] px-gutter pt-12 pb-4 sm:px-10 lg:px-14">
             <Label className="text-venice-300/60">Four practices</Label>
           </div>
           <div className="mx-auto grid max-w-[1400px] border-t border-white/10 sm:grid-cols-2 lg:grid-cols-4">
@@ -38,7 +38,7 @@ export default function NotFound() {
               <Link
                 key={group.slug}
                 href={`/services#${group.slug}`}
-                className={`group px-6 py-9 transition-colors duration-200 hover:bg-white/[0.05] sm:px-8 ${
+                className={`group px-gutter py-9 transition-colors duration-200 hover:bg-white/[0.05] sm:px-8 ${
                   i > 0 ? "border-t border-white/10 sm:border-t-0 sm:border-l" : ""
                 } ${i === 2 ? "sm:border-t sm:border-l-0 lg:border-t-0 lg:border-l" : ""} ${
                   i === 3 ? "sm:border-t lg:border-t-0" : ""

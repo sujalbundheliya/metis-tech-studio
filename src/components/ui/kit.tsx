@@ -36,9 +36,12 @@ export function Chip({
     <span
       className={cn(
         "t-label inline-flex items-center px-2.5 py-1.5 transition-colors duration-200",
+        // Chips sit inside a `group` card and light up with it on hover. On
+        // touch that never fires, so they rest one step brighter instead of
+        // sitting permanently in their dimmest state.
         dark
-          ? "border border-white/18 text-venice-200/80 group-hover:border-aurora-500/45 group-hover:text-aurora-300"
-          : "border border-white/16 text-venice-200/75 group-hover:border-venice-700/40 group-hover:text-venice-200",
+          ? "border border-aurora-500/30 text-aurora-300/90 can-hover:border-white/18 can-hover:text-venice-200/80 group-hover:border-aurora-500/45 group-hover:text-aurora-300"
+          : "border border-white/22 text-venice-200/85 can-hover:border-white/16 can-hover:text-venice-200/75 group-hover:border-venice-700/40 group-hover:text-venice-200",
         className,
       )}
     >
@@ -101,7 +104,7 @@ export function Btn({
     <Link
       href={href}
       className={cn(
-        "group/b relative isolate inline-flex items-center justify-center gap-2 overflow-hidden font-medium transition-all duration-200",
+        "group/b relative isolate inline-flex min-h-12 items-center justify-center gap-2 overflow-hidden font-medium transition-all duration-200",
         shape === "pill" && "rounded-full",
         size === "sm" && "px-4 py-2.5 text-[14px]",
         size === "md" && "px-5 py-3 text-[15px]",
@@ -141,15 +144,23 @@ export function TextLink({
     <Link
       href={href}
       className={cn(
-        "group/l inline-flex items-center gap-1.5 text-[15px] font-medium transition-colors duration-200",
+        // `min-h-11` rather than padding: the row grows to the 44px touch
+        // floor while the text stays on its own baseline, so nothing shifts
+        // above the breakpoint where a cursor makes the size moot.
+        "group/l inline-flex min-h-11 items-center gap-1.5 text-[15px] font-medium transition-colors duration-200 can-hover:min-h-0",
         dark ? "text-aurora-400 hover:text-aurora-300" : "text-aurora-400 hover:text-white",
         className,
       )}
     >
       {/* The underline is drawn as a background gradient so it can grow from
           0 to full width; `currentColor` keeps it in step with the link's own
-          colour in both the light and dark variants. */}
-      <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 group-hover/l:bg-[length:100%_1px]">
+          colour in both the light and dark variants.
+
+          It rests at full width and `can-hover:` collapses it back to zero,
+          rather than the other way round. On a phone the grow-on-hover version
+          simply never drew, leaving these links with no underline at all — the
+          only thing separating them from body copy was their colour. */}
+      <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:100%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 can-hover:bg-[length:0%_1px] group-hover/l:bg-[length:100%_1px]">
         {children}
       </span>
       <span className="transition-transform duration-200 group-hover/l:translate-x-1">{chevron}</span>

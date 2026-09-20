@@ -3,6 +3,7 @@ import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import { BootSplash } from "@/components/boot-splash";
 import { NavProgress } from "@/components/nav-progress";
 import { MotionProvider } from "@/components/motion-provider";
+import { MobileActionBar } from "@/components/mobile-action-bar";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -65,6 +66,10 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
+  // Without `viewportFit: "cover"` iOS letterboxes the page inside the safe
+  // area and every env(safe-area-inset-*) resolves to 0 — the padding added
+  // for the notch and the home indicator would silently do nothing.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -91,6 +96,7 @@ export default function RootLayout({
           <NavProgress />
           <BootSplash />
           {children}
+          <MobileActionBar />
         </MotionProvider>
       </body>
     </html>

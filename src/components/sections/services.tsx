@@ -11,7 +11,7 @@ export function ServicesSection() {
 
   return (
     <section id="services" className="border-b border-white/10 bg-ink-1000">
-      <div className="mx-auto max-w-[1400px] px-6 pt-24 pb-16 sm:px-10 lg:px-14 lg:pt-32">
+      <div className="mx-auto max-w-[1400px] px-gutter pt-16 pb-10 sm:px-10 sm:pt-24 sm:pb-16 lg:px-14 lg:pt-32">
         <Opener
           label={services.eyebrow}
           title={
@@ -33,13 +33,16 @@ export function ServicesSection() {
             viewport={{ once: true, margin: "-70px" }}
             transition={{ duration: reduced ? 0.001 : 0.7, delay: (i % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              "group relative flex flex-col px-6 py-10 transition-colors duration-300 hover:bg-white/[0.045] sm:px-10 lg:px-14 lg:py-14",
+              "group relative flex flex-col px-gutter py-9 transition-colors duration-300 hover:bg-white/[0.045] active:bg-white/[0.06] sm:px-10 sm:py-10 lg:px-14 lg:py-14",
               i % 2 === 1 && "md:border-l md:border-white/10",
               i >= 2 && "border-t border-white/10",
               i === 1 && "border-t border-white/10 md:border-t-0",
             )}
           >
-            <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {/* Crop marks fade in on hover. `touch-visible` keeps them drawn where
+                there is no pointer, so the cell still reads as a bounded card
+                rather than as loose text on the page background. */}
+            <span className="touch-visible pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <Ticks />
             </span>
 
@@ -75,7 +78,7 @@ export function ServicesSection() {
       </div>
 
       {/* nudge strip */}
-      <div className="mx-auto flex max-w-[1400px] flex-col items-start gap-5 border-t border-white/10 bg-ink-950 px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-14">
+      <div className="mx-auto flex max-w-[1400px] flex-col items-start gap-5 border-t border-white/10 bg-ink-950 px-gutter py-8 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-14">
         <p className="t-body max-w-2xl text-venice-200/80">
           <span className="font-medium text-white">Most projects are two or three of these.</span>{" "}
           You don&apos;t have to know which category your problem lives in before you ask.

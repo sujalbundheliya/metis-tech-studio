@@ -26,7 +26,7 @@ export default function ServicesIndex() {
         <section className="relative border-b border-white/10">
           <Atmosphere bloom="top-center" intensity="soft" />
           <div className="relative mx-auto grid max-w-[1400px] lg:grid-cols-12">
-            <div className="px-6 pt-20 pb-14 sm:px-10 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-28 lg:pb-20">
+            <div className="px-gutter pt-12 pb-10 sm:px-10 sm:pt-20 sm:pb-14 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-28 lg:pb-20">
               <Label>Services</Label>
               <h1 className="t-display mt-7 text-balance text-white">
                 {allServices.length} things we build.{" "}
@@ -38,7 +38,7 @@ export default function ServicesIndex() {
                 </Btn>
               </div>
             </div>
-            <div className="flex items-end border-t border-white/10 px-6 py-10 sm:px-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-28">
+            <div className="flex items-end border-t border-white/10 px-gutter py-8 sm:px-10 sm:py-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-28">
               <p className="t-lead max-w-md text-venice-200/80">
                 Most studios organise their services by technology. We&apos;ve organised ours by the
                 question you&apos;re actually asking — because nobody wakes up wanting a
@@ -56,7 +56,7 @@ export default function ServicesIndex() {
             className="scroll-mt-16 border-b border-white/10"
           >
             <div className="mx-auto grid max-w-[1400px] lg:grid-cols-12">
-              <div className="px-6 pt-14 pb-6 sm:px-10 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:py-16">
+              <div className="px-gutter pt-10 pb-5 sm:px-10 sm:pt-14 sm:pb-6 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:py-16">
                 <div className="lg:sticky lg:top-24">
                   <Label className="text-ember-400">{String(gi + 1).padStart(2, "0")}</Label>
                   <h2 className="t-h2 mt-4 text-white">{group.heading}</h2>
@@ -73,7 +73,7 @@ export default function ServicesIndex() {
                     <li key={s.slug} className="border-t border-white/10 first:border-t-0 lg:first:border-t">
                       <Link
                         href={`/services/${s.slug}`}
-                        className="group flex items-start justify-between gap-8 px-6 py-7 transition-colors duration-200 hover:bg-white/[0.045] sm:px-10 lg:px-14"
+                        className="group flex min-h-14 items-start justify-between gap-5 px-gutter py-6 transition-colors duration-200 hover:bg-white/[0.045] active:bg-white/[0.06] sm:gap-8 sm:py-7 sm:px-10 lg:px-14"
                       >
                         <span className="min-w-0">
                           <span className="t-h3 block text-white transition-colors group-hover:text-aurora-300">
@@ -101,7 +101,7 @@ export default function ServicesIndex() {
 
         {/* ---- not sure which ---- */}
         <section className="border-b border-white/10 bg-ink-950">
-          <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-16 sm:px-10 lg:grid-cols-12 lg:px-14">
+          <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter py-12 sm:px-10 sm:py-16 lg:grid-cols-12 lg:px-14">
             <div className="lg:col-span-4">
               <div className="h-px w-full bg-white/20" />
               <Label className="mt-4 block">Not sure which?</Label>
@@ -124,7 +124,7 @@ export default function ServicesIndex() {
 
         {/* ---- what every engagement includes ---- */}
         <section className="border-b border-white/10">
-          <div className="mx-auto max-w-[1400px] px-6 pt-16 pb-8 sm:px-10 lg:px-14">
+          <div className="mx-auto max-w-[1400px] px-gutter pt-12 pb-6 sm:px-10 sm:pt-16 sm:pb-8 lg:px-14">
             <div className="h-px w-full bg-white/20" />
             <Label className="mt-4 block">Every engagement</Label>
           </div>
@@ -137,7 +137,7 @@ export default function ServicesIndex() {
             ].map(([title, body], i) => (
               <div
                 key={title}
-                className={`px-6 py-10 sm:px-8 lg:px-10 ${i > 0 ? "border-t border-white/10 sm:border-t-0 sm:border-l" : ""} ${i === 2 ? "sm:border-t sm:border-l-0 lg:border-t-0 lg:border-l" : ""} ${i === 3 ? "sm:border-t lg:border-t-0" : ""}`}
+                className={`px-gutter py-8 sm:px-8 sm:py-10 lg:px-10 ${i > 0 ? "border-t border-white/10 sm:border-t-0 sm:border-l" : ""} ${i === 2 ? "sm:border-t sm:border-l-0 lg:border-t-0 lg:border-l" : ""} ${i === 3 ? "sm:border-t lg:border-t-0" : ""}`}
               >
                 <h3 className="t-h3 text-white">{title}</h3>
                 <p className="t-small mt-3 text-venice-200/68">{body}</p>

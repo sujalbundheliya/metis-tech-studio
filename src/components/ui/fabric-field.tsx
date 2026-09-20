@@ -9,6 +9,15 @@ import { cn } from "@/lib/utils";
  *
  * The metaphor is the section it sits behind: a surface that looks continuous
  * until something passes through it and shows you where the gaps are.
+ *
+ * ON TOUCH the sweep is driven by scrolling rather than by a cursor. The
+ * pointer listener alone left this canvas completely inert on a phone:
+ * `pointermove` on `window` only fires while a finger is down, and the browser
+ * cancels the stream the moment that movement is recognised as a scroll — so
+ * the one gesture a phone actually performs here is also the one that
+ * guarantees the effect never runs. Rather than ship a dead interaction, the
+ * disturbance follows the middle of the viewport as it travels down the
+ * section: the weave tears where you are reading, and knits closed behind you.
  */
 export function FabricField({
   className,
@@ -28,12 +37,17 @@ export function FabricField({
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    /* `hover: none` rather than a width test: what matters is whether a
+       pointer can hover this surface, not how wide the screen is. */
+    const coarse = window.matchMedia("(hover: none)").matches;
 
     const BASE = dark ? [132, 179, 206] : [22, 88, 123];
     const HOT = [40, 199, 232];   // aurora — the same on either surface
     const WARM = [232, 143, 53];
 
-    const RADIUS = 118;      // cursor influence
+    // A fingertip covers far more than a cursor hotspot, and the scroll-driven
+    // sweep has to read at arm's length rather than under a precise pointer.
+    const RADIUS = coarse ? 168 : 118;      // cursor influence
     const STRENGTH = 30;     // how far dots are shoved
     const SPRING = 0.075;
     const DAMPING = 0.86;
@@ -170,6 +184,25 @@ export function FabricField({
     };
     const onLeave = () => { pointer.active = false; pointer.x = -9999; pointer.y = -9999; };
 
+    /* --- touch: the sweep rides the scroll ------------------------------- */
+    let idle = 0;
+    const onScroll = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      // The disturbance sits where the viewport's middle crosses the canvas,
+      // so it tracks the line the reader is actually looking at.
+      pointer.y = window.innerHeight / 2 - rect.top;
+      // …drifting sideways as you go, so the tear has a direction instead of
+      // running dead straight down the middle.
+      pointer.x = w * (0.5 + 0.34 * Math.sin(window.scrollY / 260));
+      pointer.active = true;
+      settled = false;
+      // Let the weave close again once scrolling stops, which also lets the
+      // rAF loop idle out exactly as it does when a cursor leaves.
+      clearTimeout(idle);
+      idle = window.setTimeout(() => { pointer.active = false; }, 360);
+    };
+
     const ro = new ResizeObserver(() => { build(); settled = false; if (reduced) draw(); });
     ro.observe(canvas);
 
@@ -184,9 +217,14 @@ export function FabricField({
     if (reduced) {
       draw();
     } else {
-      // listen on the window so the tear tracks even over the text on top
-      window.addEventListener("pointermove", onMove, { passive: true });
-      window.addEventListener("pointerleave", onLeave);
+      if (coarse) {
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      } else {
+        // listen on the window so the tear tracks even over the text on top
+        window.addEventListener("pointermove", onMove, { passive: true });
+        window.addEventListener("pointerleave", onLeave);
+      }
       raf = requestAnimationFrame(step);
     }
 
@@ -196,6 +234,8 @@ export function FabricField({
       io.disconnect();
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(idle);
     };
   }, [dark, spacing]);
 

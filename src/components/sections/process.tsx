@@ -14,7 +14,7 @@ export function Process() {
 
   return (
     <section id="process" data-nav="dark" className="border-b border-white/10 bg-ink-1000">
-      <div className="mx-auto max-w-[1400px] px-6 pt-24 pb-16 sm:px-10 lg:px-14 lg:pt-32">
+      <div className="mx-auto max-w-[1400px] px-gutter pt-16 pb-10 sm:px-10 sm:pt-24 sm:pb-16 lg:px-14 lg:pt-32">
         <Opener
           dark
           label={process.eyebrow}
@@ -46,7 +46,7 @@ export function Process() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: reduced ? 0.001 : 0.7, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
-            className={`group relative flex flex-col px-6 py-10 transition-colors duration-300 hover:bg-white/[0.035] sm:px-8 lg:px-10 lg:py-14 ${
+            className={`group relative flex flex-col px-gutter py-8 transition-colors duration-300 hover:bg-white/[0.035] sm:px-8 sm:py-10 lg:px-10 lg:py-14 ${
               i > 0 ? "border-t border-white/10 md:border-t-0 md:border-l" : ""
             } ${i === 2 ? "md:border-t md:border-l-0 lg:border-t-0 lg:border-l" : ""} ${
               i === 3 ? "md:border-t lg:border-t-0" : ""
@@ -70,7 +70,7 @@ export function Process() {
         ))}
       </div>
 
-      <div className="mx-auto max-w-[1400px] border-t border-white/10 px-6 py-8 sm:px-10 lg:px-14">
+      <div className="mx-auto max-w-[1400px] border-t border-white/10 px-gutter py-7 sm:px-10 sm:py-8 lg:px-14">
         <TextLink href="/how-we-work" dark>
           {process.cta}
         </TextLink>

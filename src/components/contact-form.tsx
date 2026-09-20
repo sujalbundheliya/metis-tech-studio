@@ -8,8 +8,12 @@ import { cn } from "@/lib/utils";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
+/* 16px is not a style choice: iOS Safari zooms the viewport on focus for any
+   input under 16px and never zooms back out, leaving the page scaled and
+   scrolled sideways for the rest of the visit. The 48px min-height is the
+   touch floor — `py-3` alone left these at 27px on a phone. */
 const field =
-  "w-full border border-white/14 bg-white/[0.03] px-4 py-3 text-[16px] text-white placeholder:text-venice-300/40 transition-colors duration-200 focus:border-aurora-500/70 focus:bg-white/[0.05] focus:outline-none";
+  "w-full min-h-12 border border-white/14 bg-white/[0.03] px-4 py-3 text-[16px] text-white placeholder:text-venice-300/40 transition-colors duration-200 focus:border-aurora-500/70 focus:bg-white/[0.05] focus:outline-none";
 
 export function ContactForm() {
   const reduced = useReducedMotion();
@@ -61,7 +65,7 @@ export function ContactForm() {
         initial={{ opacity: 0, y: reduced ? 0 : 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduced ? 0.001 : 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="border border-aurora-500/30 bg-aurora-500/[0.06] p-10"
+        className="border border-aurora-500/30 bg-aurora-500/[0.06] p-6 sm:p-10"
         role="status"
       >
         <Label className="text-aurora-400">Message sent</Label>
@@ -103,23 +107,53 @@ export function ContactForm() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="name" label="Your name" error={errors.name} required>
-          <input id="name" name="name" type="text" autoComplete="name" className={field} placeholder="Jane Okafor" />
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            autoCapitalize="words"
+            enterKeyHint="next"
+            className={field}
+            placeholder="Jane Okafor"
+          />
         </Field>
         <Field id="email" label="Email" error={errors.email} required>
-          <input id="email" name="email" type="email" autoComplete="email" className={field} placeholder="jane@company.com" />
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            className={field}
+            placeholder="jane@company.com"
+          />
         </Field>
       </div>
 
       <Field id="company" label="Company" error={errors.company} optional>
-        <input id="company" name="company" type="text" autoComplete="organization" className={field} placeholder="Acme Ltd" />
+        <input
+          id="company"
+          name="company"
+          type="text"
+          autoComplete="organization"
+          autoCapitalize="words"
+          enterKeyHint="next"
+          className={field}
+          placeholder="Acme Ltd"
+        />
       </Field>
 
       <Field id="message" label="What are you trying to build?" error={errors.message} required>
         <textarea
           id="message"
           name="message"
-          rows={7}
-          className={cn(field, "resize-y")}
+          rows={4}
+          enterKeyHint="send"
+          className={cn(field, "resize-y sm:min-h-[11rem]")}
           placeholder="The problem, who it's for, and anything you've already tried. Plain language is fine — we'll ask the technical questions."
         />
       </Field>
@@ -141,14 +175,14 @@ export function ContactForm() {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-col items-start gap-4 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col-reverse items-stretch gap-4 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
         <p className="t-small text-venice-300/55">
           We reply within one business day. No newsletter, no sequence.
         </p>
         <button
           type="submit"
           disabled={status === "sending"}
-          className="inline-flex items-center gap-2 bg-sand-100 px-8 py-4 text-[16px] font-medium text-ink-1000 shadow-[0_0_0_1px_rgba(245,238,221,0.2),0_8px_40px_-10px_rgba(245,238,221,0.35)] transition-all duration-200 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-14 w-full items-center justify-center gap-2 bg-sand-100 px-8 py-4 text-[16px] font-medium text-ink-1000 shadow-[0_0_0_1px_rgba(245,238,221,0.2),0_8px_40px_-10px_rgba(245,238,221,0.35)] transition-all duration-200 hover:bg-white active:bg-white disabled:cursor-not-allowed disabled:opacity-60 can-hover:min-h-0 sm:w-auto"
         >
           {status === "sending" ? "Sending…" : "Send enquiry"}
           {status !== "sending" && (

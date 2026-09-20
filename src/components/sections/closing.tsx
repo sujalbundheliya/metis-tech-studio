@@ -36,7 +36,7 @@ export function ClosingCta({
         className="pointer-events-none absolute top-1/2 left-1/2 h-[300px] w-[560px] max-w-[110vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,var(--color-beam-500)_0%,color-mix(in_oklab,var(--color-beam-500)_50%,transparent)_34%,transparent_76%)] opacity-30"
       />
 
-      <div className="relative mx-auto max-w-[1400px] px-6 py-28 sm:px-10 lg:py-36">
+      <div className="relative mx-auto max-w-[1400px] px-gutter py-20 sm:px-10 sm:py-28 lg:py-36">
         <div className="mx-auto max-w-3xl text-center">
           <m.h2
             initial={{ opacity: 0, y: reduced ? 0 : 20 }}
@@ -75,7 +75,7 @@ export function ClosingCta({
             </Btn>
             <a
               href={`mailto:${placeholders.email}`}
-              className="group font-mono text-[15px] text-venice-200/70 transition-colors duration-300 hover:text-aurora-400"
+              className="group inline-flex min-h-11 items-center font-mono text-[15px] text-venice-200/70 transition-colors duration-300 hover:text-aurora-400 can-hover:min-h-0"
             >
               <span className="border-b border-venice-200/20 pb-0.5 transition-colors duration-300 group-hover:border-aurora-400/60">
                 {placeholders.email}

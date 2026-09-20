@@ -17,7 +17,7 @@ export function TechStack() {
 
   return (
     <section id="stack" className="border-b border-white/10 bg-ink-1000">
-      <div className="mx-auto max-w-[1400px] px-6 pt-24 pb-16 sm:px-10 lg:px-14 lg:pt-32">
+      <div className="mx-auto max-w-[1400px] px-gutter pt-16 pb-10 sm:px-10 sm:pt-24 sm:pb-16 lg:px-14 lg:pt-32">
         <Opener
           label="Tooling"
           title={
@@ -49,7 +49,7 @@ export function TechStack() {
         {techStack.groups.map((group, i) => (
           <div
             key={group.label}
-            className={`px-6 py-8 sm:px-8 lg:px-10 ${i > 0 ? "border-t border-white/10 sm:border-t-0" : ""} ${
+            className={`px-gutter py-7 sm:px-8 sm:py-8 lg:px-10 ${i > 0 ? "border-t border-white/10 sm:border-t-0" : ""} ${
               i % 2 === 1 ? "sm:border-l sm:border-white/10" : ""
             } ${i >= 2 ? "sm:border-t" : ""} ${i % 3 !== 0 ? "lg:border-l lg:border-white/10" : "lg:border-l-0"} ${
               i >= 3 ? "lg:border-t" : "lg:border-t-0"

@@ -25,7 +25,7 @@ export function SimplePage({
       <main id="main">
         <section className="relative border-b border-white/10">
           <Atmosphere bloom="top-left" intensity="soft" beam={false} />
-          <div className="relative mx-auto max-w-[1400px] px-6 pt-20 pb-12 sm:px-10 lg:px-14 lg:pt-28">
+          <div className="relative mx-auto max-w-[1400px] px-gutter pt-12 pb-10 sm:px-10 sm:pt-20 sm:pb-12 lg:px-14 lg:pt-28">
             <Label>{label}</Label>
             <h1 className="t-display mt-7 max-w-4xl text-balance text-white">{title}</h1>
             {intro && <p className="t-lead mt-7 max-w-2xl text-venice-200/80">{intro}</p>}
@@ -36,7 +36,7 @@ export function SimplePage({
         </section>
 
         <section className="border-b border-white/10">
-          <div className="mx-auto max-w-[1400px] px-6 py-14 sm:px-10 lg:px-14 lg:py-20">
+          <div className="mx-auto max-w-[1400px] px-gutter py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-20">
             {children}
           </div>
         </section>
@@ -60,7 +60,7 @@ export function Legal({ sections }: { sections: { heading: string; body: string[
               <li key={s.heading} className="border-t border-white/10 last:border-b">
                 <a
                   href={`#s${i + 1}`}
-                  className="flex gap-3 py-2.5 text-[15px] text-venice-200/65 transition-colors hover:text-white"
+                  className="flex min-h-11 items-center gap-3 py-2.5 text-[15px] text-venice-200/65 transition-colors hover:text-white active:text-white can-hover:min-h-0"
                 >
                   <span className="t-label shrink-0 pt-1 text-venice-300/40">
                     {String(i + 1).padStart(2, "0")}

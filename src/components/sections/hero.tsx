@@ -22,7 +22,7 @@ export function Hero() {
 
       {/* ---- editorial split ---- */}
       <div className="relative mx-auto grid max-w-[1400px] lg:grid-cols-12">
-        <div className="px-6 pt-20 pb-12 sm:px-10 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-28 lg:pb-20">
+        <div className="px-gutter pt-12 pb-10 sm:px-10 sm:pt-20 sm:pb-12 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-28 lg:pb-20">
           <m.div {...rise(0)}>
             <Label>{hero.eyebrow}</Label>
           </m.div>
@@ -54,7 +54,7 @@ export function Hero() {
           </m.div>
         </div>
 
-        <div className="flex flex-col justify-between border-t border-white/10 px-6 py-10 sm:px-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-28">
+        <div className="flex flex-col justify-between border-t border-white/10 px-gutter py-8 sm:px-10 sm:py-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-28">
           <m.p className="t-lead max-w-md text-venice-200/80" {...rise(0.3)}>
             {hero.subhead}
           </m.p>
@@ -76,7 +76,7 @@ export function Hero() {
           <a
             key={group.slug}
             href={`/services#${group.slug}`}
-            className={`group relative px-6 py-7 transition-colors duration-200 hover:bg-white/[0.05] sm:px-8 ${
+            className={`group relative px-gutter py-7 transition-colors duration-200 hover:bg-white/[0.05] active:bg-white/[0.07] sm:px-8 ${
               i > 0 ? "border-t border-white/10 sm:border-t-0 sm:border-l" : ""
             } ${i === 2 ? "sm:border-t sm:border-l-0 lg:border-t-0 lg:border-l" : ""} ${
               i === 3 ? "sm:border-t lg:border-t-0" : ""
@@ -85,7 +85,10 @@ export function Hero() {
             <Label className="text-ember-400">{String(i + 1).padStart(2, "0")}</Label>
             <p className="t-h3 mt-3 text-white">{group.heading}</p>
             <p className="t-small mt-1.5 text-venice-300/60">{group.items.length} services</p>
-            <span className="absolute bottom-0 left-0 h-px w-0 bg-aurora-500 transition-[width] duration-400 ease-[var(--ease-out-expo)] group-hover:w-full" />
+            {/* The rule sweeps in on hover. On touch there is no hover, so each
+                card rests with a short aurora tick marking it as a target —
+                otherwise these four read as static headings, not links. */}
+            <span className="absolute bottom-0 left-0 h-px w-10 bg-aurora-500 transition-[width] duration-400 ease-[var(--ease-out-expo)] can-hover:w-0 group-hover:w-full" />
           </a>
         ))}
       </div>

@@ -74,15 +74,18 @@ export default async function ServicePage({
         <section className="relative border-b border-white/10">
           <Atmosphere bloom="top-left" intensity="soft" />
           <div className="relative mx-auto grid max-w-[1400px] lg:grid-cols-12">
-            <div className="px-6 pt-16 pb-12 sm:px-10 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-24 lg:pb-16">
-              <nav aria-label="Breadcrumb" className="t-label flex flex-wrap items-center gap-2 text-venice-300/55">
-                <Link href="/services" className="transition-colors hover:text-aurora-400">
+            <div className="px-gutter pt-12 pb-10 sm:px-10 sm:pt-16 sm:pb-12 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-24 lg:pb-16">
+              <nav aria-label="Breadcrumb" className="t-label flex min-h-11 flex-wrap items-center gap-2 text-venice-300/55 can-hover:min-h-0">
+                <Link
+                  href="/services"
+                  className="inline-flex min-h-11 items-center transition-colors hover:text-aurora-400 can-hover:min-h-0"
+                >
                   Services
                 </Link>
                 <span aria-hidden="true">/</span>
                 <Link
                   href={`/services#${service.categorySlug}`}
-                  className="transition-colors hover:text-aurora-400"
+                  className="inline-flex min-h-11 items-center transition-colors hover:text-aurora-400 can-hover:min-h-0"
                 >
                   {service.category}
                 </Link>
@@ -103,7 +106,7 @@ export default async function ServicePage({
             </div>
 
             {/* sibling rail */}
-            <aside className="border-t border-white/10 px-6 py-10 sm:px-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-24">
+            <aside className="border-t border-white/10 px-gutter py-8 sm:px-10 sm:py-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-24">
               <div className="lg:sticky lg:top-24">
                 <Label className="text-venice-300/60">{group?.heading}</Label>
                 <p className="t-editorial mt-3 text-[20px] leading-snug text-aurora-400/80 italic">
@@ -114,7 +117,7 @@ export default async function ServicePage({
                     <li key={s.slug} className="border-t border-white/10 last:border-b">
                       <Link
                         href={`/services/${s.slug}`}
-                        className="block py-3 text-[15px] text-venice-200/65 transition-colors hover:text-white"
+                        className="tap-target text-[15px] text-venice-200/65 transition-colors hover:text-white active:text-white can-hover:block can-hover:py-3"
                       >
                         {s.name}
                       </Link>
@@ -129,7 +132,7 @@ export default async function ServicePage({
         {/* ---- body sections ---- */}
         {service.sections.map((section, i) => (
           <section key={section.heading} className="border-b border-white/10">
-            <div className="mx-auto grid max-w-[1400px] gap-8 px-6 py-16 sm:px-10 lg:grid-cols-12 lg:px-14 lg:py-20">
+            <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter py-12 sm:px-10 sm:py-16 lg:grid-cols-12 lg:px-14 lg:py-20">
               <div className="lg:col-span-4">
                 <div className="lg:sticky lg:top-24">
                   <div className="h-px w-full bg-white/20" />
@@ -187,7 +190,7 @@ export default async function ServicePage({
         {/* ---- related ---- */}
         {suggestions.length > 0 && (
           <section className="border-b border-white/10 bg-ink-950">
-            <div className="mx-auto max-w-[1400px] px-6 pt-14 pb-6 sm:px-10 lg:px-14">
+            <div className="mx-auto max-w-[1400px] px-gutter pt-10 pb-5 sm:px-10 sm:pt-14 sm:pb-6 lg:px-14">
               <div className="h-px w-full bg-white/20" />
               <Label className="mt-4 block">Related services</Label>
             </div>
@@ -196,7 +199,7 @@ export default async function ServicePage({
                 <Link
                   key={s.slug}
                   href={`/services/${s.slug}`}
-                  className={`group px-6 py-9 transition-colors duration-200 hover:bg-white/[0.05] sm:px-8 lg:px-10 ${
+                  className={`group block px-gutter py-7 transition-colors duration-200 hover:bg-white/[0.05] active:bg-white/[0.07] sm:px-8 sm:py-9 lg:px-10 ${
                     i > 0 ? "border-t border-white/10 sm:border-t-0 sm:border-l" : ""
                   } ${i === 2 ? "sm:border-t sm:border-l-0 lg:border-t-0 lg:border-l" : ""}`}
                 >
