@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { placeholders } from "@/content/site";
 import { useMounted } from "@/lib/use-mounted";
@@ -27,6 +28,7 @@ export function MobileActionBar() {
   const [atContact, setAtContact] = useState(false);
   const reduced = useReducedMotion();
   const raf = useRef(0);
+  const pathname = usePathname();
 
   /* Show once the hero is behind you. Reading the scroll position inside rAF
      keeps this off the scroll handler's critical path — the site fought hard
@@ -67,9 +69,15 @@ export function MobileActionBar() {
     );
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
-  }, []);
+    // The bar lives in the layout and outlives every page, so the elements it
+    // watches have to be looked up again after each client-side navigation —
+    // otherwise it keeps observing the previous page's detached footer.
+  }, [pathname]);
 
-  const visible = past && !atContact;
+  /* On the page the button leads to, it would only cover the form's own
+     submit button with a link back to itself. */
+  const onTarget = pathname === placeholders.bookingUrl;
+  const visible = past && !atContact && !onTarget;
 
   const bar = (
     <AnimatePresence>

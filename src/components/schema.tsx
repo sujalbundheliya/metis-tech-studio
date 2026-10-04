@@ -1,5 +1,5 @@
 import { faq, placeholders, site } from "@/content/site";
-import { allServices } from "@/content/services";
+import { practices, type Practice } from "@/content/services";
 
 /** Organization schema — only asserts values we actually have. */
 export function OrganizationSchema() {
@@ -15,13 +15,13 @@ export function OrganizationSchema() {
     ...(placeholders.location && {
       address: { "@type": "PostalAddress", addressLocality: placeholders.location },
     }),
-    makesOffer: allServices.map((s) => ({
+    makesOffer: practices.map((p) => ({
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
-        name: s.name,
-        url: `${site.url}/services/${s.slug}`,
-        description: s.metaDescription,
+        name: p.name,
+        url: `${site.url}/services/${p.slug}`,
+        description: p.metaDescription,
       },
     })),
   };
@@ -57,6 +57,31 @@ export function BreadcrumbSchema({ trail }: { trail: { name: string; url: string
       name: t.name,
       item: `${site.url}${t.url}`,
     })),
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  );
+}
+
+/** One practice page as a Service, with its eight offerings as a catalogue. */
+export function ServiceSchema({ practice }: { practice: Practice }) {
+  const url = `${site.url}/services/${practice.slug}`;
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: practice.name,
+    serviceType: practice.name,
+    description: practice.metaDescription,
+    url,
+    provider: { "@type": "Organization", name: site.name, url: site.url },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: practice.name,
+      itemListElement: practice.services.map((s) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: s.name, description: s.body, url: `${url}#${s.id}` },
+      })),
+    },
   };
   return (
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />

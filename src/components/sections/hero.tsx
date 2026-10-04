@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { m, useReducedMotion } from "motion/react";
 import { Atmosphere } from "@/components/ui/atmosphere";
 import { Btn, Label } from "@/components/ui/kit";
 import { hero, placeholders, trustSignals } from "@/content/site";
-import { practiceGroups } from "@/content/services";
+import { practiceHref, practices } from "@/content/services";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -71,25 +72,23 @@ export function Hero() {
       </div>
 
       {/* ---- practice index ---- */}
-      <div className="mx-auto grid max-w-[1400px] border-t border-white/10 sm:grid-cols-2 lg:grid-cols-4">
-        {practiceGroups.map((group, i) => (
-          <a
-            key={group.slug}
-            href={`/services#${group.slug}`}
+      <div className="mx-auto grid max-w-[1400px] border-t border-white/10 sm:grid-cols-3">
+        {practices.map((practice, i) => (
+          <Link
+            key={practice.slug}
+            href={practiceHref(practice)}
             className={`group relative px-gutter py-7 transition-colors duration-200 hover:bg-white/[0.05] active:bg-white/[0.07] sm:px-8 ${
               i > 0 ? "border-t border-white/10 sm:border-t-0 sm:border-l" : ""
-            } ${i === 2 ? "sm:border-t sm:border-l-0 lg:border-t-0 lg:border-l" : ""} ${
-              i === 3 ? "sm:border-t lg:border-t-0" : ""
             }`}
           >
-            <Label className="text-ember-400">{String(i + 1).padStart(2, "0")}</Label>
-            <p className="t-h3 mt-3 text-white">{group.heading}</p>
-            <p className="t-small mt-1.5 text-venice-300/60">{group.items.length} services</p>
+            <Label className="text-ember-400">{practice.number}</Label>
+            <p className="t-h3 mt-3 text-white">{practice.name}</p>
+            <p className="t-small mt-1.5 text-venice-300/60">{practice.services.length} services</p>
             {/* The rule sweeps in on hover. On touch there is no hover, so each
                 card rests with a short aurora tick marking it as a target —
-                otherwise these four read as static headings, not links. */}
+                otherwise these three read as static headings, not links. */}
             <span className="absolute bottom-0 left-0 h-px w-10 bg-aurora-500 transition-[width] duration-400 ease-[var(--ease-out-expo)] can-hover:w-0 group-hover:w-full" />
-          </a>
+          </Link>
         ))}
       </div>
     </section>

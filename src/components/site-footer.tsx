@@ -60,14 +60,42 @@ export function SiteFooter() {
       </div>
 
       <div className="mx-auto grid max-w-[1400px] lg:grid-cols-12">
-        <div className="px-gutter py-10 sm:px-10 sm:py-12 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14">
+        {/* Brand column. No right border: the first nav column draws the
+            shared rule, and both drawing it stacked two hairlines into one
+            visibly heavier line. */}
+        <div className="px-gutter py-10 sm:px-10 sm:py-12 lg:col-span-4 lg:px-14">
           <LogoLockup width={190} />
           <p className="t-small mt-5 max-w-xs text-venice-200/62">
             {site.name} — {site.tagline.toLowerCase()}
             {placeholders.location ? ` ${placeholders.location}` : ""}
           </p>
+
+          <Label dark className="mt-8 block">
+            Get in touch
+          </Label>
+          <ul className="mt-3 space-y-1">
+            {contact.map(({ icon: Icon, value, href }) => (
+              <li key={value}>
+                {href ? (
+                  <a
+                    href={href}
+                    className="tap-target gap-2 text-[15px] text-venice-200/62 transition-colors hover:text-sand-50 active:text-sand-50 can-hover:min-h-0 can-hover:inline-flex can-hover:py-1"
+                  >
+                    <Icon className="h-3.5 w-3.5 shrink-0 opacity-60" strokeWidth={1.7} />
+                    {value}
+                  </a>
+                ) : (
+                  <span className="tap-target gap-2 text-[15px] text-venice-200/62 can-hover:min-h-0 can-hover:inline-flex can-hover:py-1">
+                    <Icon className="h-3.5 w-3.5 shrink-0 opacity-60" strokeWidth={1.7} />
+                    {value}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+
           {socials.length > 0 && (
-            <div className="mt-7 flex gap-px">
+            <div className="mt-6 flex gap-px">
               {socials.map(({ label, href, path }, i) => (
                 <a
                   key={label}
@@ -91,30 +119,6 @@ export function SiteFooter() {
 
         <div className="grid border-t border-white/10 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-4 lg:border-t-0">
           <FooterNav columns={footer.columns} />
-
-          <div className="border-t border-white/10 px-gutter py-8 sm:border-l sm:px-8 sm:py-10 lg:border-t-0">
-            <Label dark>Get in touch</Label>
-            <ul className="mt-5 space-y-2.5">
-              {contact.map(({ icon: Icon, value, href }) => (
-                <li key={value}>
-                  {href ? (
-                    <a
-                      href={href}
-                      className="tap-target gap-2 text-[15px] text-venice-200/62 transition-colors hover:text-sand-50 active:text-sand-50 can-hover:min-h-0 can-hover:inline-flex"
-                    >
-                      <Icon className="h-3.5 w-3.5 shrink-0 opacity-60" strokeWidth={1.7} />
-                      {value}
-                    </a>
-                  ) : (
-                    <span className="tap-target gap-2 text-[15px] text-venice-200/62 can-hover:min-h-0 can-hover:inline-flex">
-                      <Icon className="h-3.5 w-3.5 shrink-0 opacity-60" strokeWidth={1.7} />
-                      {value}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </div>
 

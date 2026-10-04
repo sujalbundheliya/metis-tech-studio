@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { contactSchema } from "@/lib/contact-schema";
 import { placeholders, site } from "@/content/site";
+import { contact } from "@/content/contact";
 
 /**
  * Contact form handler.
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
 
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { ok: false, error: "Too many messages from this address. Try again shortly." },
+      { ok: false, error: "Too many messages from this address. Try again shortly, or email us at" },
       { status: 429 },
     );
   }
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, error: "Malformed request." }, { status: 400 });
+    return NextResponse.json({ ok: false, error: contact.form.error }, { status: 400 });
   }
 
   const parsed = contactSchema.safeParse(body);
@@ -66,7 +67,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, fieldErrors }, { status: 400 });
   }
 
-  const { name, email, company, message, ref_token } = parsed.data;
+  const { name, email, company, phone, message, budget, timeline, source, ref_token } = parsed.data;
 
   // Honeypot filled → look successful to the sender, but send nothing.
   // Always log it: a silently-dropped enquiry is far more costly than a spam
@@ -80,10 +81,19 @@ export async function POST(request: Request) {
   }
 
   const subject = `New enquiry — ${name}${company ? ` (${company})` : ""}`;
+  // Optional answers, in the order the form asks them. Blank ones still get a
+  // row, so a reply can see at a glance what the sender chose to skip.
+  const details: [string, string][] = [
+    ["Name", name],
+    ["Email", email],
+    ["Company", company || "—"],
+    ["Mobile", phone || "—"],
+    ["Budget", budget || "—"],
+    ["Timeline", timeline || "—"],
+    ["Heard via", source || "—"],
+  ];
   const text = [
-    `Name:      ${name}`,
-    `Email:     ${email}`,
-    `Company:   ${company || "—"}`,
+    ...details.map(([k, v]) => `${`${k}:`.padEnd(12)}${v}`),
     ``,
     message,
     ``,
@@ -94,9 +104,12 @@ export async function POST(request: Request) {
     <div style="font-family:ui-sans-serif,system-ui,sans-serif;line-height:1.6;color:#0b1520">
       <h2 style="margin:0 0 16px;font-size:18px">New enquiry via ${esc(site.name)}</h2>
       <table style="border-collapse:collapse;font-size:14px">
-        <tr><td style="padding:4px 16px 4px 0;color:#667"><b>Name</b></td><td>${esc(name)}</td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#667"><b>Email</b></td><td><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#667"><b>Company</b></td><td>${esc(company || "—")}</td></tr>
+        ${details
+          .map(([k, v]) => {
+            const cell = k === "Email" ? `<a href="mailto:${esc(v)}">${esc(v)}</a>` : esc(v);
+            return `<tr><td style="padding:4px 16px 4px 0;color:#667"><b>${k}</b></td><td>${cell}</td></tr>`;
+          })
+          .join("")}
       </table>
       <p style="margin:20px 0 6px;color:#667;font-size:13px"><b>Message</b></p>
       <div style="white-space:pre-wrap;font-size:14px">${esc(message)}</div>
@@ -123,7 +136,7 @@ export async function POST(request: Request) {
     if (error) {
       console.error("[contact] Resend rejected the message:", error);
       return NextResponse.json(
-        { ok: false, error: "We couldn't send that just now. Please email us directly." },
+        { ok: false, error: contact.form.error },
         { status: 502 },
       );
     }
@@ -134,7 +147,7 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error("[contact] send failed:", err);
     return NextResponse.json(
-      { ok: false, error: "We couldn't send that just now. Please email us directly." },
+      { ok: false, error: contact.form.error },
       { status: 502 },
     );
   }

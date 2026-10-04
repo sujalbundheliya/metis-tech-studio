@@ -476,3 +476,75 @@ body {
    in pairs: the touch-friendly value is the base, and `can-hover:` restores
    the quieter pointer-device value on top of it. */
 @custom-variant can-hover (@media (hover: hover) and (pointer: fine));
+
+/* --- Range input (cost calculator) ----------------------------------------
+   Track and thumb are pseudo-elements, which no utility class can reach, and
+   WebKit and Gecko name them differently. Each engine's selectors sit in their
+   own rule: one unrecognised pseudo-element in a selector list invalidates the
+   whole rule, so combining them would style neither browser.
+
+   The input itself is 44px tall — the touch floor — while the visible track is
+   4px; the rest is transparent hit area. Square thumb, per the zero-radius
+   geometry rule. Prefixed `appearance` first, standard last (§5 trap 1). */
+
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 2.75rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.range:focus { outline: none; }
+
+.range::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--color-aurora-500) 0 var(--pct, 50%),
+    rgb(255 255 255 / 0.14) var(--pct, 50%) 100%
+  );
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  margin-top: -9px;
+  border: 2px solid var(--color-aurora-400);
+  border-radius: 0;
+  background: var(--color-ink-1000);
+  box-shadow: 0 0 18px -2px color-mix(in oklab, var(--color-aurora-500) 70%, transparent);
+  transition: background-color 0.2s ease;
+}
+.range:active::-webkit-slider-thumb { background: var(--color-aurora-400); }
+.range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--color-aurora-500);
+  outline-offset: 3px;
+}
+
+.range::-moz-range-track {
+  height: 4px;
+  border: 0;
+  background: rgb(255 255 255 / 0.14);
+}
+.range::-moz-range-progress {
+  height: 4px;
+  background: var(--color-aurora-500);
+}
+.range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--color-aurora-400);
+  border-radius: 0;
+  background: var(--color-ink-1000);
+  box-shadow: 0 0 18px -2px color-mix(in oklab, var(--color-aurora-500) 70%, transparent);
+}
+.range:active::-moz-range-thumb { background: var(--color-aurora-400); }
+.range:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--color-aurora-500);
+  outline-offset: 3px;
+}

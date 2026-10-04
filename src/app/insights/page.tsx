@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SimplePage } from "@/components/simple-page";
 import { Label, TextLink } from "@/components/ui/kit";
 import { BreadcrumbSchema } from "@/components/schema";
-import { allServices } from "@/content/services";
+import { practiceHref, practices } from "@/content/services";
 
 export const metadata: Metadata = {
   title: "Insights",
@@ -14,8 +14,7 @@ export const metadata: Metadata = {
 
 export default function InsightsPage() {
   // No posts yet. Rather than fake a blog, point at the substantive writing
-  // that already exists on the service pages.
-  const starting = allServices.slice(0, 6);
+  // that already exists on the practice pages.
 
   return (
     <>
@@ -38,8 +37,9 @@ export default function InsightsPage() {
           </h2>
           <p className="t-body mt-5 max-w-2xl text-venice-200/70">
             We&apos;d rather publish nothing than publish filler. In the meantime, the
-            service pages carry the actual arguments — how we think about evaluation
-            sets, why most AI pilots stall, what makes a data pipeline trustworthy.
+            service pages carry the actual arguments — how we measure an AI system
+            before launch, when an agent should stop and ask, and why we choose boring
+            technology on purpose.
           </p>
           <div className="mt-7">
             <TextLink href="/services">Read the service pages</TextLink>
@@ -48,18 +48,18 @@ export default function InsightsPage() {
 
         <div className="mt-14">
           <Label className="text-venice-300/60">Start here</Label>
-          <ul className="mt-5 grid gap-px sm:grid-cols-2 lg:grid-cols-3">
-            {starting.map((s) => (
-              <li key={s.slug}>
+          <ul className="mt-5 grid gap-px md:grid-cols-3">
+            {practices.map((p) => (
+              <li key={p.slug}>
                 <Link
-                  href={`/services/${s.slug}`}
+                  href={practiceHref(p)}
                   className="group block h-full border border-white/10 p-6 transition-colors duration-200 hover:border-white/22 hover:bg-white/[0.04]"
                 >
-                  <Label className="text-venice-300/50">{s.category}</Label>
+                  <Label className="text-venice-300/50">{p.number}</Label>
                   <p className="t-h3 mt-3 text-white transition-colors group-hover:text-aurora-300">
-                    {s.name}
+                    {p.name}
                   </p>
-                  <p className="t-small mt-3 text-venice-200/62">{s.subhead}</p>
+                  <p className="t-small mt-3 text-venice-200/62">{p.subhead}</p>
                 </Link>
               </li>
             ))}

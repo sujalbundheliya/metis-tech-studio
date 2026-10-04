@@ -4,6 +4,7 @@ import { m, useReducedMotion } from "motion/react";
 import { PracticeGlyph } from "@/components/ui/glyphs";
 import { Chip, Label, Opener, TextLink, Ticks } from "@/components/ui/kit";
 import { services } from "@/content/site";
+import { practiceHref, practices } from "@/content/services";
 import { cn } from "@/lib/utils";
 
 export function ServicesSection() {
@@ -16,27 +17,25 @@ export function ServicesSection() {
           label={services.eyebrow}
           title={
             <>
-              Four practices. <em className="text-aurora-400 not-italic">One team.</em>
+              Three practices. <em className="text-aurora-400 not-italic">One team.</em>
             </>
           }
           intro={services.intro}
         />
       </div>
 
-      {/* full-bleed 2×2 of hairline cells */}
-      <div className="mx-auto grid max-w-[1400px] border-t border-white/10 md:grid-cols-2">
-        {services.practices.map((practice, i) => (
+      {/* full-bleed row of hairline cells */}
+      <div className="mx-auto grid max-w-[1400px] border-t border-white/10 lg:grid-cols-3">
+        {practices.map((practice, i) => (
           <m.article
             key={practice.number}
             initial={{ opacity: 0, y: reduced ? 0 : 26 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-70px" }}
-            transition={{ duration: reduced ? 0.001 : 0.7, delay: (i % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: reduced ? 0.001 : 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              "group relative flex flex-col px-gutter py-9 transition-colors duration-300 hover:bg-white/[0.045] active:bg-white/[0.06] sm:px-10 sm:py-10 lg:px-14 lg:py-14",
-              i % 2 === 1 && "md:border-l md:border-white/10",
-              i >= 2 && "border-t border-white/10",
-              i === 1 && "border-t border-white/10 md:border-t-0",
+              "group relative flex flex-col px-gutter py-9 transition-colors duration-300 hover:bg-white/[0.045] active:bg-white/[0.06] sm:px-10 sm:py-10 lg:px-10 lg:py-14 xl:px-12",
+              i > 0 && "border-t border-white/10 lg:border-t-0 lg:border-l",
             )}
           >
             {/* Crop marks fade in on hover. `touch-visible` keeps them drawn where
@@ -56,11 +55,13 @@ export function ServicesSection() {
               </div>
             </div>
 
-            <h3 className="t-h2 mt-7 max-w-md text-balance text-white" style={{ fontSize: "clamp(1.6rem,2.6vw,2.1rem)" }}>
-              {practice.headline}
+            <h3 className="t-h2 mt-7 max-w-md text-balance text-white" style={{ fontSize: "clamp(1.6rem,2.4vw,2rem)" }}>
+              {practice.headline.lead}
+              <em className="text-aurora-400 not-italic">{practice.headline.accent}</em>
+              {practice.headline.tail}
             </h3>
 
-            <p className="t-body mt-5 max-w-xl text-venice-200/68">{practice.body}</p>
+            <p className="t-body mt-5 max-w-xl text-venice-200/68">{practice.subhead}</p>
 
             <ul className="mt-8 flex flex-wrap gap-2">
               {practice.tags.map((tag) => (
@@ -71,7 +72,7 @@ export function ServicesSection() {
             </ul>
 
             <div className="mt-auto pt-9">
-              <TextLink href={practice.href}>{practice.cta}</TextLink>
+              <TextLink href={practiceHref(practice)}>Explore {practice.name}</TextLink>
             </div>
           </m.article>
         ))}

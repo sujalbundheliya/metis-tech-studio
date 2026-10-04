@@ -360,3 +360,47 @@ rules out of that media block and re-append them unconditionally.
 above are correct by construction and standard practice, but the scroll lock,
 the safe-area insets and the no-zoom rule have not been exercised on a real
 iPhone.
+
+---
+
+## 9. Three practices, About, Contact, calculator
+
+`services.md` replaced the 22-service, four-category structure with three
+practice pages — Generative AI & RAG, Agentic AI & Automation, Software
+Development — eight services each. Every service is a section with an `id` on
+its practice page, so the nav, footer and schema deep-link to
+`/services/<practice>#<service>`. The 22 old slugs (and the older aliases)
+`308` to the matching section, or to `/services` where the offering was
+dropped; the map is in `next.config.ts`.
+
+**A redirected fragment does not scroll.** Chrome keeps the `#section` from a
+redirect's `Location` and even matches `:target`, but leaves the page at the
+top — measured both cached and uncached. `HashLanding` scrolls to it when the
+page is still at `scrollY === 0`; a direct `#hash` load has already started
+its own scroll by then and is left alone.
+
+**The services dropdown was anchored to the wrong box.** Its wrapper was
+`relative`, so `absolute inset-x-0 top-full w-screen` started at the Services
+cell's left edge and ran 107px past the viewport, scrolling the page sideways
+while open. The wrapper is no longer positioned; the sticky header is the
+containing block, as the comment there always intended.
+
+**The calculator** (`sections/cost-calculator.tsx`) keeps the spec's
+arithmetic, ranges and captions and is rebuilt in the site's own system. Its
+sliders are `.range` in `globals.css`: a 44px-tall input with a 4px track,
+square thumb, and the WebKit and Gecko pseudo-elements in *separate* rules —
+one unknown pseudo-element in a selector list drops the whole rule.
+
+Verified: 81/81 page-viewport combinations clean (9 pages × 320→1440 incl.
+landscape); calculator outputs match the spec's worked example
+(24 h / 1,248 h / $56,160 / 33 weeks) and its six-strip overflow line.
+
+**New pages opened part-way down.** `html { scroll-behavior: smooth }` plus
+Next 16, which stopped suspending it during navigation unless `<html>` carries
+`data-scroll-behavior="smooth"`. The router's reset to the top ran as a smooth
+scroll and the incoming page interrupted it: from the homepage footer, `/about`
+opened at y=4102. The attribute is now on `<html>` in `layout.tsx`. The phone
+menu's scroll-lock restore is `behavior: "instant"` for the same reason — a
+smooth restore bled into the next page by 24–76px. Measured after: 8/8
+navigations (desktop links, phone menu, phone footer) land at y=0, back still
+restores, same-page `#` links still glide.

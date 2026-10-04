@@ -7,13 +7,14 @@ import { ClosingCta } from "@/components/sections/closing";
 import { Atmosphere } from "@/components/ui/atmosphere";
 import { Btn, Label } from "@/components/ui/kit";
 import { ServiceFaq } from "@/components/service-faq";
-import { BreadcrumbSchema, FaqSchema } from "@/components/schema";
-import { allServices, practiceGroups, serviceBySlug } from "@/content/services";
+import { HashLanding } from "@/components/hash-landing";
+import { BreadcrumbSchema, FaqSchema, ServiceSchema } from "@/components/schema";
+import { practiceBySlug, practiceHref, practices } from "@/content/services";
 import { placeholders, site } from "@/content/site";
 import { openGraphBase } from "@/lib/metadata";
 
 export function generateStaticParams() {
-  return allServices.map((s) => ({ slug: s.slug }));
+  return practices.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -22,40 +23,44 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const service = serviceBySlug(slug);
-  if (!service) return {};
+  const practice = practiceBySlug(slug);
+  if (!practice) return {};
   return {
-    title: service.titleTag.replace(` | ${site.name}`, ""),
-    description: service.metaDescription,
-    alternates: { canonical: `/services/${service.slug}` },
+    title: practice.titleTag.replace(` | ${site.name}`, ""),
+    description: practice.metaDescription,
+    alternates: { canonical: practiceHref(practice) },
     openGraph: {
       ...openGraphBase,
-      title: service.titleTag,
-      description: service.metaDescription,
-      url: `${site.url}/services/${service.slug}`,
+      title: practice.titleTag,
+      description: practice.metaDescription,
+      url: `${site.url}${practiceHref(practice)}`,
       type: "website",
     },
   };
 }
 
-export default async function ServicePage({
+/** Section opener for the two-column bands: rule, ember number, heading. */
+function SectionHead({ n, title, sticky = true }: { n: number; title: string; sticky?: boolean }) {
+  return (
+    <div className={sticky ? "lg:sticky lg:top-24" : undefined}>
+      <div className="h-px w-full bg-white/20" />
+      <Label className="mt-4 block text-ember-400">{String(n).padStart(2, "0")}</Label>
+      <h2 className="t-h2 mt-4 text-balance text-white">{title}</h2>
+    </div>
+  );
+}
+
+export default async function PracticePage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = serviceBySlug(slug);
-  if (!service) notFound();
+  const practice = practiceBySlug(slug);
+  if (!practice) notFound();
 
-  const group = practiceGroups.find((g) => g.slug === service.categorySlug);
-  const siblings = allServices.filter(
-    (s) => s.categorySlug === service.categorySlug && s.slug !== service.slug,
-  );
-  // "Related" in the source docs is by display name, so match on that
-  const related = service.related
-    .map((name) => allServices.find((s) => s.name.toLowerCase() === name.toLowerCase()))
-    .filter((s): s is NonNullable<typeof s> => Boolean(s));
-  const suggestions = related.length > 0 ? related : siblings.slice(0, 3);
+  const others = practices.filter((p) => p.slug !== practice.slug);
+  const { headline } = practice;
 
   return (
     <>
@@ -63,10 +68,12 @@ export default async function ServicePage({
         trail={[
           { name: "Home", url: "/" },
           { name: "Services", url: "/services" },
-          { name: service.name, url: `/services/${service.slug}` },
+          { name: practice.name, url: practiceHref(practice) },
         ]}
       />
-      {service.faq.length > 0 && <FaqSchema items={service.faq} />}
+      <ServiceSchema practice={practice} />
+      <FaqSchema items={practice.faq} />
+      <HashLanding />
       <SiteHeader />
 
       <main id="main">
@@ -83,44 +90,51 @@ export default async function ServicePage({
                   Services
                 </Link>
                 <span aria-hidden="true">/</span>
-                <Link
-                  href={`/services#${service.categorySlug}`}
-                  className="inline-flex min-h-11 items-center transition-colors hover:text-aurora-400 can-hover:min-h-0"
-                >
-                  {service.category}
-                </Link>
+                <span aria-current="page" className="text-venice-300/80">
+                  {practice.name}
+                </span>
               </nav>
 
-              <h1 className="t-display mt-7 text-balance text-white">{service.h1}</h1>
+              <h1 className="t-display mt-7 text-balance text-white">
+                {headline.lead}
+                <em className="text-gradient-aurora not-italic">{headline.accent}</em>
+                {headline.tail}
+              </h1>
 
-              <p className="t-lead mt-7 max-w-2xl text-venice-200/80">{service.subhead}</p>
+              <p className="t-lead mt-7 max-w-2xl text-venice-200/80">{practice.subhead}</p>
 
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <Btn href={placeholders.bookingUrl} size="lg">
-                  {service.heroCta}
+                  Book a free consultation
                 </Btn>
-                <Btn href="/services" variant="outline" size="lg">
-                  All services
+                {/* How we work — hidden for now.
+                <Btn href="/how-we-work" variant="outline" size="lg">
+                  See how we work
                 </Btn>
+                */}
               </div>
             </div>
 
-            {/* sibling rail */}
-            <aside className="border-t border-white/10 px-gutter py-8 sm:px-10 sm:py-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-24">
+            {/* On-page index. Below `lg` the services grid follows the intro
+                almost immediately, so a second list of the same eight links
+                would only push the content a screen further down. */}
+            <aside className="hidden px-10 py-24 lg:col-span-4 lg:block">
               <div className="lg:sticky lg:top-24">
-                <Label className="text-venice-300/60">{group?.heading}</Label>
+                <Label className="text-venice-300/60">
+                  Practice {practice.number} / {String(practices.length).padStart(2, "0")}
+                </Label>
                 <p className="t-editorial mt-3 text-[20px] leading-snug text-aurora-400/80 italic">
-                  “{group?.question}”
+                  “{practice.question}”
                 </p>
                 <ul className="mt-6">
-                  {siblings.map((s) => (
-                    <li key={s.slug} className="border-t border-white/10 last:border-b">
-                      <Link
-                        href={`/services/${s.slug}`}
-                        className="tap-target text-[15px] text-venice-200/65 transition-colors hover:text-white active:text-white can-hover:block can-hover:py-3"
+                  {practice.services.map((s) => (
+                    <li key={s.id} className="border-t border-white/10 last:border-b">
+                      <a
+                        href={`#${s.id}`}
+                        className="block py-2.5 text-[15px] text-venice-200/65 transition-colors hover:text-white"
                       >
                         {s.name}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -129,99 +143,144 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* ---- body sections ---- */}
-        {service.sections.map((section, i) => (
-          <section key={section.heading} className="border-b border-white/10">
-            <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter py-12 sm:px-10 sm:py-16 lg:grid-cols-12 lg:px-14 lg:py-20">
-              <div className="lg:col-span-4">
-                <div className="lg:sticky lg:top-24">
-                  <div className="h-px w-full bg-white/20" />
-                  <Label className="mt-4 block text-ember-400">
-                    {String(i + 1).padStart(2, "0")}
-                  </Label>
-                  <h2 className="t-h2 mt-4 text-balance text-white">{section.heading}</h2>
-                </div>
-              </div>
-
-              <div className="lg:col-span-8">
-                {section.kind === "prose" ? (
-                  <div className="max-w-2xl space-y-5">
-                    {section.paragraphs.map((p, pi) => (
-                      <p
-                        key={pi}
-                        className={
-                          pi === 0
-                            ? "t-lead text-venice-200/85"
-                            : "t-body text-venice-200/70"
-                        }
-                      >
-                        {p}
-                      </p>
-                    ))}
-                  </div>
-                ) : (
-                  <>
-                    {section.intro && (
-                      <p className="t-lead mb-8 max-w-2xl text-venice-200/80">{section.intro}</p>
-                    )}
-                    <dl className="border-t border-white/10">
-                      {section.items.map((item) => (
-                        <div
-                          key={item.term}
-                          className="group grid gap-2 border-b border-white/10 py-6 transition-colors duration-200 hover:bg-white/[0.03] md:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] md:gap-8"
-                        >
-                          <dt className="t-h3 text-white transition-colors group-hover:text-aurora-300">
-                            {item.term}
-                          </dt>
-                          <dd className="t-body text-venice-200/70">{item.body}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </>
-                )}
-              </div>
-            </div>
-          </section>
-        ))}
-
-        {/* ---- FAQ ---- */}
-        {service.faq.length > 0 && <ServiceFaq items={service.faq} />}
-
-        {/* ---- related ---- */}
-        {suggestions.length > 0 && (
-          <section className="border-b border-white/10 bg-ink-950">
-            <div className="mx-auto max-w-[1400px] px-gutter pt-10 pb-5 sm:px-10 sm:pt-14 sm:pb-6 lg:px-14">
+        {/* ---- 01 overview ---- */}
+        <section className="border-b border-white/10">
+          <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter py-12 sm:px-10 sm:py-16 lg:grid-cols-12 lg:px-14 lg:py-20">
+            <div className="lg:col-span-4">
               <div className="h-px w-full bg-white/20" />
-              <Label className="mt-4 block">Related services</Label>
+              <Label className="mt-4 block text-ember-400">01</Label>
+              <h2 className="t-label mt-2 text-venice-300/65">Overview</h2>
             </div>
-            <div className="mx-auto grid max-w-[1400px] border-t border-white/10 sm:grid-cols-2 lg:grid-cols-3">
-              {suggestions.map((s, i) => (
-                <Link
-                  key={s.slug}
-                  href={`/services/${s.slug}`}
-                  className={`group block px-gutter py-7 transition-colors duration-200 hover:bg-white/[0.05] active:bg-white/[0.07] sm:px-8 sm:py-9 lg:px-10 ${
-                    i > 0 ? "border-t border-white/10 sm:border-t-0 sm:border-l" : ""
-                  } ${i === 2 ? "sm:border-t sm:border-l-0 lg:border-t-0 lg:border-l" : ""}`}
-                >
-                  <Label className="text-venice-300/55">{s.category}</Label>
-                  <p className="t-h3 mt-3 text-white transition-colors group-hover:text-aurora-300">
-                    {s.name}
-                  </p>
-                  <p className="t-small mt-3 text-venice-200/62">{s.subhead}</p>
-                </Link>
+            <div className="max-w-2xl space-y-5 lg:col-span-8">
+              {practice.intro.map((p, i) => (
+                <p key={i} className={i === 0 ? "t-lead text-venice-200/88" : "t-body text-venice-200/70"}>
+                  {p}
+                </p>
               ))}
             </div>
-          </section>
-        )}
+          </div>
+        </section>
+
+        {/* ---- 02 what we build ---- */}
+        <section className="border-b border-white/10 bg-ink-950">
+          <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter pt-12 pb-10 sm:px-10 sm:pt-16 sm:pb-12 lg:grid-cols-12 lg:px-14 lg:pt-20">
+            <div className="lg:col-span-4">
+              <SectionHead n={2} title="What we build" sticky={false} />
+            </div>
+          </div>
+          {/* Hairlines are the 1px gaps showing the grid's own background, so
+              the rules stay correct at every column count without per-cell
+              border arithmetic. */}
+          <ul className="mx-auto grid max-w-[1400px] gap-px border-t border-white/10 bg-white/10 md:grid-cols-2 xl:grid-cols-4">
+            {practice.services.map((s, i) => (
+              <li key={s.id} id={s.id} className="bg-ink-950 px-gutter py-8 sm:px-8 sm:py-10 lg:px-10">
+                <Label className="text-venice-300/50">{String(i + 1).padStart(2, "0")}</Label>
+                <h3 className="t-h3 mt-4 text-white">{s.name}</h3>
+                <p className="t-small mt-3 text-venice-200/68">{s.body}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ---- 03 where it fits ---- */}
+        <section className="border-b border-white/10">
+          <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter pt-12 pb-10 sm:px-10 sm:pt-16 sm:pb-12 lg:grid-cols-12 lg:px-14 lg:pt-20">
+            <div className="lg:col-span-4">
+              <SectionHead n={3} title="Where it fits" sticky={false} />
+            </div>
+          </div>
+          <ul className="mx-auto grid max-w-[1400px] gap-px border-t border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+            {practice.useCases.map((u) => (
+              <li key={u.who} className="bg-ink-1000 px-gutter py-8 sm:px-8 sm:py-10 lg:px-10">
+                <p className="t-label text-aurora-400">{u.who}</p>
+                <p className="t-body mt-4 text-venice-200/72 first-letter:uppercase">{u.what}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ---- 04 how we build it ---- */}
+        <section className="border-b border-white/10">
+          <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter py-12 sm:px-10 sm:py-16 lg:grid-cols-12 lg:px-14 lg:py-20">
+            <div className="lg:col-span-4">
+              <SectionHead n={4} title="How we build it" />
+            </div>
+            <div className="lg:col-span-8">
+              <dl className="border-t border-white/10">
+                {practice.principles.map((item) => (
+                  <div
+                    key={item.term}
+                    className="grid gap-2 border-b border-white/10 py-6 md:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] md:gap-8"
+                  >
+                    <dt className="t-h3 text-white">{item.term}</dt>
+                    <dd className="t-body text-venice-200/70">{item.body}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        {/* ---- 05 tech stack ---- */}
+        <section className="border-b border-white/10 bg-ink-950">
+          <div className="mx-auto grid max-w-[1400px] gap-8 px-gutter py-12 sm:px-10 sm:py-16 lg:grid-cols-12 lg:px-14 lg:py-20">
+            <div className="lg:col-span-4">
+              <SectionHead n={5} title="Tech stack" />
+            </div>
+            <div className="lg:col-span-8">
+              <dl className="border-t border-white/10">
+                {practice.stack.map((group) => (
+                  <div
+                    key={group.label}
+                    className="grid gap-2 border-b border-white/10 py-5 md:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] md:gap-8"
+                  >
+                    <dt className="t-label pt-1 text-venice-300/65">{group.label}</dt>
+                    <dd className="t-body text-venice-200/78">{group.items.join(" · ")}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        {/* ---- FAQ ---- */}
+        <ServiceFaq items={practice.faq} />
+
+        {/* ---- other practices ---- */}
+        <section className="border-b border-white/10 bg-ink-950">
+          <div className="mx-auto max-w-[1400px] px-gutter pt-10 pb-5 sm:px-10 sm:pt-14 sm:pb-6 lg:px-14">
+            <div className="h-px w-full bg-white/20" />
+            <Label className="mt-4 block">Other practices</Label>
+          </div>
+          <div className="mx-auto grid max-w-[1400px] gap-px border-t border-white/10 bg-white/10 md:grid-cols-2">
+            {others.map((p) => (
+              <Link
+                key={p.slug}
+                href={practiceHref(p)}
+                className="group block bg-ink-950 px-gutter py-8 transition-colors duration-200 hover:bg-ink-900 active:bg-ink-900 sm:px-10 sm:py-10 lg:px-14"
+              >
+                <Label className="text-ember-400">{p.number}</Label>
+                <Label className="ml-3 text-venice-300/60">{p.name}</Label>
+                <p className="t-h3 mt-4 max-w-lg text-balance text-white transition-colors group-hover:text-aurora-300">
+                  {p.headline.lead}
+                  {p.headline.accent}
+                  {p.headline.tail}
+                </p>
+                <p className="t-small mt-3 max-w-xl text-venice-200/62">{p.subhead}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <ClosingCta
           heading={
             <>
-              Tell us what you&apos;re{" "}
-              <em className="text-gradient-aurora not-italic">trying to build.</em>
+              {practice.closing.heading.lead}
+              <em className="text-gradient-aurora not-italic">{practice.closing.heading.accent}</em>
             </>
           }
-          cta={service.closingCta}
+          body={practice.closing.body}
+          cta={practice.closing.cta}
         />
       </main>
       <SiteFooter />

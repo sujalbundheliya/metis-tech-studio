@@ -17,7 +17,7 @@ type Column = {
 /**
  * Footer navigation, collapsible on a phone.
  *
- * Open, these four columns are 22 links plus headings. Stacked into one phone
+ * Open, these four columns are 28 links plus headings. Stacked into one phone
  * column at the 44px touch height they need, that is roughly two thousand
  * pixels of footer — five full screens of link list between the reader and the
  * copyright line. Collapsing them puts the whole footer back on one screen and
@@ -43,7 +43,8 @@ export function FooterNav({ columns }: { columns: readonly Column[] }) {
               // The generous block padding is a desktop proportion; on a phone
               // each column is a row in a list, not a panel.
               "py-0 sm:py-10 lg:py-10",
-              i > 0 ? "sm:border-t-0" : "",
+              // The wrapping grid already draws the rule above the first row.
+              i === 0 ? "border-t-0" : "sm:border-t-0",
               i % 2 === 1 ? "sm:border-l sm:border-white/10" : "",
               i >= 2 ? "sm:border-t" : "",
             )}

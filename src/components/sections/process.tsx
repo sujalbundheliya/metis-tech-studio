@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { m, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
-import { Label, Opener, TextLink } from "@/components/ui/kit";
+import { Label, Opener } from "@/components/ui/kit";
 import { process } from "@/content/site";
 
 export function Process() {
@@ -70,11 +70,13 @@ export function Process() {
         ))}
       </div>
 
+      {/* How we work — hidden for now.
       <div className="mx-auto max-w-[1400px] border-t border-white/10 px-gutter py-7 sm:px-10 sm:py-8 lg:px-14">
         <TextLink href="/how-we-work" dark>
           {process.cta}
         </TextLink>
       </div>
+      */}
     </section>
   );
 }

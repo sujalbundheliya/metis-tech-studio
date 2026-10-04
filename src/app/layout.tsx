@@ -76,7 +76,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    // `data-scroll-behavior` is load-bearing. globals.css sets
+    // `scroll-behavior: smooth` for in-page anchors, and since Next 16 the
+    // router no longer suspends it during navigation unless told to here. The
+    // reset to the top of a new page then ran as a smooth scroll, which the
+    // incoming page interrupted part-way — visitors landed thousands of pixels
+    // down the next page. With it, page changes jump to the top instantly and
+    // same-page `#hash` links keep their smooth scroll.
+    <html lang="en" data-scroll-behavior="smooth">
       {/* Browser extensions (password managers, colour pickers, Grammarly…)
           commonly stamp attributes onto <body> before React hydrates, which
           React then reports as a mismatch. suppressHydrationWarning applies to

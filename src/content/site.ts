@@ -23,6 +23,10 @@ export const placeholders = {
   location: null as string | null,
   /** TODO: regions served, e.g. "India, UK and the EU" */
   regions: null as string | null,
+  /** TODO: e.g. "India" — names the contact FAQ's "outside [your country]" */
+  country: null as string | null,
+  /** TODO: e.g. "Monday to Friday, 9am–5pm IST" — null hides the line */
+  hours: null as string | null,
   /** TODO: founder names for the FAQ */
   founderA: null as string | null,
   founderB: null as string | null,
@@ -54,17 +58,23 @@ export const site = {
 /* NAVIGATION                                                                  */
 /* -------------------------------------------------------------------------- */
 
-import { practiceGroups } from "./services";
+import { practiceHref, practices, serviceHref } from "./services";
 
 export type NavService = { label: string; href: string };
-export type NavServiceGroup = { heading: string; question: string; items: NavService[] };
+export type NavServiceGroup = { heading: string; question: string; href: string; items: NavService[] };
 
-/** Derived from services.ts — every href resolves to a real page. */
-export const serviceGroups: NavServiceGroup[] = practiceGroups;
+/** Derived from services.ts — every href resolves to a real page or section. */
+export const serviceGroups: NavServiceGroup[] = practices.map((p) => ({
+  heading: p.name,
+  question: p.question,
+  href: practiceHref(p),
+  items: p.services.map((s) => ({ label: s.navLabel ?? s.name, href: serviceHref(p, s) })),
+}));
 
 export const navLinks = [
   { label: "Services", href: "/services", hasDropdown: true },
-  { label: "How we work", href: "/how-we-work", hasDropdown: false },
+  // How we work — hidden for now.
+  // { label: "How we work", href: "/how-we-work", hasDropdown: false },
   { label: "About", href: "/about", hasDropdown: false },
   { label: "Contact", href: "/contact", hasDropdown: false },
 ] as const;
@@ -106,63 +116,11 @@ export const problem = {
 /* SERVICES                                                                    */
 /* -------------------------------------------------------------------------- */
 
-export type Practice = {
-  number: string;
-  name: string;
-  headline: string;
-  body: string;
-  tags: string[];
-  cta: string;
-  href: string;
-  glyph: "neural" | "stack" | "flow" | "pipeline";
-};
-
+/** The practice cards themselves are derived from services.ts. */
 export const services = {
   eyebrow: "What we do",
   intro:
     "From a first release to an AI system running against live data. Most projects touch two or three of these, which is exactly why having them under one roof matters.",
-  practices: [
-    {
-      number: "01",
-      name: "AI & ML",
-      headline: "AI that does a job, not a demo.",
-      body: "Generative AI, autonomous agents, and custom machine learning models trained on your data. We start by finding the task worth automating, then build the narrowest thing that solves it well.",
-      tags: ["Generative AI", "AI agents", "Machine learning models", "Computer vision", "NLP"],
-      cta: "Explore AI & ML",
-      href: "/services#ai-ml",
-      glyph: "neural",
-    },
-    {
-      number: "02",
-      name: "Software Development",
-      headline: "Web and mobile products built to last.",
-      body: "Custom web applications, iOS and Android apps, and the platforms underneath them. Built on modern, boring, maintainable foundations, so the next developer to open the repo doesn't have to start over.",
-      tags: ["Web apps", "Mobile apps", "Custom software", "SaaS", "APIs"],
-      cta: "Explore software development",
-      href: "/services#software",
-      glyph: "stack",
-    },
-    {
-      number: "03",
-      name: "Intelligent Systems",
-      headline: "Automation wired into the tools you already use.",
-      body: "Chatbots and assistants, document processing, and workflow automation connected to your real systems — with guardrails, approval steps, and an audit trail.",
-      tags: ["Chatbots & assistants", "Document processing", "Workflow automation", "Knowledge search"],
-      cta: "Explore intelligent systems",
-      href: "/services#intelligent-systems",
-      glyph: "flow",
-    },
-    {
-      number: "04",
-      name: "Data & Cloud",
-      headline: "The plumbing that makes the rest work.",
-      body: "Data pipelines, analytics, predictive models, and the cloud infrastructure to run them. Including the part most projects skip: monitoring what happens after deployment.",
-      tags: ["Data engineering", "Analytics", "Predictive models", "MLOps", "Cloud & DevOps"],
-      cta: "Explore data & cloud",
-      href: "/services#data-cloud",
-      glyph: "pipeline",
-    },
-  ] satisfies Practice[],
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -333,30 +291,19 @@ export const closingCta = {
 
 export const footer = {
   columns: [
-    {
-      heading: "AI & ML",
-      links: practiceGroups[0].items,
-    },
-    {
-      heading: "Software",
-      links: practiceGroups[1].items,
-    },
-    {
-      heading: "Intelligent Systems",
-      links: [...practiceGroups[2].items, { label: "All services →", href: "/services" }],
-    },
-    {
-      heading: "Data & Cloud",
-      links: practiceGroups[3].items,
-    },
+    ...serviceGroups.map((g, i, all) => ({
+      heading: g.heading,
+      links: i === all.length - 1 ? [...g.items, { label: "All services →", href: "/services" }] : g.items,
+    })),
     {
       heading: "Company",
       links: [
         { label: "About", href: "/about" },
-        { label: "How we work", href: "/how-we-work" },
+        // How we work — hidden for now.
+        // { label: "How we work", href: "/how-we-work" },
         { label: "Insights", href: "/insights" },
         { label: "Contact", href: "/contact" },
       ],
     },
   ],
-} as const;
+};

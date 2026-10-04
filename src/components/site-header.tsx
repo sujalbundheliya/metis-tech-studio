@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
-import { Label } from "@/components/ui/kit";
 import { navLinks, placeholders, serviceGroups } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { useMounted } from "@/lib/use-mounted";
@@ -69,7 +68,10 @@ export function SiteHeader() {
     body.style.overflow = "hidden";
     return () => {
       Object.assign(body.style, prev);
-      window.scrollTo(0, y);
+      // Instant, not the page's CSS smooth scroll: when the sheet closes
+      // because a link was tapped, a smooth restore was still running when the
+      // new page arrived and dragged it a few dozen pixels off its top.
+      window.scrollTo({ top: y, behavior: "instant" });
     };
   }, [mobileOpen]);
 
@@ -147,39 +149,40 @@ export function SiteHeader() {
                   transition={{ duration: reduced ? 0.001 : 0.3, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden border-b border-white/10 bg-white/[0.02]"
                 >
-                  <div className="px-gutter py-6">
+                  {/* One row per practice rather than every service: twenty-four
+                      anchor links stacked at the 44px touch height is a screen
+                      and a half of list, and each practice page opens on its own
+                      index of the eight anyway. */}
+                  <ul className="px-gutter py-3">
                     {serviceGroups.map((group, gi) => (
-                      <div key={group.heading} className={gi > 0 ? "mt-7" : undefined}>
-                        <Label>{group.heading}</Label>
-                        {/* The question is what the desktop dropdown leads with;
-                            dropping it on mobile would leave a bare link list
-                            with none of the reason it is grouped that way. */}
-                        <p className="t-editorial mt-1.5 text-[17px] leading-snug text-aurora-400/80 italic">
-                          “{group.question}”
-                        </p>
-                        <ul className="mt-2">
-                          {group.items.map((item) => (
-                            <li key={item.href} className="border-t border-white/[0.07]">
-                              <Link
-                                href={item.href}
-                                onClick={closeMobile}
-                                className="tap-target text-[16px] text-white/78 transition-colors active:text-aurora-300"
-                              >
-                                {item.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      <li key={group.heading} className={gi > 0 ? "border-t border-white/[0.07]" : undefined}>
+                        <Link
+                          href={group.href}
+                          onClick={closeMobile}
+                          className="group flex min-h-16 items-center justify-between gap-4 py-4 active:bg-white/[0.04]"
+                        >
+                          <span className="min-w-0">
+                            <span className="block text-[17px] font-medium text-white">{group.heading}</span>
+                            <span className="t-editorial mt-1 block text-[16px] leading-snug text-aurora-400/80 italic">
+                              “{group.question}”
+                            </span>
+                          </span>
+                          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-4 w-4 shrink-0 text-venice-300/60">
+                            <path d="M5.5 3.5 10 8l-4.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
+                          </svg>
+                        </Link>
+                      </li>
                     ))}
-                    <Link
-                      href="/services"
-                      onClick={closeMobile}
-                      className="tap-target mt-7 border-t border-white/12 text-[15px] font-medium text-aurora-400"
-                    >
-                      All {serviceGroups.reduce((n, g) => n + g.items.length, 0)} services →
-                    </Link>
-                  </div>
+                    <li className="border-t border-white/12">
+                      <Link
+                        href="/services"
+                        onClick={closeMobile}
+                        className="tap-target text-[15px] font-medium text-aurora-400"
+                      >
+                        All services →
+                      </Link>
+                    </li>
+                  </ul>
                 </m.div>
               )}
             </AnimatePresence>
@@ -249,9 +252,13 @@ export function SiteHeader() {
           <nav className="hidden items-stretch lg:flex" aria-label="Main">
             {navLinks.map((link) =>
               link.hasDropdown ? (
+                /* Deliberately not `relative`: the panel below must resolve
+                   against the header so it spans the full bar. Anchored here,
+                   it started at this cell's left edge and its `w-screen` ran
+                   past the viewport, scrolling the page sideways while open. */
                 <div
                   key={link.label}
-                  className="relative flex items-stretch"
+                  className="flex items-stretch"
                   onMouseEnter={() => setServicesOpen(true)}
                   onMouseLeave={() => setServicesOpen(false)}
                 >
@@ -282,15 +289,21 @@ export function SiteHeader() {
                            `fixed top-14`. The old value only landed correctly
                            because the header's backdrop-filter happened to be
                            the containing block and happened to be 56px tall. */
-                        className="absolute inset-x-0 top-full w-screen border-b border-white/10 bg-ink-1000 shadow-[0_20px_40px_-24px_rgba(8,32,46,0.3)]"
+                        className="absolute inset-x-0 top-full border-b border-white/10 bg-ink-1000 shadow-[0_20px_40px_-24px_rgba(8,32,46,0.3)]"
                       >
-                        <div className="mx-auto grid max-w-[1400px] grid-cols-4">
+                        <div className="mx-auto grid max-w-[1400px] grid-cols-3">
                           {serviceGroups.map((group, i) => (
                             <div
                               key={group.heading}
-                              className={cn("px-6 py-7", i > 0 && "border-l border-white/10")}
+                              className={cn("px-8 py-7", i > 0 && "border-l border-white/10")}
                             >
-                              <Label>{group.heading}</Label>
+                              <Link
+                                href={group.href}
+                                className="t-label inline-flex items-center gap-1.5 text-venice-300/80 transition-colors hover:text-aurora-400"
+                              >
+                                {group.heading}
+                                <span aria-hidden="true">→</span>
+                              </Link>
                               <p className="mt-2.5 t-editorial text-[19px] leading-snug text-venice-200 italic">
                                 “{group.question}”
                               </p>

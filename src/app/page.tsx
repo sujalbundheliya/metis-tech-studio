@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/sections/hero";
 import { Problem } from "@/components/sections/problem";
 import { ServicesSection } from "@/components/sections/services";
+import { CostCalculator } from "@/components/sections/cost-calculator";
 import { WhyMetis } from "@/components/sections/why";
 import { Process } from "@/components/sections/process";
 import { TechStack } from "@/components/sections/stack";
@@ -20,6 +21,7 @@ export default function Home() {
         <Hero />
         <Problem />
         <ServicesSection />
+        <CostCalculator />
         <WhyMetis />
         <Process />
         <TechStack />

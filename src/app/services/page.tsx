@@ -6,13 +6,13 @@ import { ClosingCta } from "@/components/sections/closing";
 import { Atmosphere } from "@/components/ui/atmosphere";
 import { Btn, Label, TextLink } from "@/components/ui/kit";
 import { BreadcrumbSchema } from "@/components/schema";
-import { allServices, practiceGroups } from "@/content/services";
+import { practiceHref, practices, serviceCount, serviceHref } from "@/content/services";
 import { placeholders } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Our Services — AI, Software, Automation & Data",
+  title: "Our Services — Generative AI, Automation & Software",
   description:
-    "Generative AI, web and mobile development, workflow automation, and data engineering — from a two-person studio that builds what it sells.",
+    "Generative AI and RAG, agentic AI and workflow automation, and custom software development — from a two-person studio that builds what it sells.",
   alternates: { canonical: "/services" },
 };
 
@@ -29,8 +29,8 @@ export default function ServicesIndex() {
             <div className="px-gutter pt-12 pb-10 sm:px-10 sm:pt-20 sm:pb-14 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-28 lg:pb-20">
               <Label>Services</Label>
               <h1 className="t-display mt-7 text-balance text-white">
-                {allServices.length} things we build.{" "}
-                <em className="text-gradient-aurora not-italic">Four questions they answer.</em>
+                {serviceCount} things we build.{" "}
+                <em className="text-gradient-aurora not-italic">Three questions they answer.</em>
               </h1>
               <div className="mt-11">
                 <Btn href={placeholders.bookingUrl} size="lg">
@@ -41,60 +41,76 @@ export default function ServicesIndex() {
             <div className="flex items-end border-t border-white/10 px-gutter py-8 sm:px-10 sm:py-10 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-28">
               <p className="t-lead max-w-md text-venice-200/80">
                 Most studios organise their services by technology. We&apos;ve organised ours by the
-                question you&apos;re actually asking — because nobody wakes up wanting a
-                recommendation system. They wake up wanting customers to find the right product.
+                question you&apos;re actually asking — because nobody wakes up wanting a RAG
+                pipeline. They wake up wanting their team to stop searching for the same answer.
               </p>
             </div>
           </div>
         </section>
 
-        {/* ---- the four practices ---- */}
-        {practiceGroups.map((group, gi) => (
-          <section
-            key={group.slug}
-            id={group.slug}
-            className="scroll-mt-16 border-b border-white/10"
-          >
+        {/* ---- the three practices ---- */}
+        {practices.map((p) => (
+          <section key={p.slug} id={p.slug} className="border-b border-white/10">
             <div className="mx-auto grid max-w-[1400px] lg:grid-cols-12">
-              <div className="px-gutter pt-10 pb-5 sm:px-10 sm:pt-14 sm:pb-6 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:py-16">
+              <div className="px-gutter pt-10 pb-6 sm:px-10 sm:pt-14 sm:pb-8 lg:col-span-4 lg:border-r lg:border-white/10 lg:px-14 lg:py-16">
                 <div className="lg:sticky lg:top-24">
-                  <Label className="text-ember-400">{String(gi + 1).padStart(2, "0")}</Label>
-                  <h2 className="t-h2 mt-4 text-white">{group.heading}</h2>
+                  <Label className="text-ember-400">{p.number}</Label>
+                  <h2 className="t-h2 mt-4 text-white">
+                    <Link
+                      href={practiceHref(p)}
+                      className="inline-flex min-h-11 items-center transition-colors hover:text-aurora-300 can-hover:min-h-0"
+                    >
+                      {p.name}
+                    </Link>
+                  </h2>
                   <p className="t-editorial mt-4 text-[21px] leading-snug text-aurora-400/85 italic">
-                    “{group.question}”
+                    “{p.question}”
                   </p>
                 </div>
               </div>
 
-              <ul className="lg:col-span-8">
-                {allServices
-                  .filter((s) => s.categorySlug === group.slug)
-                  .map((s) => (
-                    <li key={s.slug} className="border-t border-white/10 first:border-t-0 lg:first:border-t">
+              <div className="lg:col-span-8">
+                <div className="px-gutter pb-8 sm:px-10 sm:pb-10 lg:px-14 lg:pt-16">
+                  <p className="t-h3 max-w-2xl text-balance text-white">
+                    {p.headline.lead}
+                    {p.headline.accent}
+                    {p.headline.tail}
+                  </p>
+                  <p className="t-body mt-4 max-w-2xl text-venice-200/68">{p.subhead}</p>
+                </div>
+
+                <ul className="grid border-t border-white/10 sm:grid-cols-2">
+                  {p.services.map((s, i) => (
+                    <li
+                      key={s.id}
+                      className={`border-white/10 ${i > 0 ? "border-t" : ""} ${
+                        i === 1 ? "sm:border-t-0" : ""
+                      } ${i % 2 === 1 ? "sm:border-l" : ""}`}
+                    >
                       <Link
-                        href={`/services/${s.slug}`}
-                        className="group flex min-h-14 items-start justify-between gap-5 px-gutter py-6 transition-colors duration-200 hover:bg-white/[0.045] active:bg-white/[0.06] sm:gap-8 sm:py-7 sm:px-10 lg:px-14"
+                        href={serviceHref(p, s)}
+                        className="group flex min-h-14 items-center justify-between gap-5 px-gutter py-4 transition-colors duration-200 hover:bg-white/[0.045] active:bg-white/[0.06] sm:px-10 lg:px-14"
                       >
-                        <span className="min-w-0">
-                          <span className="t-h3 block text-white transition-colors group-hover:text-aurora-300">
-                            {s.name}
-                          </span>
-                          <span className="t-small mt-2 block max-w-xl text-venice-200/62">
-                            {s.subhead}
-                          </span>
+                        <span className="text-[16px] text-venice-200/85 transition-colors group-hover:text-white">
+                          {s.name}
                         </span>
                         <svg
                           viewBox="0 0 16 16"
                           fill="none"
                           aria-hidden="true"
-                          className="mt-1.5 h-4 w-4 shrink-0 text-venice-300/50 transition-all duration-200 group-hover:translate-x-1 group-hover:text-aurora-400"
+                          className="h-3.5 w-3.5 shrink-0 text-venice-300/45 transition-all duration-200 group-hover:translate-x-1 group-hover:text-aurora-400"
                         >
                           <path d="M5.5 3.5 10 8l-4.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
                         </svg>
                       </Link>
                     </li>
                   ))}
-              </ul>
+                </ul>
+
+                <div className="border-t border-white/10 px-gutter py-6 sm:px-10 lg:px-14">
+                  <TextLink href={practiceHref(p)}>Explore {p.name}</TextLink>
+                </div>
+              </div>
             </div>
           </section>
         ))}
@@ -111,9 +127,9 @@ export default function ServicesIndex() {
                 Most projects are two or three of these.
               </h2>
               <p className="t-lead mt-6 max-w-2xl text-venice-200/72">
-                An app that needs a recommendation engine. A platform that needs a document
-                pipeline. A model that&apos;s useless until someone builds the interface around it.
-                Describe the problem in your own words and we&apos;ll tell you what it&apos;s made of.
+                An app that needs an assistant. A platform that needs a document pipeline. An
+                agent that&apos;s useless until someone builds the interface around it. Describe
+                the problem in your own words and we&apos;ll tell you what it&apos;s made of.
               </p>
               <div className="mt-8">
                 <TextLink href="/contact">Describe your problem</TextLink>
