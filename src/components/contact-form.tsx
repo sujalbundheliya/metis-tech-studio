@@ -208,7 +208,7 @@ export function ContactForm() {
             inputMode="tel"
             enterKeyHint="next"
             className={field}
-            placeholder="+61 412 345 678"
+            placeholder="Include your country code"
             {...invalid("phone")}
           />
         </Field>

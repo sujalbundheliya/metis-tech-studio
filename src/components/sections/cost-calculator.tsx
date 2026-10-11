@@ -12,7 +12,7 @@ import { Btn, Opener } from "@/components/ui/kit";
 
 /** The spec's CONFIG block. Change currency, locale or assumptions here. */
 const CONFIG = {
-  // TODO: switch to the currency you quote in (e.g. "en-AU" + "AUD").
+  // TODO: switch to the currency you quote in (e.g. "en-GB" + "GBP").
   locale: "en-US",
   currency: "USD",
   fullTimeHoursPerWeek: 38,

@@ -9,9 +9,9 @@ import { placeholders } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "About Us — Adelaide Software & AI Studio",
+  title: "About Us — Software & AI Studio",
   description:
-    "A small Adelaide product engineering studio building AI systems and custom software. The people you meet on the first call are the people who write the code.",
+    "A small product engineering studio building AI systems and custom software. The people you meet on the first call are the people who write the code.",
   path: "/about",
 });
 

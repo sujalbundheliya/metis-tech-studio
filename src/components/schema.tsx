@@ -13,14 +13,6 @@ export function OrganizationSchema() {
     slogan: site.tagline,
     email: placeholders.email,
     ...(placeholders.phone && { telephone: placeholders.phone }),
-    ...(placeholders.location && {
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: placeholders.address.locality,
-        addressRegion: placeholders.address.region,
-        addressCountry: placeholders.address.country,
-      },
-    }),
     makesOffer: practices.map((p) => ({
       "@type": "Offer",
       itemOffered: {

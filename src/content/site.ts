@@ -19,16 +19,12 @@ export const placeholders = {
   email: "team@metistechstudio.com",
   /** TODO: real number, or leave null to hide the row entirely */
   phone: null as string | null,
-  location: "Adelaide, Australia" as string | null,
-  /** `location` broken down for search engines' structured data. There's no
-   *  street address on the site — add `streetAddress` and `postalCode` here,
-   *  and to OrganizationSchema, if one is ever published. */
-  address: { locality: "Adelaide", region: "SA", country: "AU" },
-  /** TODO: regions served, e.g. "India, UK and the EU" */
+  /** Deliberately null: the site doesn't say where the studio is based.
+   *  Null hides it from the footer, contact page and privacy policy. */
+  location: null as string | null,
+  /** Regions served, shown beside `location` on the contact page. */
   regions: null as string | null,
-  /** Names the contact FAQ's "outside [your country]". */
-  country: "Australia" as string | null,
-  /** TODO: e.g. "Monday to Friday, 9am–5pm IST" — null hides the line */
+  /** TODO: e.g. "Monday to Friday, 9am–5pm" — null hides the line */
   hours: null as string | null,
   /** TODO: founder names for the FAQ */
   founderA: null as string | null,
@@ -52,9 +48,9 @@ export const site = {
   shortName: "Metis",
   tagline: "Practical intelligence, engineered.",
   url: "https://metistechstudio.com",
-  title: "AI & Software Development in Adelaide | Metis Tech Studio",
+  title: "AI & Software Development Studio | Metis Tech Studio",
   description:
-    "Adelaide product engineering studio building web platforms, mobile apps, and AI systems. Founder-built, fixed scope, code you own. Book a free consultation.",
+    "Product engineering studio building web platforms, mobile apps, and AI systems. Founder-built, fixed scope, code you own. Book a free consultation.",
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -246,15 +242,6 @@ const costAnswer = (() => {
   return "It depends on scope. Discovery produces a written scope with a fixed price and a date, and that number doesn't move unless you change the scope. Tell us roughly what you have in mind on a first call and we'll give you a realistic band before you commit to anything.";
 })();
 
-const locationAnswer = (() => {
-  const { location, regions } = placeholders;
-  if (location) {
-    const where = regions ? ` and work with clients across ${regions}` : "";
-    return `We're based in ${location}${where}. Most delivery is remote, with on-site sessions for discovery and key milestones.`;
-  }
-  return "Most delivery is remote, with on-site sessions for discovery and key milestones. Tell us where you are and we'll work out the overlap.";
-})();
-
 export const faq = {
   eyebrow: "Questions",
   items: [
@@ -276,7 +263,6 @@ export const faq = {
       q: "Do you only do AI projects?",
       a: "No. Plenty of our work is straightforward web and mobile development. We'll tell you honestly if AI isn't the right answer for your problem.",
     },
-    { q: "Where are you based?", a: locationAnswer },
   ],
 } as const;
 

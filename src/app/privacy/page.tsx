@@ -62,7 +62,7 @@ const SECTIONS = [
     heading: "Your rights",
     body: [
       "Depending on where you live, you may have the right to access the personal data we hold about you, correct it, delete it, restrict or object to how we use it, and receive a copy in a portable format.",
-      `Exercise any of these by emailing ${placeholders.email}. We'll respond within one month. If you're unhappy with our response, you can complain to your local data protection authority — in Australia, that's the Office of the Australian Information Commissioner (oaic.gov.au).`,
+      `Exercise any of these by emailing ${placeholders.email}. We'll respond within one month. If you're unhappy with our response, you can complain to the data protection authority where you live.`,
     ],
   },
   {

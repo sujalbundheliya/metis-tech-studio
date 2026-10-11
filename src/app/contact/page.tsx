@@ -12,7 +12,7 @@ import { pageMetadata } from "@/lib/metadata";
 export const metadata = pageMetadata({
   title: "Contact Us — Book a Free Consultation",
   description:
-    "Book a free 30-minute call or send us a message. Based in Adelaide, working remotely. No pitch deck, no pressure, and a reply within one business day.",
+    "Book a free 30-minute call or send us a message. We work remotely with clients anywhere. No pitch deck, no pressure, and a reply within one business day.",
   path: "/contact",
 });
 

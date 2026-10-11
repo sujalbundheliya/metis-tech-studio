@@ -39,9 +39,7 @@ export const contact = {
     { q: "Will you sign an NDA?", a: "Yes. If you'd like one in place before sharing details, mention it in your message and we'll sort it out before the call." },
     { q: "What size projects do you take on?", a: "Everything from a focused automation or internal tool to a full platform build. If something is too small to justify custom work, we'll point you to a simpler option." },
     {
-      q: placeholders.country
-        ? `Do you work with businesses outside ${placeholders.country}?`
-        : "Do you work with businesses in other countries?",
+      q: "Do you work with businesses anywhere in the world?",
       a: "Yes. We work remotely and schedule calls to suit your time zone.",
     },
   ],

@@ -59,7 +59,7 @@ const SECTIONS = [
   {
     heading: "Governing law",
     body: [
-      "These terms are governed by the laws of South Australia. Any dispute about them is subject to the non-exclusive jurisdiction of the courts of South Australia.",
+      "These terms are governed by the laws of the place where we are registered. Any dispute about them is subject to the non-exclusive jurisdiction of its courts.",
     ],
   },
   {
