@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Atmosphere } from "@/components/ui/atmosphere";
@@ -8,13 +7,14 @@ import { ServiceFaq } from "@/components/service-faq";
 import { BreadcrumbSchema, FaqSchema } from "@/components/schema";
 import { placeholders } from "@/content/site";
 import { contact, hasBookingLink } from "@/content/contact";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata = pageMetadata({
+  title: "Contact Us — Book a Free Consultation",
   description:
-    "Book a free 30-minute call or send us a message. No pitch deck, no pressure, and a reply within one business day.",
-  alternates: { canonical: "/contact" },
-};
+    "Book a free 30-minute call or send us a message. Based in Adelaide, working remotely. No pitch deck, no pressure, and a reply within one business day.",
+  path: "/contact",
+});
 
 const LINKEDIN_PATH =
   "M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13M7.12 20.45H3.56V9h3.56zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0";
@@ -53,7 +53,7 @@ export default function ContactPage() {
 
             <aside className="border-t border-white/10 px-gutter py-10 sm:px-10 sm:py-12 lg:col-span-4 lg:border-t-0 lg:px-10 lg:py-16">
               <div className="lg:sticky lg:top-24">
-                <h2 className="t-label text-venice-300/60">What happens on the call</h2>
+                <h2 className="t-label text-venice-300/75">What happens on the call</h2>
                 <ol className="mt-6">
                   {contact.callSteps.map((step, i) => (
                     <li key={step.title} className="border-t border-white/10 py-5 last:border-b">
@@ -71,7 +71,7 @@ export default function ContactPage() {
                 </ol>
 
                 <div className="mt-10">
-                  <h2 className="t-label text-venice-300/60">Other ways to reach us</h2>
+                  <h2 className="t-label text-venice-300/75">Other ways to reach us</h2>
 
                   {/* Only once a real scheduler is configured — the fallback
                       booking URL is this very page. */}
@@ -88,14 +88,14 @@ export default function ContactPage() {
                   <ul className="mt-4 space-y-1">
                     <li>
                       <a href={`mailto:${placeholders.email}`} className={reach}>
-                        <span className="t-label w-16 shrink-0 text-venice-300/45">Email</span>
+                        <span className="t-label w-16 shrink-0 text-venice-300/75">Email</span>
                         {placeholders.email}
                       </a>
                     </li>
                     {placeholders.phone && (
                       <li>
                         <a href={`tel:${placeholders.phone.replace(/\s/g, "")}`} className={reach}>
-                          <span className="t-label w-16 shrink-0 text-venice-300/45">Phone</span>
+                          <span className="t-label w-16 shrink-0 text-venice-300/75">Phone</span>
                           {placeholders.phone}
                         </a>
                       </li>
@@ -103,7 +103,7 @@ export default function ContactPage() {
                     {linkedin && (
                       <li>
                         <a href={linkedin} target="_blank" rel="noopener noreferrer" className={reach}>
-                          <span className="t-label w-16 shrink-0 text-venice-300/45">LinkedIn</span>
+                          <span className="t-label w-16 shrink-0 text-venice-300/75">LinkedIn</span>
                           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-[15px] w-[15px]">
                             <path d={LINKEDIN_PATH} />
                           </svg>

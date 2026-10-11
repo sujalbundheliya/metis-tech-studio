@@ -1,11 +1,5 @@
 import { z } from "zod";
-
-/** Dropdown choices, from contact-us.md. */
-export const enquiryOptions = {
-  // TODO: set the bands in the currency you quote in, sized to your projects.
-  budget: ["Under $10k", "$10k–$25k", "$25k–$50k", "$50k+", "Not sure yet"],
-  timeline: ["As soon as possible", "Within 3 months", "Just exploring"],
-} as const;
+import { enquiryOptions } from "@/content/contact";
 
 /** An optional dropdown: empty, or exactly one of its listed values. */
 const choice = (values: readonly string[]) =>
@@ -49,3 +43,15 @@ export const contactSchema = z.object({
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
+
+/** First message per field, keyed by field name — the shape the form renders.
+ *  The form runs this before sending and the route runs it again on arrival,
+ *  so both always report the same thing. */
+export function fieldErrors(error: z.ZodError): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const issue of error.issues) {
+    const key = String(issue.path[0] ?? "form");
+    out[key] ??= issue.message;
+  }
+  return out;
+}

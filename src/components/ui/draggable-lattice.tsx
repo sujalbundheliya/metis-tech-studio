@@ -298,27 +298,36 @@ export function DraggableLattice({ className }: { className?: string }) {
       canvas.style.cursor = "default";
     };
 
-    const ro = new ResizeObserver(() => { build(); if (reduced) draw(); });
+    /* Built on first approach rather than at mount: the lattice closes the
+       page, and measuring it during hydration forced a layout of a section
+       `defer-render` lets the browser skip. */
+    let started = false;
+    const start = () => {
+      started = true;
+      build();
+      if (reduced) draw();
+    };
+
+    const ro = new ResizeObserver(() => {
+      if (!started) return;
+      build(); if (reduced) draw();
+    });
     ro.observe(canvas);
 
     const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started) start();
       if (reduced) return;
       if (entry.isIntersecting && !raf) raf = requestAnimationFrame(step);
       if (!entry.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
-    }, { threshold: 0 });
+    }, { threshold: 0, rootMargin: "200px 0px" });
     io.observe(canvas);
 
-    build();
-
-    if (reduced) {
-      draw();
-    } else {
+    if (!reduced) {
       canvas.addEventListener("pointerdown", onDown);
       canvas.addEventListener("pointermove", onMove, { passive: true });
       canvas.addEventListener("pointerup", onUp);
       canvas.addEventListener("pointercancel", onUp);
       canvas.addEventListener("pointerleave", onLeave);
-      raf = requestAnimationFrame(step);
     }
 
     return () => {

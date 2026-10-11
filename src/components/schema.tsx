@@ -8,12 +8,18 @@ export function OrganizationSchema() {
     "@type": "Organization",
     name: site.name,
     url: site.url,
+    logo: `${site.url}/logo-mark.png`,
     description: site.description,
     slogan: site.tagline,
     email: placeholders.email,
     ...(placeholders.phone && { telephone: placeholders.phone }),
     ...(placeholders.location && {
-      address: { "@type": "PostalAddress", addressLocality: placeholders.location },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: placeholders.address.locality,
+        addressRegion: placeholders.address.region,
+        addressCountry: placeholders.address.country,
+      },
     }),
     makesOffer: practices.map((p) => ({
       "@type": "Offer",
@@ -24,6 +30,21 @@ export function OrganizationSchema() {
         description: p.metaDescription,
       },
     })),
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  );
+}
+
+/** Lets Google show "Metis Tech Studio" as the site name in results, rather
+ *  than guessing one from the domain. Homepage only. */
+export function WebsiteSchema() {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: site.name,
+    alternateName: site.shortName,
+    url: site.url,
   };
   return (
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />

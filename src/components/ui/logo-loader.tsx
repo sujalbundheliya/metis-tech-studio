@@ -79,7 +79,7 @@ export function LogoLoader({
         </svg>
       </div>
 
-      <span className="t-label text-venice-300/45">{label}</span>
+      <span className="t-label text-venice-300/75">{label}</span>
     </div>
   );
 }

@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
 import { SimplePage, Legal } from "@/components/simple-page";
 import { BreadcrumbSchema } from "@/components/schema";
 import { placeholders, site } from "@/content/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Privacy Policy",
-  description: `How ${site.name} handles the personal data you send us.`,
-  alternates: { canonical: "/privacy" },
-  robots: { index: true, follow: false },
-};
+  description: `How ${site.name} handles the personal data you send us: what we collect, why, who processes it, and how to have it deleted.`,
+  path: "/privacy",
+});
 
 /**
  * ⚠️  NOT LEGAL ADVICE. This describes what the site actually does today —
- * one contact form, delivered by email, no analytics and no cookies — which
- * makes it accurate but generic. Have a solicitor review it before launch,
- * and revisit it the moment you add analytics, a CRM, or tracking pixels.
+ * one contact form delivered by email, Google Analytics, and Vercel's
+ * cookieless analytics — which makes it accurate but generic. Have a solicitor
+ * review it, and revisit it the moment you add a CRM, ad pixels, or another
+ * analytics tool.
  */
 const SECTIONS = [
   {
@@ -30,8 +30,10 @@ const SECTIONS = [
     heading: "What we collect",
     body: [
       "Only what you type into the contact form: your name, email address, and — if you choose to provide them — your company, an approximate budget band, the services you're interested in, and your message.",
-      "We do not run analytics, advertising pixels, or third-party trackers on this site, and we do not set cookies. Nothing is collected from you simply by reading these pages.",
-      "Our hosting provider keeps standard server logs, which include IP addresses, for security and abuse prevention. We use your IP address only to rate-limit the contact form.",
+      "We use Google Analytics to understand how people find and use the site. It sets cookies (named _ga and _ga_ followed by an ID) that recognise your browser on return visits, and records things like the pages you view, the site that referred you, your approximate location, and your browser and device type. We see this as reports, not as a record of who you are. You can block these cookies in your browser settings, or opt out with Google's browser add-on at tools.google.com/dlpage/gaoptout.",
+      "We also use Vercel Web Analytics and Vercel Speed Insights to count visits and measure how quickly pages load. Neither sets cookies or identifies you.",
+      "We don't run advertising pixels, and the Google Analytics cookies above are the only cookies this site sets.",
+      "Vercel, our hosting provider, keeps standard server logs, which include IP addresses, for security and abuse prevention. We use your IP address only to rate-limit the contact form.",
     ],
   },
   {
@@ -44,7 +46,8 @@ const SECTIONS = [
   {
     heading: "Who else sees it",
     body: [
-      "Your submission is delivered to our inbox by Resend, our transactional email provider, which processes it on our behalf. Our email is hosted by our mail provider.",
+      "Your submission is delivered to our inbox by Resend, our transactional email provider, which processes it on our behalf. Our email is hosted by our mail provider. Vercel hosts this site and provides the speed and visit counts described above. Google provides Google Analytics; how Google uses data from sites like this one is set out at policies.google.com/technologies/partner-sites.",
+      "Resend, Vercel and Google are based in the United States, so your information may be stored or processed there.",
       "We do not otherwise disclose your information, except where we are legally required to.",
     ],
   },
@@ -59,7 +62,7 @@ const SECTIONS = [
     heading: "Your rights",
     body: [
       "Depending on where you live, you may have the right to access the personal data we hold about you, correct it, delete it, restrict or object to how we use it, and receive a copy in a portable format.",
-      `Exercise any of these by emailing ${placeholders.email}. We'll respond within one month. If you're unhappy with our response, you can complain to your local data protection authority.`,
+      `Exercise any of these by emailing ${placeholders.email}. We'll respond within one month. If you're unhappy with our response, you can complain to your local data protection authority — in Australia, that's the Office of the Australian Information Commissioner (oaic.gov.au).`,
     ],
   },
   {
@@ -85,7 +88,7 @@ export default function PrivacyPage() {
         label="Legal"
         title="Privacy Policy"
         intro="What we collect, why, and how to make us delete it. Short, because we collect very little."
-        updated="19 September 2026"
+        updated="11 October 2026"
       >
         <Legal sections={SECTIONS} />
       </SimplePage>

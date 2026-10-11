@@ -1,50 +1,73 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { m, AnimatePresence, useReducedMotion } from "motion/react";
-import { Label } from "@/components/ui/kit";
+import { useRouter } from "next/navigation";
+import { m, AnimatePresence } from "motion/react";
 import { placeholders } from "@/content/site";
-import { contact } from "@/content/contact";
-import { enquiryOptions } from "@/lib/contact-schema";
+import { contact, enquiryOptions } from "@/content/contact";
+import { ENQUIRY_KEY } from "@/components/enquiry-receipt";
 import { cn } from "@/lib/utils";
 
-type Status = "idle" | "sending" | "sent" | "error";
+type Status = "idle" | "sending" | "error";
 
 /* 16px is not a style choice: iOS Safari zooms the viewport on focus for any
    input under 16px and never zooms back out, leaving the page scaled and
    scrolled sideways for the rest of the visit. The 48px min-height is the
-   touch floor — `py-3` alone left these at 27px on a phone. */
+   touch floor — `py-3` alone left these at 27px on a phone. The aria-invalid
+   variants turn a field ember while its error is showing. */
 const field =
-  "w-full min-h-12 border border-white/14 bg-white/[0.03] px-4 py-3 text-[16px] text-white placeholder:text-venice-300/40 transition-colors duration-200 focus:border-aurora-500/70 focus:bg-white/[0.05] focus:outline-none";
+  "w-full min-h-12 border border-white/14 bg-white/[0.03] px-4 py-3 text-[16px] text-white placeholder:text-venice-300/75 transition-colors duration-200 focus:border-aurora-500/70 focus:bg-white/[0.05] focus:outline-none aria-invalid:border-ember-500/70 aria-invalid:focus:border-ember-400";
 
+/* The schema brings Zod with it — ~90kB gzipped, more than the rest of this
+   page's own code. Imported statically it also rode along whenever Next
+   prefetched /contact from a link on another page, homepage included. It is
+   fetched the first time anything in the form gets focus instead, which is
+   long before anyone can press Send. */
+const loadSchema = () => import("@/lib/contact-schema");
+
+/** In the order the form shows them — the first one with an error gets focus. */
 const FIELDS = ["name", "email", "message", "company", "phone", "budget", "timeline", "source", "ref_token"] as const;
 
 export function ContactForm() {
-  const reduced = useReducedMotion();
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
-  const [delivered, setDelivered] = useState(true);
-  const [firstName, setFirstName] = useState("");
-  const sentRef = useRef<HTMLDivElement>(null);
 
-  /* The success panel is far shorter than the form it replaces. On a phone the
-     reader is down at the submit button when it swaps, which would leave them
-     looking at the rail below with the confirmation scrolled off the top. */
-  useEffect(() => {
-    if (status === "sent") sentRef.current?.scrollIntoView({ block: "start", behavior: reduced ? "auto" : "smooth" });
-  }, [status, reduced]);
+  /** Show the errors and put the cursor in the first field that has one. */
+  function fail(next: Record<string, string>) {
+    setErrors(next);
+    setStatus("error");
+    const first = FIELDS.find((k) => next[k]);
+    const el = first && formRef.current?.elements.namedItem(first);
+    if (el instanceof HTMLElement) el.focus();
+  }
+
+  /** Wired onto each control: the error-state attributes for that field. */
+  const invalid = (id: string) =>
+    errors[id] ? { "aria-invalid": true as const, "aria-describedby": `${id}-error` } : {};
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus("sending");
     setErrors({});
     setFormError(null);
 
     const fd = new FormData(e.currentTarget);
     const payload = Object.fromEntries(FIELDS.map((k) => [k, String(fd.get(k) ?? "")]));
 
+    // Same schema the route uses, so a mistake shows instantly instead of
+    // after a round trip — and the server still checks, for anyone who
+    // bypasses this.
+    const { contactSchema, fieldErrors } = await loadSchema();
+    const checked = contactSchema.safeParse(payload);
+    if (!checked.success) {
+      fail(fieldErrors(checked.error));
+      return;
+    }
+
+    setStatus("sending");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -54,53 +77,49 @@ export function ContactForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.fieldErrors) setErrors(data.fieldErrors);
         if (data.error) setFormError(data.error);
-        setStatus("error");
+        fail(data.fieldErrors ?? {});
         return;
       }
-      setFirstName(payload.name.trim().split(/\s+/)[0] ?? "");
-      setDelivered(data.delivered !== false);
-      setStatus("sent");
+      try {
+        sessionStorage.setItem(
+          ENQUIRY_KEY,
+          JSON.stringify({
+            firstName: payload.name.trim().split(/\s+/)[0] ?? "",
+            delivered: data.delivered !== false,
+          }),
+        );
+      } catch {
+        // storage blocked — the thank-you page falls back to a generic greeting
+      }
+      // Status stays "sending", so the button can't be pressed again while
+      // the next page loads.
+      router.push("/contact/thank-you");
     } catch {
       setFormError(contact.form.error);
       setStatus("error");
     }
   }
 
-  if (status === "sent") {
-    return (
-      <m.div
-        ref={sentRef}
-        initial={{ opacity: 0, y: reduced ? 0 : 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduced ? 0.001 : 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="scroll-mt-24 border border-aurora-500/30 bg-aurora-500/[0.06] p-6 sm:p-10"
-        role="status"
-      >
-        <Label className="text-aurora-400">Message sent</Label>
-        <h2 className="t-h2 mt-4 text-white">Thanks{firstName ? `, ${firstName}` : ""}.</h2>
-        <p className="t-body mt-4 max-w-lg text-venice-200/72">
-          {contact.form.success}{" "}
-          <a href={`mailto:${placeholders.email}`} className="text-aurora-400 underline underline-offset-4">
-            {placeholders.email}
-          </a>
-          .
-        </p>
-        {!delivered && (
-          <p className="t-small mt-5 border-t border-white/10 pt-4 text-ember-400">
-            Note for the developer: email delivery isn&apos;t configured yet, so this
-            submission was logged to the server console rather than sent. Set
-            <code className="mx-1 font-mono text-[13px]">RESEND_API_KEY</code>
-            to enable it.
-          </p>
-        )}
-      </m.div>
-    );
-  }
-
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-8">
+    <form
+      ref={formRef}
+      onSubmit={onSubmit}
+      onFocus={() => void loadSchema()}
+      // Editing a field clears its error; the rest stay until the next send.
+      onChange={(e) => {
+        const name = (e.target as Element).getAttribute("name") ?? "";
+        if (!errors[name]) return;
+        setErrors((prev) => {
+          const next = { ...prev };
+          delete next[name];
+          return next;
+        });
+      }}
+      noValidate
+      aria-busy={status === "sending"}
+      className="space-y-8"
+    >
       <div>
         <h2 className="t-h2 text-white">{contact.form.heading}</h2>
         <p className="t-body mt-3 max-w-xl text-venice-200/68">{contact.form.intro}</p>
@@ -134,6 +153,7 @@ export function ContactForm() {
             enterKeyHint="next"
             className={field}
             placeholder="Your full name"
+            {...invalid("name")}
           />
         </Field>
         <Field id="email" label="Work email" error={errors.email} required>
@@ -149,6 +169,7 @@ export function ContactForm() {
             enterKeyHint="next"
             className={field}
             placeholder="you@company.com"
+            {...invalid("email")}
           />
         </Field>
       </div>
@@ -160,6 +181,7 @@ export function ContactForm() {
           rows={4}
           className={cn(field, "resize-y sm:min-h-[9.5rem]")}
           placeholder="Describe the problem, process, or idea in a few sentences. Plain English is perfect."
+          {...invalid("message")}
         />
       </Field>
 
@@ -174,6 +196,7 @@ export function ContactForm() {
             enterKeyHint="next"
             className={field}
             placeholder="Company name"
+            {...invalid("company")}
           />
         </Field>
         <Field id="phone" label="Mobile number" error={errors.phone} optional>
@@ -185,14 +208,15 @@ export function ContactForm() {
             inputMode="tel"
             enterKeyHint="next"
             className={field}
-            placeholder="+91 98765 43210"
+            placeholder="+61 412 345 678"
+            {...invalid("phone")}
           />
         </Field>
         <Field id="budget" label="Rough budget" error={errors.budget} optional>
-          <Select id="budget" options={enquiryOptions.budget} />
+          <Select id="budget" options={enquiryOptions.budget} {...invalid("budget")} />
         </Field>
         <Field id="timeline" label="Timeline" error={errors.timeline} optional>
-          <Select id="timeline" options={enquiryOptions.timeline} />
+          <Select id="timeline" options={enquiryOptions.timeline} {...invalid("timeline")} />
         </Field>
       </div>
 
@@ -205,6 +229,7 @@ export function ContactForm() {
           enterKeyHint="send"
           className={field}
           placeholder="Google, LinkedIn, referral…"
+          {...invalid("source")}
         />
       </Field>
 
@@ -232,6 +257,12 @@ export function ContactForm() {
           disabled={status === "sending"}
           className="inline-flex min-h-14 w-full items-center justify-center gap-2 bg-sand-100 px-8 py-4 text-[16px] font-medium text-ink-1000 shadow-[0_0_0_1px_rgba(245,238,221,0.2),0_8px_40px_-10px_rgba(245,238,221,0.35)] transition-all duration-200 hover:bg-white active:bg-white disabled:cursor-not-allowed disabled:opacity-60 can-hover:min-h-0 sm:w-auto"
         >
+          {status === "sending" && (
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-4 w-4 animate-spin motion-reduce:animate-none">
+              <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.6" />
+              <path d="M14.25 8A6.25 6.25 0 0 0 8 1.75" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
+            </svg>
+          )}
           {status === "sending" ? "Sending…" : contact.form.submit}
           {status !== "sending" && (
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="h-3.5 w-3.5">
@@ -239,7 +270,7 @@ export function ContactForm() {
             </svg>
           )}
         </button>
-        <p className="t-small mt-5 max-w-xl text-venice-300/60">
+        <p className="t-small mt-5 max-w-xl text-venice-300/75">
           {contact.form.privacy}{" "}
           <Link
             href="/privacy"
@@ -255,13 +286,23 @@ export function ContactForm() {
 
 /** Native select — the platform picker is the right control on a phone — with
  *  the empty "Choose one" state dimmed like an input placeholder. */
-function Select({ id, options }: { id: string; options: readonly string[] }) {
+function Select({
+  id,
+  options,
+  ...aria
+}: {
+  id: string;
+  options: readonly string[];
+  "aria-invalid"?: true;
+  "aria-describedby"?: string;
+}) {
   const [value, setValue] = useState("");
   return (
     <div className="relative">
       <select
         id={id}
         name={id}
+        {...aria}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className={cn(
@@ -270,7 +311,7 @@ function Select({ id, options }: { id: string; options: readonly string[] }) {
           // Windows Chrome paints the open list with the OS's light theme
           // unless each option is coloured explicitly.
           "[&>option]:bg-ink-900 [&>option]:text-white",
-          value === "" && "text-venice-300/40",
+          value === "" && "text-venice-300/75",
         )}
       >
         <option value="">Choose one</option>
@@ -312,11 +353,14 @@ function Field({
       <label htmlFor={id} className="t-label block text-venice-300/70">
         {label}
         {required && <span className="ml-1 text-ember-400">*</span>}
-        {optional && <span className="ml-1.5 normal-case tracking-normal opacity-60">(optional)</span>}
+        {optional && <span className="ml-1.5 normal-case tracking-normal">(optional)</span>}
       </label>
       <div className="mt-2.5">{children}</div>
+      {/* No role="alert": several of these appear at once on a failed send,
+          and focus lands on the first invalid field, whose aria-describedby
+          already reads its message out. */}
       {error && (
-        <p role="alert" className="mt-2 text-[14px] text-ember-400">
+        <p id={`${id}-error`} className="mt-2 text-[14px] text-ember-400">
           {error}
         </p>
       )}

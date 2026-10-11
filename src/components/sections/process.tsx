@@ -56,7 +56,7 @@ export function Process() {
               <span className="t-editorial text-[44px] leading-none text-aurora-400/85">
                 {phase.number}
               </span>
-              <Label dark className="text-venice-300/55">
+              <Label dark className="text-venice-300/75">
                 {phase.duration}
               </Label>
             </div>

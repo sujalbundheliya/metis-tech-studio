@@ -116,6 +116,35 @@
   50%      { opacity: 0.6; }
 }
 
+/* For sections that start below the fold. The browser skips their style,
+   layout and paint until they come near the viewport, instead of laying out
+   the entire homepage — some thousand boxes, ~380ms on a fast machine and
+   four times that on a phone — before it can show the hero. `auto` in the
+   size makes it remember each section's real height once seen, so the
+   scrollbar settles rather than jumping when you scroll back up. */
+@utility defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+}
+
+/* The hero's entrance. CSS rather than Motion so it starts with the first
+   paint: Motion's version server-rendered the headline at opacity 0 and left
+   it there until React hydrated, which on a phone was most of four seconds.
+   Stagger with `[--rise-delay:…]`. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+}
+@utility rise {
+  animation: rise 0.85s var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0s);
+
+  /* The global reduced-motion rule shortens durations but leaves delays, and
+     `both` would hold each line invisible for its delay. */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
 /* ============================================================================
    BASE — dark is the only mode
    ========================================================================== */
@@ -127,7 +156,13 @@
   --hair-strong: color-mix(in oklab, #ffffff 20%, transparent);
 }
 
-* { border-color: var(--hair); }
+/* The default hairline, in the base layer so border-colour utilities can
+   override it. Unlayered, it outranked every one of them whatever their
+   specificity — `focus:border-aurora-500/70` on inputs, the ember error
+   state, the hover borders on cards all rendered as this hairline instead. */
+@layer base {
+  * { border-color: var(--hair); }
+}
 
 html {
   scroll-behavior: smooth;
@@ -324,7 +359,16 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: var(--animate-shimmer);
+
+  /* The sweep moves `background-position`, which no browser can hand to the
+     compositor: text clipped to a moving gradient is repainted every frame,
+     forever. On a phone-class CPU that was ~360ms of main thread per second
+     of an idle homepage — over a third of the core, spent on one phrase. So
+     it sweeps where there is a mouse (the same line `can-hover` draws), and
+     on touch the gradient simply holds still. */
+  @media (hover: hover) and (pointer: fine) {
+    animation: var(--animate-shimmer);
+  }
 }
 
 /* ============================================================================

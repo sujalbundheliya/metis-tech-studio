@@ -1,9 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Atmosphere } from "@/components/ui/atmosphere";
 import { Btn, Label } from "@/components/ui/kit";
 import { practiceHref, practices } from "@/content/services";
+
+// Next adds `noindex` to every 404 on its own. Without a title here the page
+// fell back to the homepage's, so a broken link looked like the homepage in
+// the tab and in any crawler report.
+export const metadata: Metadata = {
+  title: "Page not found",
+  description: "That page doesn't exist. Here's the way back.",
+  // Matches the `noindex` Next injects, instead of contradicting it with the
+  // layout's `index, follow`.
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (
@@ -31,7 +43,7 @@ export default function NotFound() {
 
         <section className="border-b border-white/10">
           <div className="mx-auto max-w-[1400px] px-gutter pt-12 pb-4 sm:px-10 lg:px-14">
-            <Label className="text-venice-300/60">Three practices</Label>
+            <Label className="text-venice-300/75">Three practices</Label>
           </div>
           <div className="mx-auto grid max-w-[1400px] border-t border-white/10 sm:grid-cols-3">
             {practices.map((practice, i) => (
@@ -45,7 +57,7 @@ export default function NotFound() {
                 <p className="t-h3 text-white transition-colors group-hover:text-aurora-300">
                   {practice.name}
                 </p>
-                <p className="t-small mt-2 text-venice-300/60">{practice.services.length} services</p>
+                <p className="t-small mt-2 text-venice-300/75">{practice.services.length} services</p>
               </Link>
             ))}
           </div>

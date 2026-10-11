@@ -48,7 +48,7 @@ export function ServicesSection() {
             <div className="flex items-start justify-between gap-6">
               <div>
                 <Label className="text-ember-400">{practice.number}</Label>
-                <Label className="mt-2 block text-venice-300/60">{practice.name}</Label>
+                <Label className="mt-2 block text-venice-300/75">{practice.name}</Label>
               </div>
               <div className="shrink-0 text-aurora-400">
                 <PracticeGlyph name={practice.glyph} />

@@ -88,7 +88,7 @@ export function ClosingCta({
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: reduced ? 0.001 : 0.9, delay: 0.28 }}
-            className="t-label mt-9 text-venice-300/45"
+            className="t-label mt-9 text-venice-300/75"
           >
             30 minutes · No charge · No deck
           </m.p>

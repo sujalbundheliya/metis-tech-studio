@@ -11,7 +11,7 @@ import { HashLanding } from "@/components/hash-landing";
 import { BreadcrumbSchema, FaqSchema, ServiceSchema } from "@/components/schema";
 import { practiceBySlug, practiceHref, practices } from "@/content/services";
 import { placeholders, site } from "@/content/site";
-import { openGraphBase } from "@/lib/metadata";
+import { pageMetadata } from "@/lib/metadata";
 
 export function generateStaticParams() {
   return practices.map((p) => ({ slug: p.slug }));
@@ -25,18 +25,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const practice = practiceBySlug(slug);
   if (!practice) return {};
-  return {
+  // The share card comes from ./opengraph-image.tsx, one per practice.
+  return pageMetadata({
     title: practice.titleTag.replace(` | ${site.name}`, ""),
     description: practice.metaDescription,
-    alternates: { canonical: practiceHref(practice) },
-    openGraph: {
-      ...openGraphBase,
-      title: practice.titleTag,
-      description: practice.metaDescription,
-      url: `${site.url}${practiceHref(practice)}`,
-      type: "website",
-    },
-  };
+    path: practiceHref(practice),
+    ownImage: true,
+  });
 }
 
 /** Section opener for the two-column bands: rule, ember number, heading. */
@@ -82,7 +77,7 @@ export default async function PracticePage({
           <Atmosphere bloom="top-left" intensity="soft" />
           <div className="relative mx-auto grid max-w-[1400px] lg:grid-cols-12">
             <div className="px-gutter pt-12 pb-10 sm:px-10 sm:pt-16 sm:pb-12 lg:col-span-8 lg:border-r lg:border-white/10 lg:px-14 lg:pt-24 lg:pb-16">
-              <nav aria-label="Breadcrumb" className="t-label flex min-h-11 flex-wrap items-center gap-2 text-venice-300/55 can-hover:min-h-0">
+              <nav aria-label="Breadcrumb" className="t-label flex min-h-11 flex-wrap items-center gap-2 text-venice-300/75 can-hover:min-h-0">
                 <Link
                   href="/services"
                   className="inline-flex min-h-11 items-center transition-colors hover:text-aurora-400 can-hover:min-h-0"
@@ -120,7 +115,7 @@ export default async function PracticePage({
                 would only push the content a screen further down. */}
             <aside className="hidden px-10 py-24 lg:col-span-4 lg:block">
               <div className="lg:sticky lg:top-24">
-                <Label className="text-venice-300/60">
+                <Label className="text-venice-300/75">
                   Practice {practice.number} / {String(practices.length).padStart(2, "0")}
                 </Label>
                 <p className="t-editorial mt-3 text-[20px] leading-snug text-aurora-400/80 italic">
@@ -149,7 +144,7 @@ export default async function PracticePage({
             <div className="lg:col-span-4">
               <div className="h-px w-full bg-white/20" />
               <Label className="mt-4 block text-ember-400">01</Label>
-              <h2 className="t-label mt-2 text-venice-300/65">Overview</h2>
+              <h2 className="t-label mt-2 text-venice-300/75">Overview</h2>
             </div>
             <div className="max-w-2xl space-y-5 lg:col-span-8">
               {practice.intro.map((p, i) => (
@@ -174,7 +169,7 @@ export default async function PracticePage({
           <ul className="mx-auto grid max-w-[1400px] gap-px border-t border-white/10 bg-white/10 md:grid-cols-2 xl:grid-cols-4">
             {practice.services.map((s, i) => (
               <li key={s.id} id={s.id} className="bg-ink-950 px-gutter py-8 sm:px-8 sm:py-10 lg:px-10">
-                <Label className="text-venice-300/50">{String(i + 1).padStart(2, "0")}</Label>
+                <Label className="text-venice-300/75">{String(i + 1).padStart(2, "0")}</Label>
                 <h3 className="t-h3 mt-4 text-white">{s.name}</h3>
                 <p className="t-small mt-3 text-venice-200/68">{s.body}</p>
               </li>
@@ -234,7 +229,7 @@ export default async function PracticePage({
                     key={group.label}
                     className="grid gap-2 border-b border-white/10 py-5 md:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] md:gap-8"
                   >
-                    <dt className="t-label pt-1 text-venice-300/65">{group.label}</dt>
+                    <dt className="t-label pt-1 text-venice-300/75">{group.label}</dt>
                     <dd className="t-body text-venice-200/78">{group.items.join(" · ")}</dd>
                   </div>
                 ))}
@@ -260,7 +255,7 @@ export default async function PracticePage({
                 className="group block bg-ink-950 px-gutter py-8 transition-colors duration-200 hover:bg-ink-900 active:bg-ink-900 sm:px-10 sm:py-10 lg:px-14"
               >
                 <Label className="text-ember-400">{p.number}</Label>
-                <Label className="ml-3 text-venice-300/60">{p.name}</Label>
+                <Label className="ml-3 text-venice-300/75">{p.name}</Label>
                 <p className="t-h3 mt-4 max-w-lg text-balance text-white transition-colors group-hover:text-aurora-300">
                   {p.headline.lead}
                   {p.headline.accent}

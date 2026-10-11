@@ -53,5 +53,14 @@ export const contact = {
   },
 } as const;
 
+/** Dropdown choices, from contact-us.md. Here rather than beside the schema
+ *  in src/lib/contact-schema.ts so the form can render them without pulling
+ *  in Zod, which it loads only once someone starts filling the form in. */
+export const enquiryOptions = {
+  // TODO: set the bands in the currency you quote in, sized to your projects.
+  budget: ["Under $10k", "$10k–$25k", "$25k–$50k", "$50k+", "Not sure yet"],
+  timeline: ["As soon as possible", "Within 3 months", "Just exploring"],
+} as const;
+
 /** A real scheduler link (Cal.com / Calendly) rather than the /contact fallback. */
 export const hasBookingLink = /^https?:\/\//.test(placeholders.bookingUrl);

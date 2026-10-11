@@ -16,7 +16,7 @@ export function Label({
   className?: string;
 }) {
   return (
-    <span className={cn("t-label", dark ? "text-aurora-400" : "text-venice-300/65", className)}>
+    <span className={cn("t-label", dark ? "text-aurora-400" : "text-venice-300/75", className)}>
       {children}
     </span>
   );

@@ -123,13 +123,13 @@ export function CostCalculator() {
         <div className="border-t border-white/10 lg:col-span-7 lg:border-t-0">
           <dl className="grid grid-cols-2 border-b border-white/10">
             <div className="px-gutter py-6 sm:px-10 sm:py-8 lg:px-12">
-              <dt className="t-label text-venice-300/60">Hours spent each week</dt>
+              <dt className="t-label text-venice-300/75">Hours spent each week</dt>
               <dd className="t-editorial mt-2 text-[length:clamp(2rem,4vw,2.75rem)] leading-none text-white tabular-nums">
                 {whole.format(weeklyHours)}
               </dd>
             </div>
             <div className="border-l border-white/10 px-gutter py-6 sm:px-10 sm:py-8 lg:px-12">
-              <dt className="t-label text-venice-300/60">Hours spent each year</dt>
+              <dt className="t-label text-venice-300/75">Hours spent each year</dt>
               <dd className="t-editorial mt-2 text-[length:clamp(2rem,4vw,2.75rem)] leading-none text-white tabular-nums">
                 {whole.format(yearlyHours)}
               </dd>
@@ -137,7 +137,7 @@ export function CostCalculator() {
           </dl>
 
           <div className="px-gutter py-8 sm:px-10 sm:py-10 lg:px-12">
-            <p className="t-label text-venice-300/60">Cost of manual work each year</p>
+            <p className="t-label text-venice-300/75">Cost of manual work each year</p>
             {/* Inline style rather than a size class: `t-display` sets its own
                 font-size, and which of two utilities wins is down to emit order. */}
             <p
@@ -169,7 +169,7 @@ export function CostCalculator() {
               ))}
             </div>
             {stripsNeeded > CONFIG.maxStrips && (
-              <p className="t-small mt-3 text-venice-300/60">
+              <p className="t-small mt-3 text-venice-300/75">
                 Showing {CONFIG.maxStrips} of {stripsNeeded} full-time working years.
               </p>
             )}
@@ -192,7 +192,7 @@ export function CostCalculator() {
             <Btn href="/contact" size="lg" className="mt-6 w-full sm:w-auto">
               Contact us
             </Btn>
-            <p className="t-small mt-5 max-w-xl text-venice-300/60">
+            <p className="t-small mt-5 max-w-xl text-venice-300/75">
               The first call is free, takes 30 minutes, and comes with no obligation. We&apos;ll look at
               your actual processes and tell you honestly what&apos;s worth automating.
             </p>
@@ -241,12 +241,12 @@ function Slider({
         className="range mt-2"
         style={{ "--pct": `${pct}%` } as React.CSSProperties}
       />
-      <div aria-hidden="true" className="t-label flex justify-between text-venice-300/40">
+      <div aria-hidden="true" className="t-label flex justify-between text-venice-300/75">
         <span>{spec.format(spec.min)}</span>
         <span>{spec.format(spec.max)}</span>
       </div>
       {spec.hint && (
-        <p id={hintId} className="t-small mt-3 text-venice-300/60">
+        <p id={hintId} className="t-small mt-3 text-venice-300/75">
           {spec.hint}
         </p>
       )}

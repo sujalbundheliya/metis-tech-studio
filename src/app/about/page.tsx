@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ClosingCta } from "@/components/sections/closing";
@@ -7,13 +6,14 @@ import { Btn, Label } from "@/components/ui/kit";
 import { BreadcrumbSchema } from "@/components/schema";
 import { about } from "@/content/about";
 import { placeholders } from "@/content/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata = pageMetadata({
+  title: "About Us — Adelaide Software & AI Studio",
   description:
-    "A small product engineering studio building AI systems and custom software. The people you meet on the first call are the people who write the code.",
-  alternates: { canonical: "/about" },
-};
+    "A small Adelaide product engineering studio building AI systems and custom software. The people you meet on the first call are the people who write the code.",
+  path: "/about",
+});
 
 /** Rule, mono label, serif heading — the opener every band on this page uses. */
 function Opener({ n, children }: { n: number; children: React.ReactNode }) {
@@ -80,7 +80,7 @@ export default function AboutPage() {
             <div className="lg:col-span-5">
               <div className="h-px w-full bg-white/20" />
               <Label className="mt-4 block text-ember-400">02</Label>
-              <h2 className="t-label mt-2 text-venice-300/65">Why &ldquo;Metis&rdquo;</h2>
+              <h2 className="t-label mt-2 text-venice-300/75">Why &ldquo;Metis&rdquo;</h2>
               <p
                 lang="grc"
                 aria-hidden="true"

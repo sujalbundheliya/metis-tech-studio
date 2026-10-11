@@ -19,12 +19,15 @@ export const placeholders = {
   email: "team@metistechstudio.com",
   /** TODO: real number, or leave null to hide the row entirely */
   phone: null as string | null,
-  /** TODO: e.g. "Ahmedabad, India" — leave null to hide */
-  location: null as string | null,
+  location: "Adelaide, Australia" as string | null,
+  /** `location` broken down for search engines' structured data. There's no
+   *  street address on the site — add `streetAddress` and `postalCode` here,
+   *  and to OrganizationSchema, if one is ever published. */
+  address: { locality: "Adelaide", region: "SA", country: "AU" },
   /** TODO: regions served, e.g. "India, UK and the EU" */
   regions: null as string | null,
-  /** TODO: e.g. "India" — names the contact FAQ's "outside [your country]" */
-  country: null as string | null,
+  /** Names the contact FAQ's "outside [your country]". */
+  country: "Australia" as string | null,
   /** TODO: e.g. "Monday to Friday, 9am–5pm IST" — null hides the line */
   hours: null as string | null,
   /** TODO: founder names for the FAQ */
@@ -49,9 +52,9 @@ export const site = {
   shortName: "Metis",
   tagline: "Practical intelligence, engineered.",
   url: "https://metistechstudio.com",
-  title: "Metis Tech Studio — Web, App & AI Development",
+  title: "AI & Software Development in Adelaide | Metis Tech Studio",
   description:
-    "Product engineering studio building web platforms, mobile apps, and AI systems. Founder-built, fixed scope, code you own. Book a free consultation.",
+    "Adelaide product engineering studio building web platforms, mobile apps, and AI systems. Founder-built, fixed scope, code you own. Book a free consultation.",
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -245,8 +248,9 @@ const costAnswer = (() => {
 
 const locationAnswer = (() => {
   const { location, regions } = placeholders;
-  if (location && regions) {
-    return `We're based in ${location} and work with clients across ${regions}. Most delivery is remote, with on-site sessions for discovery and key milestones.`;
+  if (location) {
+    const where = regions ? ` and work with clients across ${regions}` : "";
+    return `We're based in ${location}${where}. Most delivery is remote, with on-site sessions for discovery and key milestones.`;
   }
   return "Most delivery is remote, with on-site sessions for discovery and key milestones. Tell us where you are and we'll work out the overlap.";
 })();

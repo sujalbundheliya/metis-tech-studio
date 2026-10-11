@@ -1,14 +1,13 @@
-import type { Metadata } from "next";
 import { SimplePage, Legal } from "@/components/simple-page";
 import { BreadcrumbSchema } from "@/components/schema";
 import { placeholders, site } from "@/content/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Terms of Service",
-  description: `The terms covering use of the ${site.name} website.`,
-  alternates: { canonical: "/terms" },
-  robots: { index: true, follow: false },
-};
+  description: `The terms covering use of the ${site.name} website, including intellectual property, liability, and governing law.`,
+  path: "/terms",
+});
 
 /**
  * ⚠️  NOT LEGAL ADVICE. These cover use of the website only — they are not the
@@ -58,6 +57,12 @@ const SECTIONS = [
     ],
   },
   {
+    heading: "Governing law",
+    body: [
+      "These terms are governed by the laws of South Australia. Any dispute about them is subject to the non-exclusive jurisdiction of the courts of South Australia.",
+    ],
+  },
+  {
     heading: "Changes and contact",
     body: [
       "We may update these terms; the date at the top of this page shows when they last changed. Continuing to use the site means you accept the current version.",
@@ -74,7 +79,7 @@ export default function TermsPage() {
         label="Legal"
         title="Terms of Service"
         intro="These cover use of this website. Client work is governed by a separate signed agreement."
-        updated="19 September 2026"
+        updated="10 October 2026"
       >
         <Legal sections={SECTIONS} />
       </SimplePage>

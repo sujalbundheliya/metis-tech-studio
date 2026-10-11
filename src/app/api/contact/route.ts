@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { contactSchema } from "@/lib/contact-schema";
+import { contactSchema, fieldErrors } from "@/lib/contact-schema";
 import { placeholders, site } from "@/content/site";
 import { contact } from "@/content/contact";
 
@@ -59,12 +59,7 @@ export async function POST(request: Request) {
 
   const parsed = contactSchema.safeParse(body);
   if (!parsed.success) {
-    const fieldErrors: Record<string, string> = {};
-    for (const issue of parsed.error.issues) {
-      const key = String(issue.path[0] ?? "form");
-      fieldErrors[key] ??= issue.message;
-    }
-    return NextResponse.json({ ok: false, fieldErrors }, { status: 400 });
+    return NextResponse.json({ ok: false, fieldErrors: fieldErrors(parsed.error) }, { status: 400 });
   }
 
   const { name, email, company, phone, message, budget, timeline, source, ref_token } = parsed.data;

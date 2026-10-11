@@ -75,8 +75,9 @@ export function MobileActionBar() {
   }, [pathname]);
 
   /* On the page the button leads to, it would only cover the form's own
-     submit button with a link back to itself. */
-  const onTarget = pathname === placeholders.bookingUrl;
+     submit button with a link back to itself — and on the thank-you page
+     beneath it, the visitor has just done what it asks. */
+  const onTarget = pathname.startsWith(placeholders.bookingUrl);
   const visible = past && !atContact && !onTarget;
 
   const bar = (

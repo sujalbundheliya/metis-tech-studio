@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
-import { BootSplash } from "@/components/boot-splash";
 import { NavProgress } from "@/components/nav-progress";
 import { MotionProvider } from "@/components/motion-provider";
 import { MobileActionBar } from "@/components/mobile-action-bar";
+import { DeferRenderAnchors } from "@/components/defer-render-anchors";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -37,21 +40,17 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
-  alternates: { canonical: "/" },
+  // Deliberately no canonical, URL, title or description here. Each page sets
+  // its own through pageMetadata() in src/lib/metadata.ts, and anything put
+  // here is inherited word for word by a page that doesn't — /about used to
+  // share as the homepage card, linking to the homepage.
   openGraph: {
     type: "website",
-    url: site.url,
     siteName: site.name,
-    title: site.title,
-    description: site.description,
-    // The card image comes from src/app/opengraph-image.tsx — naming it here
-    // as well would override the generated one with a path that has to exist.
+    locale: "en_AU",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: site.title,
-    description: site.description,
-  },
+  // Title, description and image are filled in from each page's openGraph.
+  twitter: { card: "summary_large_image" },
   robots: {
     index: true,
     follow: true,
@@ -83,7 +82,7 @@ export default function RootLayout({
     // incoming page interrupted part-way — visitors landed thousands of pixels
     // down the next page. With it, page changes jump to the top instantly and
     // same-page `#hash` links keep their smooth scroll.
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en-AU" data-scroll-behavior="smooth">
       {/* Browser extensions (password managers, colour pickers, Grammarly…)
           commonly stamp attributes onto <body> before React hydrates, which
           React then reports as a mismatch. suppressHydrationWarning applies to
@@ -101,10 +100,17 @@ export default function RootLayout({
         </a>
         <MotionProvider>
           <NavProgress />
-          <BootSplash />
           {children}
           <MobileActionBar />
+          <DeferRenderAnchors />
         </MotionProvider>
+        {/* Vercel's two are cookieless. Both report only once Analytics and
+            Speed Insights are enabled for the project in the Vercel
+            dashboard, and do nothing in local dev. Google Analytics does set
+            cookies, which /privacy discloses. */}
+        <Analytics />
+        <SpeedInsights />
+        <GoogleAnalytics />
       </body>
     </html>
   );

@@ -44,7 +44,7 @@ export function WhyMetis() {
             >
               <div className="flex items-center gap-3">
                 <Icon className="h-[18px] w-[18px] shrink-0 text-aurora-400" strokeWidth={1.7} />
-                <Label className="text-venice-300/60">{String(i + 1).padStart(2, "0")}</Label>
+                <Label className="text-venice-300/75">{String(i + 1).padStart(2, "0")}</Label>
               </div>
               <h3 className="t-h3 mt-6 text-balance text-white">{reason.title}</h3>
               <p className="t-body mt-3.5 text-venice-200/68">{reason.body}</p>

@@ -187,6 +187,9 @@ export function FabricField({
     /* --- touch: the sweep rides the scroll ------------------------------- */
     let idle = 0;
     const onScroll = () => {
+      // Far off screen there is nothing to sweep — and measuring would make
+      // the browser lay out a section it is skipping (`defer-render`).
+      if (!near) return;
       const rect = canvas.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > window.innerHeight) return;
       // The disturbance sits where the viewport's middle crosses the canvas,
@@ -203,29 +206,41 @@ export function FabricField({
       idle = window.setTimeout(() => { pointer.active = false; }, 360);
     };
 
-    const ro = new ResizeObserver(() => { build(); settled = false; if (reduced) draw(); });
+    /* Nothing is measured, built or drawn until the canvas first comes near
+       the screen. It sits below the fold, and measuring it at mount — in the
+       middle of hydration — forced a layout of the section around it, which
+       `defer-render` exists to let the browser skip. */
+    let near = false, started = false;
+    const start = () => {
+      started = true;
+      build();
+      if (reduced) draw();
+      else if (coarse) onScroll();
+    };
+
+    const ro = new ResizeObserver(() => {
+      if (!started) return;
+      build(); settled = false; if (reduced) draw();
+    });
     ro.observe(canvas);
 
     const io = new IntersectionObserver(([entry]) => {
+      near = entry.isIntersecting;
+      if (near && !started) start();
       if (reduced) return;
-      if (entry.isIntersecting && !raf) raf = requestAnimationFrame(step);
-      if (!entry.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
-    }, { threshold: 0 });
+      if (near && !raf) raf = requestAnimationFrame(step);
+      if (!near && raf) { cancelAnimationFrame(raf); raf = 0; }
+    }, { threshold: 0, rootMargin: "200px 0px" });
     io.observe(canvas);
 
-    build();
-    if (reduced) {
-      draw();
-    } else {
+    if (!reduced) {
       if (coarse) {
         window.addEventListener("scroll", onScroll, { passive: true });
-        onScroll();
       } else {
         // listen on the window so the tear tracks even over the text on top
         window.addEventListener("pointermove", onMove, { passive: true });
         window.addEventListener("pointerleave", onLeave);
       }
-      raf = requestAnimationFrame(step);
     }
 
     return () => {

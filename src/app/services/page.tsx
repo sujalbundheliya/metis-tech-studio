@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -8,13 +7,14 @@ import { Btn, Label, TextLink } from "@/components/ui/kit";
 import { BreadcrumbSchema } from "@/components/schema";
 import { practiceHref, practices, serviceCount, serviceHref } from "@/content/services";
 import { placeholders } from "@/content/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Our Services — Generative AI, Automation & Software",
+export const metadata = pageMetadata({
+  title: "AI & Software Development Services",
   description:
     "Generative AI and RAG, agentic AI and workflow automation, and custom software development — from a two-person studio that builds what it sells.",
-  alternates: { canonical: "/services" },
-};
+  path: "/services",
+});
 
 export default function ServicesIndex() {
   return (

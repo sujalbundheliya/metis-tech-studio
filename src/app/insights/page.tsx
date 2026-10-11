@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { SimplePage } from "@/components/simple-page";
 import { Label, TextLink } from "@/components/ui/kit";
 import { BreadcrumbSchema } from "@/components/schema";
 import { practiceHref, practices } from "@/content/services";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Insights",
+export const metadata = pageMetadata({
+  title: "Insights on Building Software & AI",
   description:
     "Notes on building software and AI systems that survive contact with real users. Writing from the two engineers doing the work.",
-  alternates: { canonical: "/insights" },
-};
+  path: "/insights",
+});
 
 export default function InsightsPage() {
   // No posts yet. Rather than fake a blog, point at the substantive writing
@@ -28,6 +28,7 @@ export default function InsightsPage() {
           </>
         }
         intro="We write when we have something specific to say — usually after a project taught us something we didn't expect. No posting schedule, no SEO filler."
+        heroCta
         withCta
       >
         <div className="border border-dashed border-white/18 bg-white/[0.02] p-8 sm:p-12">
@@ -47,7 +48,7 @@ export default function InsightsPage() {
         </div>
 
         <div className="mt-14">
-          <Label className="text-venice-300/60">Start here</Label>
+          <Label className="text-venice-300/75">Start here</Label>
           <ul className="mt-5 grid gap-px md:grid-cols-3">
             {practices.map((p) => (
               <li key={p.slug}>
@@ -55,7 +56,7 @@ export default function InsightsPage() {
                   href={practiceHref(p)}
                   className="group block h-full border border-white/10 p-6 transition-colors duration-200 hover:border-white/22 hover:bg-white/[0.04]"
                 >
-                  <Label className="text-venice-300/50">{p.number}</Label>
+                  <Label className="text-venice-300/75">{p.number}</Label>
                   <p className="t-h3 mt-3 text-white transition-colors group-hover:text-aurora-300">
                     {p.name}
                   </p>

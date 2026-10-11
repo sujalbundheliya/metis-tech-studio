@@ -174,14 +174,48 @@ Even a 14px blur cost 16fps. Reach for gradient stops before a blur filter.
   stops the full bundle creeping back in, but it is not why the site is fast.
 - CLS is **0** and TTFB is 15–50ms; neither needed work.
 
-### The loading moment
+### First paint (October 2026)
 
-Route changes are instant (static pages, prefetched links), so a route-level
-loading state would never be seen — `loading.tsx` exists only as a slow-network
-fallback. The mark instead appears in `BootSplash`: once per session, while
-fonts settle, with a 620ms floor so it reads as intentional and a 1400ms ceiling
-so it can never hold the site up. It renders only after mount, so it cannot
-block first paint, and a visitor without JS never sees it.
+Mobile Lighthouse scored **48** on the live site, with a 4.9s Largest
+Contentful Paint of which 4.3s was *render delay*: the HTML had arrived, but
+nothing on it was allowed to show. What was fixed, in order of effect:
+
+- **Nothing may start at `opacity: 0` on first load.** `template.tsx` faded
+  every page in, so the server sent the whole page invisible until React had
+  hydrated. The fade now plays only on client-side navigations. The hero's
+  entrance is the CSS `rise` utility (it starts with the first paint, not with
+  hydration), and the headline and subhead don't animate at all — they are the
+  LCP element, and fading them in held that moment back until every script had
+  run.
+- **`BootSplash` is gone.** It existed to cover the invisible page; once the
+  page paints immediately, a splash arriving after hydration would hide text
+  the visitor had already started reading.
+- **The shimmer is mouse-only.** `text-gradient-aurora` animates
+  `background-position`, which can't be composited: on a phone-class CPU it cost
+  ~360ms of main thread per second of an *idle* homepage. On touch the gradient
+  holds still. Idle cost went from 485ms/s to ~2ms/s at 4× CPU throttle.
+- **`defer-render`** (`content-visibility: auto`) on every homepage section
+  after the hero, so the first layout is the hero, not the whole page. It also
+  applies paint containment, which clips anything drawn outside the box — the
+  footer is left out because its band's glow spills upward on purpose. A smooth
+  scroll past skipped sections lands short (their real height replaces the
+  placeholder mid-flight); `DeferRenderAnchors` renders the sections between a
+  same-page link and its target before the scroll starts.
+- **Canvases measure nothing until they come near the screen.** Reading a
+  canvas's rect at mount or on every scroll forced a layout of the section
+  `defer-render` was skipping.
+- **Zod is fetched when the contact form gets focus**, not with the page — it
+  is ~90kB gzipped and also rode along on every prefetch of `/contact`.
+
+Measured locally at 4× CPU / slow 4G (the machine was shared, so ranges):
+simulated score 68 → 76–83, Total Blocking Time 460 → 190–390ms, FCP 1.3 →
+1.0s; with real throttling instead of simulation, 88 and LCP 2.5s. The
+simulated LCP stays near 4s because on localhost the scripts finish before the
+first full render and the simulation charges them to it — check the deployed
+site on pagespeed.web.dev for the number that matters.
+
+Route changes are instant (static pages, prefetched links), so `loading.tsx`
+exists only as a slow-network fallback.
 
 ---
 

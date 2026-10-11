@@ -124,7 +124,7 @@ export function SiteFooter() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-1 px-gutter py-4 pb-safe sm:flex-row sm:gap-3 sm:py-6 sm:px-10 lg:px-14">
-          <p className="font-mono text-[12px] text-venice-300/45">
+          <p className="font-mono text-[12px] text-venice-300/75">
             © {year} {site.name}
           </p>
           <div className="flex items-center gap-6 sm:gap-7">
